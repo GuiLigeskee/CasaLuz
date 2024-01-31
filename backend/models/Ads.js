@@ -3,11 +3,15 @@ const { Schema } = mongoose;
 
 const adsSchema = new Schema(
   {
-    images: Array,
+    images: [
+      {
+        type: String
+      }
+    ],
     title: String,
     description: String,
     address: String,
-    landMeasurement: String,
+    landMeasurement: Number,
     tell: String,
     whatsapp: String,
   },
