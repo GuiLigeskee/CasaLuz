@@ -50,12 +50,12 @@ const deleteAds = async (req, res) => {
   }
 
   // Verificar se o anúncio pertence ao usuário
-  if (!ads.adminId.equals(reqAdmin._id)) {
-    res
-      .status(422)
-      .json({ errors: ["Ocorreu um erro, tente novamente mais tarde"] });
-    return;
-  }
+  // if (!ads.adminId.equals(reqAdmin._id)) {
+  //   res
+  //     .status(422)
+  //     .json({ errors: ["Ocorreu um erro, tente novamente mais tarde"] });
+  //   return;
+  // }
 
   await Ads.findByIdAndDelete(ads._id);
 
@@ -73,7 +73,7 @@ const getAllAds = async (req, res) => {
   return res.status(200).json(ads);
 };
 
-// Obter anúncios do usuário
+// Obter anúncios do admin
 const getAdminAds = async (req, res) => {
   const { id } = req.params;
 
@@ -105,14 +105,14 @@ const getAdsById = async (req, res) => {
 const updateAds = async (req, res) => {
   const { id } = req.params;
   const { title, description, tell, whatsapp, address, landMeasurement } = req.body;
+  
+  const ads = await Ads.findById(id);
 
   let images;
 
   if (req.files) {
     images = req.files.map(file => file.filename);
   }
-
-  const ads = await Ads.findById(id);
 
   // Verificar se o anúncio existe
   if (!ads) {

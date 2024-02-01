@@ -30,6 +30,6 @@ router.put(
   validate,
   update
 );
-router.get("/:id", getAdminById);
+router.get("/:id", authGuard, getAdminById);
 
 module.exports = router;
