@@ -1,84 +1,69 @@
-// CSS
 import "./Login.css";
 
-// Components
-import { Link, useNavigate } from "react-router-dom";
-import Message from "../../Components/Messages/Message";
-
-// Hooks
-import { useEffect, useState } from "react";
+// hooks
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 // Redux
-// import { login, reset } from "../../Slices/AuthSlice";
-// import { resetMessage } from "../../Slices/userSlice";
+import { login, reset } from "../../Slice/authSlice";
+
+// Components
+import Message from "../../Components/Messages/Message";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const resetMessage = useResetComponentMessage(dispatch);
+  const { message, loading, error } = useSelector((state) => state.auth);
 
-  // const navigate = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  // const { user, message, loading, error } = useSelector((state) => state.auth);
+    const admin = {
+      email,
+      password,
+    };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
+    console.log(admin);
 
-  //   const user = {
-  //     email,
-  //     password,
-  //   };
+    dispatch(login(admin));
+  };
 
-  //   dispatch(login(user));
-  //   resetMessage();
-  // };
-
-  // // Clean all auth states and redirect after 2 seconds if the user is logged in
-  // useEffect(() => {
-  //   if (user) {
-  //     const redirectTimeout = setTimeout(() => {
-  //       navigate("/profile");
-  //     }, 500);
-
-  //     return () => clearTimeout(redirectTimeout);
-  //   }
-
-  //   return () => {
-  //     dispatch(reset());
-  //   };
-  // }, [user, dispatch, navigate]);
+  // clean all auth states
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
 
   return (
-    <div className="login">
-      <p className="subtitle">Faça o login para voltar a participar.</p>
-      <form>
-        <input
-          type="text"
-          name="email"
-          placeholder="E-mail"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email || ""}
-        />
-        <input
-          type="password"
-          name="senha"
-          placeholder="Senha"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password || ""}
-        />
-        {/* {!loading && <input type="submit" value="Salvar" />}
+    <div id="login">
+      <h2 id="title">Casa Luz</h2>
+      <p id="subtitle">Entre para ter acesso a área de administrador</p>
+      <form onSubmit={handleSubmit}>
+        <label>
+          <span>Seu email:</span>
+          <input
+            type="email"
+            placeholder="E-mail"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email || ""}
+          />
+        </label>
+        <label>
+          <span>Sua senha:</span>
+          <input
+            type="password"
+            placeholder="Senha"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password || ""}
+          />
+        </label>
+        {!loading && <input type="submit" value="Entrar" />}
         {loading && <input type="submit" disabled value="Aguarde..." />}
         {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />} */}
+        {message && <Message msg={message} type="success" />}
       </form>
-      <p>
-        Não tem uma conta? <Link to="/register">Clique aqui</Link>
-      </p>
     </div>
   );
 };

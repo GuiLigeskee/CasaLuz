@@ -1,68 +1,22 @@
-.login,
-.register {
+#login,
+#register {
   border: 2px solid #181881;
-  background-color: #fcfcfc;
-  padding: 1.5em 2em;
-  width: auto;
-  margin: 2em auto;
-  border-radius: 10px;
+  background-color: #f7fbff;
+  padding: 1em 2em;
+  width: 30%;
+  margin: 3em auto;
+  border-radius: 25px;
 }
 
-.login h2,
-.register h2 {
-  text-align: center;
-  font-size: 2em;
-  margin: 0;
-}
-
-.subtitle {
+#title {
+  font-weight: 600;
   color: #181881;
-  margin: 1.5em;
   text-align: center;
 }
 
-.login form,
-.register form {
-  padding-bottom: 1.5em;
-  margin-bottom: 1.5em;
-  border-bottom: 2px solid #181881;
-}
-
-.login p,
-.register p {
+#subtitle {
+  font-size: 0.8em;
+  color: #181881;
   text-align: center;
-}
-
-.login p a,
-.register p a {
-  font-weight: bold;
-  color: #ffbf00;
-}
-
-span {
-  color: #ffbf00;
-}
-
-#logo {
-  text-align: center;
-  width: auto;
-  min-height: 7em;
-}
-
-@media screen and (max-width: 768px) {
-  .login {
-    width: 100%;
-    margin: 0;
-    border: none;
-    padding: 2em;
-    height: 90vh;
-  }
-
-  .register {
-    width: 100%;
-    margin: 0;
-    border: none;
-    padding: 2em;
-    height: 90vh;
-  }
+  margin-bottom: 1em;
 }
