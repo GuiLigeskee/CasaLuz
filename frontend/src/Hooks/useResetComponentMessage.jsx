@@ -1,5 +1,5 @@
 // redux
-import { resetMessage } from "../Slices/userSlice";
+// import { resetMessage } from "../Slice/authSlice";s
 
 export const useResetComponentMessage = (dispatch) => {
   return () => {
