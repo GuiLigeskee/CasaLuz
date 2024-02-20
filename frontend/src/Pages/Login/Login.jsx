@@ -27,12 +27,12 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const admin = {
+    const createAdmin = {
       email,
       password,
     };
 
-    dispatch(login(admin));
+    dispatch(login(createAdmin));
     // resetMessage();
   };
 

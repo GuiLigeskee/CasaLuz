@@ -9,6 +9,7 @@ import { useAuth } from "../../Hooks/useAuth";
 // import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+// import { UseSelector } from "react-redux";
 
 // Redux
 import { logout, reset } from "../../Slice/authSlice";
@@ -58,7 +59,9 @@ const NavBar = () => {
           <ul className="navbar__options">
             {auth ? (
               <>
-                <li className="navbar__option">Novo anúncio</li>
+                <li className="navbar__option">
+                  <NavLink to="/createAds">Novo anúncio</NavLink>
+                </li>
                 <li className="navbar__option">Novo admin</li>
                 <li className="navbar__option">
                   <span onClick={handleLogout}>Sair</span>

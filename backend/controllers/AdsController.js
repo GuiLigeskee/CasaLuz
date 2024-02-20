@@ -1,11 +1,19 @@
 const Ads = require("../models/Ads");
-const Admin =  require("../models/Admin");
+const Admin = require("../models/Admin");
 const mongoose = require("mongoose");
 
 // Inserir um anúncio
 const insertAds = async (req, res) => {
-  const { title, description, tell, whatsapp, address, landMeasurement } = req.body;
-  const images = req.files.map(file => file.filename);
+  const {
+    title,
+    description,
+    tell,
+    whatsapp,
+    address,
+    landMeasurement,
+    price,
+  } = req.body;
+  const images = req.files.map((file) => file.filename);
 
   const reqAdmin = req.admin;
 
@@ -18,6 +26,7 @@ const insertAds = async (req, res) => {
     tell,
     whatsapp,
     address,
+    price,
     landMeasurement,
     images,
     adminId: admin._id,
@@ -88,9 +97,7 @@ const getAdminAds = async (req, res) => {
 const getAdsById = async (req, res) => {
   const { id } = req.params;
 
-  const ads = await Ads.findById(
-    new mongoose.Types.ObjectId(id)
-  );
+  const ads = await Ads.findById(new mongoose.Types.ObjectId(id));
 
   // Verificar se o anúncio existe
   if (!ads) {
@@ -104,14 +111,15 @@ const getAdsById = async (req, res) => {
 // Atualizar um anúncio
 const updateAds = async (req, res) => {
   const { id } = req.params;
-  const { title, description, tell, whatsapp, address, landMeasurement } = req.body;
-  
+  const { title, description, tell, whatsapp, address, landMeasurement } =
+    req.body;
+
   const ads = await Ads.findById(id);
 
   let images;
 
   if (req.files) {
-    images = req.files.map(file => file.filename);
+    images = req.files.map((file) => file.filename);
   }
 
   // Verificar se o anúncio existe
@@ -126,6 +134,10 @@ const updateAds = async (req, res) => {
 
   if (description) {
     ads.description = description;
+  }
+
+  if (price) {
+    ads.price = price;
   }
 
   if (tell) {
@@ -155,20 +167,19 @@ const updateAds = async (req, res) => {
 
 // Pesquisar um anúncio pelo título
 const searchAds = async (req, res) => {
-    const { q } = req.query;
-  
-    const ads = await Ads.find({ titulo: new RegExp(q, "i") }).exec();
-  
-    res.status(200).json(ads);
+  const { q } = req.query;
+
+  const ads = await Ads.find({ titulo: new RegExp(q, "i") }).exec();
+
+  res.status(200).json(ads);
 };
-  
+
 module.exports = {
-    insertAds,
-    deleteAds,
-    getAllAds,
-    getAdminAds,
-    getAdsById,
-    updateAds,
-    searchAds,
+  insertAds,
+  deleteAds,
+  getAllAds,
+  getAdminAds,
+  getAdsById,
+  updateAds,
+  searchAds,
 };
-  

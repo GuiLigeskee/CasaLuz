@@ -5,11 +5,12 @@ const adsSchema = new Schema(
   {
     images: [
       {
-        type: String
-      }
+        type: String,
+      },
     ],
     title: String,
     description: String,
+    price: Number,
     address: String,
     landMeasurement: Number,
     tell: String,
