@@ -46,8 +46,8 @@ export const photoSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.photo = action.payload;
-        state.photos.unshift(state.photo);
+        state.add = action.payload;
+        state.ads.unshift(state.ads);
         state.message = "Anúncio publicado com sucesso!";
       })
       .addCase(publishAds.rejected, (state, action) => {

@@ -1,15 +1,11 @@
 import "./AddAds.css";
 
-import { uploads } from "../../utils/config";
-
 // Components
 import Message from "../../Components/Messages/Message";
 
 // Hooks
-import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { useParams } from "react-router-dom";
-import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
+import { useState } from "react";
 
 // Redux
 import { publishAds } from "../../Slice/adsSlice";
@@ -17,11 +13,7 @@ import { publishAds } from "../../Slice/adsSlice";
 const AddAds = () => {
   const dispatch = useDispatch();
 
-  const resetMessage = useResetComponentMessage();
-
-  const { admin } = useSelector((state) => state.auth);
-
-  // const { ads, loading, error, message } = useSelector((state) => state.ads);
+  const { ads, loading, error, message } = useSelector((state) => state.ads);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -57,8 +49,6 @@ const AddAds = () => {
     }
 
     dispatch(publishAds(formData));
-
-    resetMessage();
   };
 
   const handleFile = (e) => {
@@ -93,12 +83,7 @@ const AddAds = () => {
         </label>
         <div className="imagePreviews">
           {imagePreviews.map((preview, index) => (
-            <img
-              key={index}
-              src={preview}
-              alt={`Preview ${index + 1}`}
-              style={{ width: "100px", height: "100px", marginRight: "10px" }}
-            />
+            <img key={index} src={preview} alt={`Preview ${index + 1}`} />
           ))}
         </div>
         <label>
@@ -171,7 +156,10 @@ const AddAds = () => {
             required
           />
         </label>
-        <input type="submit" value="criar anúncio" />
+        {!loading && <input type="submit" value="Criar anúncio" />}
+        {loading && <input type="submit" disabled value="Aguarde..." />}
+        {error && <Message msg={error} type="error" />}
+        {message && <Message msg={message} type="success" />}
       </form>
     </div>
   );
