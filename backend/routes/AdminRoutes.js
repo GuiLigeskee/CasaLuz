@@ -20,16 +20,16 @@ const {
 const authGuard = require("../middlewares/authGuard");
 
 // Routes
-router.post("/register", authGuard, adminCreateValidation(), validate, register);
-router.get("/profile", authGuard, validate, getCurrentAdmin);
-router.post("/login",loginValidation(), validate, login);
-router.put(
-  "/",
+router.post(
+  "/register",
   authGuard,
-  adminUpdateValidation(),
+  adminCreateValidation(),
   validate,
-  update
+  register
 );
+router.get("/profile", authGuard, validate, getCurrentAdmin);
+router.post("/login", loginValidation(), validate, login);
+router.put("/", authGuard, adminUpdateValidation(), validate, update);
 router.get("/:id", authGuard, getAdminById);
 
 module.exports = router;

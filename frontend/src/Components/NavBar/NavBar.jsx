@@ -62,7 +62,9 @@ const NavBar = () => {
                 <li className="navbar__option">
                   <NavLink to="/createAds">Novo anúncio</NavLink>
                 </li>
-                <li className="navbar__option">Novo admin</li>
+                <li className="navbar__option">
+                  <NavLink to="/register">Novo admin</NavLink>
+                </li>
                 <li className="navbar__option">
                   <span onClick={handleLogout}>Sair</span>
                 </li>

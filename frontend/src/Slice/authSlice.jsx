@@ -10,20 +10,17 @@ const initialState = {
   loading: false,
 };
 
-// // Register a user and sign in
-// export const register = createAsyncThunk(
-//   "auth/register",
-//   async (user, thunkAPI) => {
-//     const data = await authService.register(user);
+// Register a admin and sign in
+export const register = createAsyncThunk(
+  "auth/register",
+  async (admin, thunkAPI) => {
+    const token = thunkAPI.getState().auth.Data.token;
 
-//     // Check for errors
-//     if (data.errors) {
-//       return thunkAPI.rejectWithValue(data.errors[0]);
-//     }
+    const data = await authService.register(admin, token);
 
-//     return data;
-//   }
-// );
+    return data;
+  }
+);
 
 // Logout a admin
 export const logout = createAsyncThunk("auth/logout", () => {
@@ -54,23 +51,23 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // .addCase(register.pending, (state) => {
-      //   state.loading = true;
-      //   state.error = null;
-      // })
-      // .addCase(register.fulfilled, (state, action) => {
-      //   state.loading = false;
-      //   state.success = true;
-      //   state.error = null;
-      //   state.user = action.payload;
-      // })
-      // .addCase(register.rejected, (state, action) => {
-      //   state.loading = false;
-      //   state.error = action.payload;
-      //   state.user = null;
-      // })
+      .addCase(register.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.admin = action.payload;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.admin = null;
+      })
       .addCase(logout.fulfilled, (state) => {
-        state.user = null;
+        state.admin = null;
         state.loading = false;
         state.success = true;
         state.error = null;
@@ -83,12 +80,12 @@ export const authSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.user = action.payload;
+        state.admin = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.user = null;
+        state.admin = null;
       });
   },
 });

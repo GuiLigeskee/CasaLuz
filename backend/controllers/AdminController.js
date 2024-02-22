@@ -36,18 +36,16 @@ const register = async (req, res) => {
     password: passwordHash,
   });
 
-  // If admin was created sucessfully, return the token
-  if (!newAdmin) {
+  // If admin was created successfully
+  if (newAdmin) {
+    res.status(200).json({
+      message: "Administrador criado com sucesso!",
+    });
+  } else {
     res.status(422).json({
       errors: ["Houve um erro, por favor tente novamente mais tarde."],
     });
-    return;
   }
-
-  res.status(201).json({
-    _id: newAdmin._id,
-    token: generateToken(newAdmin._id),
-  });
 };
 
 // Get logged in admin
@@ -78,7 +76,6 @@ const login = async (req, res) => {
   // Return admin with token
   res.status(200).json({
     _id: admin._id,
-    profileImage: admin.profileImage,
     token: generateToken(admin._id),
   });
 };
@@ -89,9 +86,9 @@ const update = async (req, res) => {
 
   const reqAdmin = req.admin;
 
-  const admin = await Admin.findById(new mongoose.Types.ObjectId(reqAdmin._id)).select(
-    "-password"
-  );
+  const admin = await Admin.findById(
+    new mongoose.Types.ObjectId(reqAdmin._id)
+  ).select("-password");
 
   if (name) {
     admin.name = name;
@@ -112,7 +109,7 @@ const update = async (req, res) => {
 const getAdminById = async (req, res) => {
   const { id } = req.params;
 
-  const admin = await Admin.findById( new mongoose.Types.ObjectId(id)).select(
+  const admin = await Admin.findById(new mongoose.Types.ObjectId(id)).select(
     "-password"
   );
 

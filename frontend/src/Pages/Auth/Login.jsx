@@ -1,4 +1,4 @@
-import "./Login.css";
+import "./Auth.css";
 
 // hooks
 import { useState, useEffect } from "react";

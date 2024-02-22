@@ -13,7 +13,7 @@ import { publishAds } from "../../Slice/adsSlice";
 const AddAds = () => {
   const dispatch = useDispatch();
 
-  const { ads, loading, error, message } = useSelector((state) => state.ads);
+  const { loading, error, message } = useSelector((state) => state.ads);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");

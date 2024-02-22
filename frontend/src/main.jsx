@@ -12,8 +12,9 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Pages
 import Home from "./Pages/Home.jsx";
-import Login from "./Pages/Login/Login.jsx";
+import Login from "./Pages/Auth/Login.jsx";
 import AddAds from "./Pages/AddAds/AddAds.jsx";
+import Register from "./Pages/Auth/Register.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
       {
         path: "/createAds",
