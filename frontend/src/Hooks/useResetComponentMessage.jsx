@@ -1,10 +1,10 @@
 // redux
-// import { resetMessage } from "../Slice/authSlice";
+import { reset } from "../Slice/authSlice";
 
 export const useResetComponentMessage = (dispatch) => {
   return () => {
     setTimeout(() => {
-      dispatch(resetMessage());
+      dispatch(reset());
     }, 2000);
   };
 };

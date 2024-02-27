@@ -13,10 +13,10 @@ const initialState = {
 // Register a admin and sign in
 export const register = createAsyncThunk(
   "auth/register",
-  async (admin, thunkAPI) => {
-    const token = thunkAPI.getState().auth.Data.token;
+  async (adminData, thunkAPI) => {
+    const token = thunkAPI.getState().auth.admin.token;
 
-    const data = await authService.register(admin, token);
+    const data = await authService.register(adminData, token);
 
     return data;
   }
@@ -55,16 +55,14 @@ export const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.admin = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.admin = null;
       })
       .addCase(logout.fulfilled, (state) => {
         state.admin = null;

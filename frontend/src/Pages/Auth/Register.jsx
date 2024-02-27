@@ -5,18 +5,10 @@ import { register } from "../../Slice/authSlice";
 
 // Hooks
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-// import { useAuth } from "../../Hooks/useAuth";
-
-// Components
-import Message from "../../Components/Messages/Message";
+import { useDispatch } from "react-redux";
 
 const Register = () => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  // const { auth } = useAuth();
-  const { admin, message, loading, error } = useSelector((state) => state.auth);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,15 +19,15 @@ const Register = () => {
     e.preventDefault();
 
     const adminData = {
-      name,
-      email,
-      password,
-      confirmPassword,
+      name: name,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
     };
 
     console.log(adminData);
 
-    dispatch(register(JSON.stringify(adminData))); // Converta para JSON aqui
+    dispatch(register(adminData));
   };
 
   return (
@@ -51,7 +43,7 @@ const Register = () => {
             type="text"
             placeholder="Nome"
             onChange={(e) => setName(e.target.value)}
-            value={name}
+            value={name || ""}
             required
           />
         </label>
@@ -61,7 +53,7 @@ const Register = () => {
             type="email"
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            value={email || ""}
             required
           />
         </label>
@@ -71,7 +63,7 @@ const Register = () => {
             type="password"
             placeholder="Senha"
             onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            value={password || ""}
             required
           />
         </label>
@@ -81,7 +73,7 @@ const Register = () => {
             type="password"
             placeholder="Confirmar senha"
             onChange={(e) => setConfirmPassword(e.target.value)}
-            value={confirmPassword}
+            value={confirmPassword || ""}
             required
           />
         </label>
