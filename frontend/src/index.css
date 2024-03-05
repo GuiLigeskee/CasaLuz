@@ -6,11 +6,11 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #fafafa;
+  background-color: #ffffff;
 }
 
 a {
-  color: #000000;
+  color: #08273c;
   text-decoration: none;
 }
 
@@ -19,8 +19,8 @@ ul {
 }
 
 .active {
-  font-weight: 500;
-  color: #181881;
+  font-weight: 300;
+  color: #fdb303;
 }
 
 ul {
@@ -42,45 +42,33 @@ label {
 label span {
   font-weight: 600;
   margin-bottom: 0.1em;
-  color: #eec035;
+  color: #08273c;
   font-size: 0.8em;
 }
 
 input:not([type="color"]) {
   background-color: #fff;
-  color: #181881;
+  color: #08273c;
   border-radius: 10px;
   padding: 0.8em;
   outline: none;
   margin-bottom: 0.6em;
-  border-radius: 25px;
+  border: 1px solid #08273c;
 }
 
 input::placeholder {
   color: #aaa;
 }
 
-/* .btn,
-button,
-input[type="submit"] {
-  color: #000000;
-  background-color: #d67f0c;
-  border: 2px solid black;
-  border-radius: 10px;
-  font-size: 1em;
-  padding: 0.5em;
-  cursor: pointer;
-} */
-
 .btn,
 button,
 input[type="submit"] {
-  color: #eec035;
-  background-color: #181881;
-  border: 2px solid #eec035;
-  border-radius: 25px;
+  color: #fdb303;
+  background-color: #08273c;
+  border: 1px solid #fdb303;
+  border-radius: 10px;
   padding: 0.8em 1.6em;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1em;
   text-align: center;
   cursor: pointer;

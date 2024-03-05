@@ -39,7 +39,9 @@ const Register = () => {
 
   return (
     <div id="register">
-      <h2 id="title">Registrar novo Administrador</h2>
+      <h1 id="title">
+        <span>Registrar</span> novo Administrador
+      </h1>
       <p id="subtitle">
         Preencha os campos abaixo para registrar um novo administrador
       </p>

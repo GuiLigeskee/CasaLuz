@@ -1,27 +1,51 @@
 .createAds {
-  background-color: #181881;
+  background-color: #fafafa;
   padding: 0.5em 2em;
-  border: 1px solid #000;
-  border-radius: 15px;
+  border: 1px solid #08273c;
+  border-radius: 10px;
   margin-bottom: 3em;
+  max-width: 50%;
 }
 
 .createAds h1 {
-  color: #fff;
+  color: #08273c;
   margin: 0.5em auto;
+  text-align: center;
+}
+
+.createAds h1 span {
+  color: #fdb303;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+#buttonFile {
+  margin-top: 2em;
+  background-color: #08273c;
+  color: #fdb303;
+  padding: 1em;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+#buttonFile:hover {
+  cursor: pointer;
 }
 
 .imagePreviews {
   width: auto;
-  background-color: #fff;
-  border-radius: 15px;
+  border-radius: 10px;
   padding: 1em;
   margin-bottom: 1em;
 }
 
 .imagePreviews img {
   max-width: 180px;
+  max-height: 100px;
   margin: 0 0.2em;
-  border-radius: 15px;
-  border: 2px solid #000;
+  border-radius: 10px;
+  object-fit: cover;
 }

@@ -75,11 +75,19 @@ const AddAds = () => {
 
   return (
     <div className="createAds">
-      <h1>Adicionar anúncio de imóvel</h1>
+      <h1>
+        <span>Adicionar</span> anúncio de imóvel
+      </h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          <span>Carregar fotos do imóvel</span>
-          <input type="file" onChange={handleFile} multiple />
+        <label htmlFor="arquivo" className="foto-perfil">
+          <span id="buttonFile">Carregar imagens do imóvel</span>
+          <input
+            type="file"
+            onChange={handleFile}
+            name="arquivo"
+            id="arquivo"
+            multiple
+          />
         </label>
         <div className="imagePreviews">
           {imagePreviews.map((preview, index) => (
