@@ -5,13 +5,8 @@
 }
 
 body {
-  font-family: "Fira Sans", sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #fafafa;
-  font-family: "Noto Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-  font-variation-settings: "width" 100;
 }
 
 a {
@@ -22,13 +17,9 @@ a {
 ul {
   list-style: none;
 }
-/* 
-button {
-  font-family: "Quicksand", sans-serif;
-} */
 
 .active {
-  font-weight: bold;
+  font-weight: 500;
   color: #181881;
 }
 

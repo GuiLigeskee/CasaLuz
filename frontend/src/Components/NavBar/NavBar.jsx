@@ -1,5 +1,4 @@
 import "./NavBar.css";
-import { FiSearch } from "react-icons/fi";
 
 // react-router
 import { NavLink } from "react-router-dom";
@@ -31,29 +30,13 @@ const NavBar = () => {
     navigate("/login");
   };
 
-  // const handleSearch = (e) => {
-  //   e.preventDefault();
-
-  //   if (query) {
-  //     return navigate(`/search?q=${query}`);
-  //   }
-  // };
-
   return (
     <div>
       <nav className="navbar">
         <div className="navbar__left">
-          <h1 className="logo">Casa Luz</h1>
-        </div>
-        <div className="navbar__center">
-          <div className="navbar__search">
-            <FiSearch className="navbar__search-icon" />
-            <input
-              type="text"
-              placeholder="Pesquisar"
-              className="navbar__search-input"
-            />
-          </div>
+          <h1 className="logo">
+            Casa <span>Luz</span> Imóveis
+          </h1>
         </div>
         <div className="navbar__right">
           <ul className="navbar__options">

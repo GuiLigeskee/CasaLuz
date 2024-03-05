@@ -23,7 +23,6 @@ const register = async (req, res) => {
     if (existingAdmin) {
       return res.status(400).json({ message: "Este e-mail já está em uso." });
     }
-
     // Cria um hash da senha
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);

@@ -10,7 +10,7 @@ const initialState = {
   loading: false,
 };
 
-// Register a admin and sign in
+// Register a admin
 export const register = createAsyncThunk(
   "auth/register",
   async (adminData, thunkAPI) => {
@@ -18,7 +18,7 @@ export const register = createAsyncThunk(
 
     const data = await authService.register(adminData, token);
 
-    return data;
+    return adminData;
   }
 );
 
@@ -45,8 +45,8 @@ export const authSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.loading = false;
-      state.error = false;
-      state.success = false;
+      state.error = null;
+      state.message = null;
     },
   },
   extraReducers: (builder) => {
@@ -55,10 +55,11 @@ export const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(register.fulfilled, (state) => {
+      .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
+        state.admin = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;

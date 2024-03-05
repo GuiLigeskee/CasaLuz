@@ -1,14 +1,19 @@
 import "./Auth.css";
 
+// Components
+import Message from "../../Components/Messages/Message";
+
 // Redux
-import { register } from "../../Slice/authSlice";
+import { register, reset } from "../../Slice/authSlice";
 
 // Hooks
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Register = () => {
   const dispatch = useDispatch();
+
+  const { message, loading, error } = useSelector((state) => state.auth);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,9 +30,11 @@ const Register = () => {
       confirmPassword: confirmPassword,
     };
 
-    console.log(adminData);
+    // console.log(adminData);
 
     dispatch(register(adminData));
+
+    reset();
   };
 
   return (
@@ -77,7 +84,10 @@ const Register = () => {
             required
           />
         </label>
-        <input type="submit" value="Registrar" />
+        {!loading && <input type="submit" value="Registrar" />}
+        {loading && <input type="submit" disabled value="Aguarde..." />}
+        {error && <Message msg={error} type="error" />}
+        {message && <Message msg={message} type="success" />}
       </form>
     </div>
   );
