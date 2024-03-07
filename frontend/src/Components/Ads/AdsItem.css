@@ -1,0 +1,28 @@
+/* AdsItem.css */
+.ads-item {
+  position: relative;
+}
+
+.ads-item img {
+  display: block;
+  width: 350px;
+  height: 200px;
+}
+
+.ads-item .price {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: auto;
+  padding: 0.5em;
+  background-color: #ffffffb4;
+}
+
+.ads-item .title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5em;
+  background-color: #ffffffb4;
+}

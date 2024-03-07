@@ -7,7 +7,20 @@ import SearchBar from "../../Components/SearchBar/SearchBar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+// Redux
+import { getAds } from "../../Slice/adsSlice";
+import AdsItem from "../../Components/Ads/AdsItem";
+
 const Home = () => {
+  const dispatch = useDispatch();
+
+  const { ads, loading } = useSelector((state) => state.ads);
+
+  // Load all ads
+  useEffect(() => {
+    dispatch(getAds());
+  }, [dispatch]);
+
   return (
     <div>
       <SearchBar />
@@ -15,7 +28,14 @@ const Home = () => {
         <h2 id="carroussel-title">
           Conheça nossos imóveis à <span>venda</span>
         </h2>
-        <div className="carroussel"></div>
+        <div className="carroussel">
+          {ads &&
+            ads.map((add) => (
+              <div key={add._id}>
+                <AdsItem add={add} />
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

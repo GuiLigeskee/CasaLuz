@@ -20,7 +20,7 @@ const getAds = async () => {
   const config = requestConfig("GET");
 
   try {
-    const res = await fetch(api + "/ads", config)
+    const res = await fetch(api + "/ads/", config)
       .then((res) => res.json())
       .catch((err) => err);
 
