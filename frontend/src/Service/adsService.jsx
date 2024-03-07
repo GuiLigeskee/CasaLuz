@@ -15,8 +15,24 @@ const publishAds = async (data, token) => {
   }
 };
 
+// Get all ads
+const getAds = async () => {
+  const config = requestConfig("GET");
+
+  try {
+    const res = await fetch(api + "/ads", config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const adsService = {
   publishAds,
+  getAds,
 };
 
 export default adsService;

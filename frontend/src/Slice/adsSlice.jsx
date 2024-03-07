@@ -28,6 +28,13 @@ export const publishAds = createAsyncThunk(
   }
 );
 
+// Get all photos
+export const getAds = createAsyncThunk("ads/getall", async () => {
+  const data = await adsService.getAds();
+
+  return data;
+});
+
 export const photoSlice = createSlice({
   name: "publish",
   initialState,
@@ -54,6 +61,16 @@ export const photoSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.photo = null;
+      })
+      .addCase(getAds.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAds.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.ads = action.payload;
       });
   },
 });
