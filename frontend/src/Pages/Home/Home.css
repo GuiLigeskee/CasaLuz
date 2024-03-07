@@ -1,0 +1,13 @@
+.carroussel-ads {
+  display: flex;
+  flex-direction: row;
+}
+
+#carroussel-title {
+  text-align: center;
+  color: #08273c;
+}
+
+#carroussel-title span {
+  color: #fdb303;
+}

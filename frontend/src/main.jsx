@@ -11,7 +11,7 @@ import { store } from "./store.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Pages
-import Home from "./Pages/Home.jsx";
+import Home from "./Pages/Home/Home.jsx";
 import Login from "./Pages/Auth/Login.jsx";
 import AddAds from "./Pages/AddAds/AddAds.jsx";
 import Register from "./Pages/Auth/Register.jsx";
