@@ -1,44 +1,69 @@
-.search-container {
-  width: 490px;
-  display: block;
-  margin: 0 auto;
-}
-
-input#search-bar {
-  margin: 0 auto;
-  width: 100%;
-  height: 45px;
-  padding: 2em;
-  font-size: 1rem;
-  border: none;
-  border-radius: 50px;
-  outline: none;
+#searchForm {
+  margin-top: 8em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   background-color: #fafafa;
-  font-family: "poppins";
-  &:focus {
-    border: none;
-    transition: 0.35s ease;
-    color: #08273c;
-    &::-webkit-input-placeholder {
-      transition: opacity 0.45s ease;
-      opacity: 0;
-    }
-    &::-moz-placeholder {
-      transition: opacity 0.45s ease;
-      opacity: 0;
-    }
-    &:-ms-placeholder {
-      transition: opacity 0.45s ease;
-      opacity: 0;
-    }
-  }
+  border-radius: 10px;
+  padding: 0.8em 1.5em;
+  gap: 0.5em;
 }
 
-.search-icon {
-  position: relative;
-  float: right;
-  width: 75px;
-  height: 75px;
-  top: -72px;
-  right: -5px;
+#searchInput {
+  color: #08273c;
+  flex: 1;
+  background-color: #f1f1f1e1;
+  padding: 1.2em;
+  border: none;
+  width: 25em;
+  margin-bottom: 0;
+  font-family: "poppins";
+}
+
+#searchInput::placeholder {
+  color: #08273c;
+  font-family: "poppins";
+  font-weight: 300;
+}
+
+#searchForm button {
+  background-color: #08273c;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  width: 15%;
+  padding: 0.2em 0.8em;
+  font-size: 0.9em;
+  font-family: "poppins";
+  font-weight: 300;
+  margin: 0;
+  border-radius: 10px;
+}
+
+#searchForm button:hover {
+  background-color: #08273c;
+}
+
+#searchForm select {
+  color: #08273c;
+  border: none;
+  width: 100%;
+  border-radius: 10px;
+  padding: 1em;
+  background-color: #f1f1f1;
+  font-family: "poppins";
+  font-weight: 300;
+  transition: all 0.3s;
+}
+
+#searchForm select:focus {
+  outline: none;
+}
+
+#searchForm select option {
+  background-color: #f1f1f1;
+  font-size: 0.8em;
+  padding: 1em;
+  border: none;
 }

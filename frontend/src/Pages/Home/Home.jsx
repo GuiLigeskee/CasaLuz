@@ -14,7 +14,7 @@ import AdsItem from "../../Components/Ads/AdsItem";
 const Home = () => {
   const dispatch = useDispatch();
 
-  const { ads, loading } = useSelector((state) => state.ads);
+  const { ads } = useSelector((state) => state.ads);
 
   // Load all ads
   useEffect(() => {
@@ -23,7 +23,15 @@ const Home = () => {
 
   return (
     <div>
-      <SearchBar />
+      <div className="intro-home">
+        <div>
+          <h1 id="intro-title">
+            Descubra <span>seu lar</span> em Curitiba-PR
+          </h1>
+          <h2>Venda e aluguel de imóveis</h2>
+        </div>
+        <SearchBar />
+      </div>
       <div className="carroussel-ads">
         <h2 id="carroussel-title">
           Conheça nossos imóveis à <span>venda</span>

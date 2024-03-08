@@ -35,7 +35,9 @@ const NavBar = () => {
       <nav className="navbar">
         <div className="navbar__left">
           <h1 className="logo">
-            Casa <span>Luz</span> Imóveis
+            <NavLink to="/">
+              Casa <span>Luz</span> Imóveis
+            </NavLink>
           </h1>
         </div>
         <div className="navbar__right">

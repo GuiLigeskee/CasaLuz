@@ -1,6 +1,5 @@
 .container {
   padding-top: 3.5em;
   min-height: 90vh;
-  display: flex;
   justify-content: center;
 }

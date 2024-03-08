@@ -1,17 +1,29 @@
 import "./SearchBar.css";
-// import SearchIcon from "../../assets/procurar.png";
 
 const SearchBar = () => {
   return (
     <div className="search">
-      <form className="search-container">
-        <input type="text" id="search-bar" placeholder="Pesquisar imóveis" />
-        <a href="#">
-          <img
-            className="search-icon"
-            src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png"
-          />
-        </a>
+      <form id="searchForm">
+        <div className="select-content">
+          <select id="propertyType">
+            <option value="apartamento">Apartamento</option>
+            <option value="casa">Casa</option>
+            <option value="sobrado">Sobrado</option>
+            <option value="sitio">Sítio</option>
+            <option value="terreno">Terreno</option>
+          </select>
+        </div>
+
+        <div className="select-content">
+          <select id="intentionType">
+            <option value="aluguel">Aluguel</option>
+            <option value="venda">Venda</option>
+          </select>
+        </div>
+
+        <input type="text" id="searchInput" placeholder="Pesquisar imóvel..." />
+
+        <button type="submit">Procurar Imóvel</button>
       </form>
     </div>
   );

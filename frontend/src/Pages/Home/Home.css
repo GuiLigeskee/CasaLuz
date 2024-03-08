@@ -12,3 +12,30 @@
   flex-direction: row;
   background-color: #08273c;
 }
+
+.intro-home {
+  background-image: url("../../assets/background-intro.jpg");
+  background-size: cover;
+  background-position: center center;
+  color: #08273c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  padding: 1.5em 0 7em 0;
+}
+
+.intro-home {
+  min-height: 95vh;
+}
+
+#intro-title {
+  text-align: center;
+  font-size: 3em;
+  color: #ffffff;
+}
+
+h2 {
+  text-align: center;
+  color: #ffffff;
+}

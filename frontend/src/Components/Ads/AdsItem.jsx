@@ -8,7 +8,7 @@ const AdsItem = ({ add }) => {
       <div className="ads-item">
         {add.images && (
           <div>
-            <p className="price">{add.price}</p>
+            <p className="price">R${add.price}</p>
             <img src={`${uploads}/ads/${add.images[0]}`} alt={add.title} />
             <p className="title">{add.title}</p>
           </div>
