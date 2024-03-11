@@ -1,5 +1,6 @@
 #carroussel-title {
   text-align: center;
+  margin: 2em 0;
   color: #08273c;
 }
 
@@ -7,10 +8,11 @@
   color: #fdb303;
 }
 
-.carroussel {
-  display: flex;
-  flex-direction: row;
-  background-color: #08273c;
+.carousel {
+  position: relative;
+  margin: 20px auto;
+  max-width: 100%;
+  width: 100%;
 }
 
 .intro-home {

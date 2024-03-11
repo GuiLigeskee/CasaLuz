@@ -5,8 +5,8 @@
 
 .ads-item img {
   display: block;
-  width: 350px;
-  height: 200px;
+  min-width: 450px;
+  height: 300px;
 }
 
 .ads-item .price {
