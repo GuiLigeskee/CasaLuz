@@ -12,6 +12,10 @@ const insertAds = async (req, res) => {
     address,
     landMeasurement,
     price,
+    typeOfRealty,
+    district,
+    city,
+    methodOfSale,
   } = req.body;
   const images = req.files.map((file) => file.filename);
 
@@ -28,6 +32,10 @@ const insertAds = async (req, res) => {
     address,
     price,
     landMeasurement,
+    typeOfRealty,
+    district,
+    city,
+    methodOfSale,
     images,
     adminId: admin._id,
     adminName: admin.name,
