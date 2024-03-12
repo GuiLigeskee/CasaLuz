@@ -35,6 +35,12 @@ export const getAds = createAsyncThunk("ads/getall", async () => {
   return data;
 });
 
+// Get ads details
+export const getAdsDetails = createAsyncThunk("ads/get", async (id) => {
+  const data = await adsService.getAdsDetails(id);
+  return data;
+});
+
 export const photoSlice = createSlice({
   name: "publish",
   initialState,
@@ -67,6 +73,16 @@ export const photoSlice = createSlice({
         state.error = null;
       })
       .addCase(getAds.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.ads = action.payload;
+      })
+      .addCase(getAdsDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAdsDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;

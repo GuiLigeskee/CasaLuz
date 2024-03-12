@@ -12,8 +12,9 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Pages
 import Home from "./Pages/Home/Home.jsx";
-import Login from "./Pages/Auth/Login.jsx";
 import AddAds from "./Pages/AddAds/AddAds.jsx";
+import AdsPage from "./Pages/AdsPage/AdsPage.jsx";
+import Login from "./Pages/Auth/Login.jsx";
 import Register from "./Pages/Auth/Register.jsx";
 
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "/createAds",
         element: <AddAds />,
+      },
+      {
+        path: "/ads/:id",
+        element: <AdsPage />,
       },
     ],
   },

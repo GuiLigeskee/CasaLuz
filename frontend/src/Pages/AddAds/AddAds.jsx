@@ -86,6 +86,7 @@ const AddAds = () => {
       <h1>
         <span>Adicionar</span> anúncio de imóvel
       </h1>
+      <h3>Preencha os campos abaixo para criar um anúncio</h3>
       <form onSubmit={handleSubmit}>
         <label htmlFor="arquivo" className="foto-perfil">
           <span id="buttonFile">Carregar imagens do imóvel</span>

@@ -17,6 +17,12 @@
   color: #fdb303;
 }
 
+.createAds h3 {
+  color: #08273c;
+  text-align: center;
+  font-weight: 400;
+}
+
 input[type="file"] {
   display: none;
 }
