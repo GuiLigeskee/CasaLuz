@@ -3,7 +3,7 @@
   padding: 0.5em 2em;
   border: 1px solid #08273c;
   border-radius: 10px;
-  margin-bottom: 3em;
+  margin: 3em auto;
   max-width: 50%;
 }
 
@@ -48,4 +48,27 @@ input[type="file"] {
   margin: 0 0.2em;
   border-radius: 10px;
   object-fit: cover;
+}
+
+select {
+  color: #08273c;
+  border: 1px solid #08273c;
+  width: 100%;
+  border-radius: 10px;
+  padding: 1em;
+  background-color: #ffffff;
+  font-family: "poppins";
+  font-weight: 300;
+  transition: all 0.3s;
+}
+
+select:focus {
+  outline: none;
+}
+
+select option {
+  background-color: #f1f1f1;
+  font-size: 0.8em;
+  padding: 1em;
+  border: none;
 }

@@ -6,11 +6,10 @@ const SearchBar = () => {
       <form id="searchForm">
         <div className="select-content">
           <select id="propertyType">
-            <option value="apartamento">Apartamento</option>
-            <option value="casa">Casa</option>
-            <option value="sobrado">Sobrado</option>
-            <option value="sitio">Sítio</option>
-            <option value="terreno">Terreno</option>
+            <option value="Casa">Casa</option>
+            <option value="Apartamento">Apartamento</option>
+            <option value="Terreno">Terreno</option>
+            <option value="Comercial">Comercial</option>
           </select>
         </div>
 

@@ -20,6 +20,10 @@ const AddAds = () => {
   const [tell, setTell] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [address, setAddress] = useState("");
+  const [district, setDistrict] = useState("");
+  const [city, setCity] = useState("");
+  const [typeOfRealty, setTypeOfRealty] = useState("");
+  const [methodOfSale, setMethodOfSale] = useState("");
   const [landMeasurement, setLandMeasurement] = useState(0);
   const [price, setPrice] = useState(0);
   const [adsImages, setAdsImages] = useState([]);
@@ -36,6 +40,10 @@ const AddAds = () => {
       address,
       landMeasurement,
       price,
+      district,
+      city,
+      typeOfRealty,
+      methodOfSale,
     };
 
     const formData = new FormData();
@@ -115,12 +123,46 @@ const AddAds = () => {
           />
         </label>
         <label>
+          <span>Categoria de imóvel</span>
+          <select
+            onChange={(e) => setTypeOfRealty(e.target.value)}
+            value={typeOfRealty || ""}
+            required
+          >
+            <option value="">Selecione uma categoria</option>
+            <option value="Casa">Casa</option>
+            <option value="Apartamento">Apartamento</option>
+            <option value="Terreno">Terreno</option>
+            <option value="Comercial">Comercial</option>
+          </select>
+        </label>
+        <label>
           <span>Endereço do imóvel</span>
           <input
             type="text"
             placeholder="endereço"
             onChange={(e) => setAddress(e.target.value)}
             value={address || ""}
+            required
+          />
+        </label>
+        <label>
+          <span>Bairro do imóvel</span>
+          <input
+            type="text"
+            placeholder="bairro"
+            onChange={(e) => setDistrict(e.target.value)}
+            value={district || ""}
+            required
+          />
+        </label>
+        <label>
+          <span>Cidade do imóvel</span>
+          <input
+            type="text"
+            placeholder="cidade"
+            onChange={(e) => setCity(e.target.value)}
+            value={city || ""}
             required
           />
         </label>
@@ -143,6 +185,19 @@ const AddAds = () => {
             value={price}
             required
           />
+        </label>
+        <label>
+          <span>Método de negócio</span>
+          <select
+            onChange={(e) => setMethodOfSale(e.target.value)}
+            value={methodOfSale || ""}
+            required
+          >
+            <option value="">Selecione um método</option>
+            <option value="Venda">Venda</option>
+            <option value="Aluguel">Aluguel</option>
+            <option value="Aluguel e venda">Aluguel e venda</option>
+          </select>
         </label>
         <label>
           <span>Telefone do vendedor</span>

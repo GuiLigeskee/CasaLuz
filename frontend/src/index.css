@@ -45,10 +45,11 @@ input:not([type="color"]) {
   background-color: #fff;
   color: #08273c;
   border-radius: 10px;
-  padding: 0.8em;
+  padding: 1em;
   outline: none;
   margin-bottom: 0.6em;
   border: 1px solid #08273c;
+  font-family: "poppins";
 }
 
 input::placeholder {
