@@ -124,7 +124,7 @@ const AddAds = () => {
           />
         </label>
         <label>
-          <span>Categoria de imóvel</span>
+          <span>Categoria do imóvel</span>
           <select
             onChange={(e) => setTypeOfRealty(e.target.value)}
             value={typeOfRealty || ""}
@@ -138,7 +138,7 @@ const AddAds = () => {
           </select>
         </label>
         <label>
-          <span>Endereço do imóvel</span>
+          <span>Endereço</span>
           <input
             type="text"
             placeholder="endereço"
@@ -148,7 +148,7 @@ const AddAds = () => {
           />
         </label>
         <label>
-          <span>Bairro do imóvel</span>
+          <span>Bairro</span>
           <input
             type="text"
             placeholder="bairro"
@@ -158,7 +158,7 @@ const AddAds = () => {
           />
         </label>
         <label>
-          <span>Cidade do imóvel</span>
+          <span>Cidade</span>
           <input
             type="text"
             placeholder="cidade"
@@ -168,7 +168,7 @@ const AddAds = () => {
           />
         </label>
         <label>
-          <span>Tamanho do imóvel</span>
+          <span>Tamanho do imóvel (m2)</span>
           <input
             type="number"
             placeholder="tamanho"
