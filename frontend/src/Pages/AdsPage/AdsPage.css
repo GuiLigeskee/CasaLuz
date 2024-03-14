@@ -1,0 +1,29 @@
+.AdsPage {
+}
+
+.carousel-img {
+  width: 100%;
+  height: 100%;
+}
+
+.mySwiper {
+  width: 50%;
+  height: 25%;
+  float: left;
+}
+
+.details-container {
+  background-color: #f1f1f1;
+  padding: 1em;
+}
+
+.detailsTitle {
+  color: #08273c;
+  padding: 1em 0.5em;
+}
+
+.details-container label {
+  background-color: #fafafa;
+  padding: 1em;
+  border-radius: 15px;
+}

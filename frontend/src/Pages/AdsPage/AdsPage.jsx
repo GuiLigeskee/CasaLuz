@@ -1,12 +1,19 @@
 // CSS
 import "./AdsPage.css";
 
+// Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 import { uploads } from "../../utils/config";
 
 // Components
 
 // Hooks
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -28,34 +35,86 @@ const AdsPage = () => {
   }, [dispatch, id]);
 
   return (
-    <div>
-      {loading ? (
-        <p>Carregando...</p>
-      ) : (
-        ads && (
-          <div>
-            {ads.images &&
-              ads.images.map((image, index) => (
+    <div className="AdsPage">
+      <div>
+        <Swiper
+          slidesPerView={1}
+          loop={true}
+          pagination={{
+            clickable: true,
+          }}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
+          }}
+          navigation={true}
+          modules={[Pagination, Navigation, Autoplay]}
+          className="mySwiper"
+        >
+          {ads.images &&
+            ads.images.map((image, index) => (
+              <SwiperSlide key={index}>
                 <img
                   key={index}
                   src={`${uploads}/ads/${image}`}
                   alt={`${ads.title} - Foto ${index + 1}`}
+                  className="carousel-img"
                 />
-              ))}
-            <p>Título: {ads.title}</p>
-            <p>Tipo de Imóvel: {ads.typeOfRealty}</p>
-            <p>Descrição: {ads.description}</p>
-            <p>Preço: {ads.price}</p>
-            <p>Endereço: {ads.address}</p>
-            <p>Bairro: {ads.district}</p>
-            <p>Cidade: {ads.city}</p>
-            <p>Método de Venda: {ads.methodOfSale}</p>
-            <p>Medição do Terreno: {ads.landMeasurement}</p>
-            <p>Telefone: {ads.tell}</p>
-            <p>WhatsApp: {ads.whatsapp}</p>
-          </div>
-        )
-      )}
+              </SwiperSlide>
+            ))}
+        </Swiper>
+        <div className="details-container">
+          <h2 className="detailsTitle">{ads.title}</h2>
+          {ads.description && (
+            <label>
+              <span>Descrição:</span>
+              <p>{ads.description}</p>
+            </label>
+          )}
+          {ads.typeOfRealty && (
+            <label>
+              <span>Tipo de imóvel:</span>
+              <p>{ads.typeOfRealty}</p>
+            </label>
+          )}
+          {ads.price && (
+            <label>
+              <span>Preço:</span>
+              <p>R${ads.price}</p>
+            </label>
+          )}
+          {ads.address && (
+            <label>
+              <span>Endereço:</span>
+              <p>{ads.address}</p>
+            </label>
+          )}
+          {ads.district && (
+            <label>
+              <span>Bairro:</span>
+              <p>{ads.district}</p>
+            </label>
+          )}
+          {ads.city && (
+            <label>
+              <span>Cidade:</span>
+              <p>{ads.city}</p>
+            </label>
+          )}
+          {ads.methodOfSale && (
+            <label>
+              <span>Método de venda:</span>
+              <p>{ads.methodOfSale}</p>
+            </label>
+          )}
+          {ads.landMeasurement && (
+            <label>
+              <span>Tamanho do imóvel:</span>
+              <p>{ads.landMeasurement}m2</p>
+            </label>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
