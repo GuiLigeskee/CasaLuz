@@ -11,9 +11,11 @@ import "swiper/css/navigation";
 import { uploads } from "../../utils/config";
 
 // Components
+import Whatsapp from "../../assets/whatsapp.svg";
+import Tell from "../../assets/phone.svg";
 
 // Hooks
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -35,8 +37,8 @@ const AdsPage = () => {
   }, [dispatch, id]);
 
   return (
-    <div className="AdsPage">
-      <div>
+    <div className="adsPage">
+      <div className="carousel-container">
         <Swiper
           slidesPerView={1}
           loop={true}
@@ -44,7 +46,7 @@ const AdsPage = () => {
             clickable: true,
           }}
           autoplay={{
-            delay: 2500,
+            delay: 5000,
             disableOnInteraction: false,
           }}
           navigation={true}
@@ -63,12 +65,42 @@ const AdsPage = () => {
               </SwiperSlide>
             ))}
         </Swiper>
-        <div className="details-container">
-          <h2 className="detailsTitle">{ads.title}</h2>
-          {ads.description && (
+        <div className="contact-section">
+          <h3>Gostou do que viu?</h3>
+          <h4>Entre em contato com nossos corretores!</h4>
+          <div className="contact-buttons">
+            <a
+              id="contact-button"
+              href={`https://wa.me/${ads.whatsapp}`}
+              target="blank"
+            >
+              <img src={Whatsapp} alt="Whatsapp" />
+              <p>Whatsapp</p>
+            </a>
+            <a
+              id="contact-button"
+              href={`http://tell:${ads.tell}`}
+              target="_blank"
+            >
+              <img src={Tell} alt="Telefone" />
+              <p>Telefone</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className="details-container">
+        <h2 className="details-title">{ads.title}</h2>
+        {ads.description && (
+          <label>
+            <span>Descrição:</span>
+            <p>{ads.description}</p>
+          </label>
+        )}
+        <div className="details-flex">
+          {ads.price && (
             <label>
-              <span>Descrição:</span>
-              <p>{ads.description}</p>
+              <span>Preço:</span>
+              <p>R${ads.price}</p>
             </label>
           )}
           {ads.typeOfRealty && (
@@ -77,10 +109,16 @@ const AdsPage = () => {
               <p>{ads.typeOfRealty}</p>
             </label>
           )}
-          {ads.price && (
+          {ads.methodOfSale && (
             <label>
-              <span>Preço:</span>
-              <p>R${ads.price}</p>
+              <span>Método de venda:</span>
+              <p>{ads.methodOfSale}</p>
+            </label>
+          )}
+          {ads.landMeasurement && (
+            <label>
+              <span>Tamanho do imóvel:</span>
+              <p>{ads.landMeasurement}m2</p>
             </label>
           )}
           {ads.address && (
@@ -99,18 +137,6 @@ const AdsPage = () => {
             <label>
               <span>Cidade:</span>
               <p>{ads.city}</p>
-            </label>
-          )}
-          {ads.methodOfSale && (
-            <label>
-              <span>Método de venda:</span>
-              <p>{ads.methodOfSale}</p>
-            </label>
-          )}
-          {ads.landMeasurement && (
-            <label>
-              <span>Tamanho do imóvel:</span>
-              <p>{ads.landMeasurement}m2</p>
             </label>
           )}
         </div>

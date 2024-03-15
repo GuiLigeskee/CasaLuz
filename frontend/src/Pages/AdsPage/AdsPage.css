@@ -1,29 +1,68 @@
-.AdsPage {
+.adsPage {
+  background-color: #f1f1f1;
+  padding: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.carousel-container {
+  width: 50%; /* Faz o carrossel ocupar metade da largura da tela */
 }
 
 .carousel-img {
-  width: 100%;
-  height: 100%;
-}
-
-.mySwiper {
-  width: 50%;
-  height: 25%;
-  float: left;
+  max-width: 100%;
+  object-fit: cover;
 }
 
 .details-container {
-  background-color: #f1f1f1;
-  padding: 1em;
-}
-
-.detailsTitle {
-  color: #08273c;
-  padding: 1em 0.5em;
+  width: 50%;
+  padding: 0 0 0 1em;
 }
 
 .details-container label {
   background-color: #fafafa;
   padding: 1em;
   border-radius: 15px;
+}
+
+.details-title {
+  color: #08273c;
+  padding-bottom: 1em;
+}
+
+.contact-section {
+  margin-top: 20px;
+}
+
+.contact-section h3,
+h4 {
+  color: #08273c;
+  text-align: center;
+}
+
+.contact-buttons {
+  margin: 1em;
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+#contact-button {
+  background-color: #08273c;
+  color: #fafafa;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  width: 50%;
+  padding: 1em;
+  border-radius: 15px;
+}
+
+#contact-button img {
+  width: 3em;
+  filter: invert(1);
 }
