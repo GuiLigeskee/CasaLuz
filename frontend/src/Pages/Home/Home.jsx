@@ -69,10 +69,17 @@ const Home = () => {
         </h2>
         <div className="carousel">
           <Swiper
-            modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
             slidesPerView={slidePerView}
-            pagination={{ clickable: true }}
+            loop={true}
+            pagination={{
+              clickable: true,
+            }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
             navigation={true}
+            modules={[Pagination, Navigation, Autoplay]}
           >
             {ads &&
               ads.map((add) => (
@@ -92,10 +99,17 @@ const Home = () => {
         </h2>
         <div className="carousel">
           <Swiper
-            modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
             slidesPerView={slidePerView}
-            pagination={{ clickable: true }}
+            loop={true}
+            pagination={{
+              clickable: true,
+            }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
             navigation={true}
+            modules={[Pagination, Navigation, Autoplay]}
           >
             {ads &&
               ads.map((add) => (

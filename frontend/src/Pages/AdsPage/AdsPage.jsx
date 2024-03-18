@@ -27,9 +27,7 @@ const AdsPage = () => {
 
   const dispatch = useDispatch();
 
-  const { ads, add, loading, error, message } = useSelector(
-    (state) => state.ads
-  );
+  const { ads } = useSelector((state) => state.ads);
 
   // Load ads data
   useEffect(() => {
@@ -77,11 +75,7 @@ const AdsPage = () => {
               <img src={Whatsapp} alt="Whatsapp" />
               <p>Whatsapp</p>
             </a>
-            <a
-              id="contact-button"
-              href={`http://tell:${ads.tell}`}
-              target="_blank"
-            >
+            <a id="contact-button" href={`tell:${ads.tell}`} target="_blank">
               <img src={Tell} alt="Telefone" />
               <p>Telefone</p>
             </a>

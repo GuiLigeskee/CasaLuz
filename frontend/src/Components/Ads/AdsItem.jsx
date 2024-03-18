@@ -10,7 +10,13 @@ const AdsItem = ({ add }) => {
           <div>
             <p className="price">R${add.price}</p>
             <img src={`${uploads}/ads/${add.images[0]}`} alt={add.title} />
-            <p className="title">{add.title}</p>
+            <p className="title">
+              {add.typeOfRealty}
+              <br />
+              {add.address}
+              <br />
+              {add.district}, {add.city}
+            </p>
           </div>
         )}
       </div>
