@@ -31,6 +31,7 @@ Os administradores terão a opção de adicionar pop-ups para destacar ofertas, 
 ## Tecnologia e Plataforma
 #### O site será desenvolvido utilizando as seguintes tecnologias:
 
+##### Front-end: React.js, Redux
 ##### Back-end: Node.js, Express
 ##### Banco de Dados: MongoDB
 ##### Estilização: CSS
