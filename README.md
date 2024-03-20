@@ -23,10 +23,10 @@ Os administradores terão a opção de adicionar pop-ups para destacar ofertas, 
 ## Design e Layout
 #### O design do site será minimalista, com as seguintes cores predominantes:
 
-Fundo: #fafafa
-Tons de Cinza: #f1f1f1
-Destaque: #08273c
-Destaque Secundário: #fdb303
+#### Fundo: #fafafa
+#### Tons de Cinza: #f1f1f1
+#### Destaque: #08273c
+#### Destaque Secundário: #fdb303
 
 ## Tecnologia e Plataforma
 #### O site será desenvolvido utilizando as seguintes tecnologias:
