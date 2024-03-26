@@ -21,7 +21,11 @@ const imagesUpload = multer({
   fileFilter(req, file, cb) {
     if (!file.originalname.match(/\.(png|jpg|jpeg|heif|hevc)$/i)) {
       // upload only png, jpg, jpeg, heif, hevc format
-      return cb(new Error("Por favor, envie apenas imagens PNG, JPG, HEIF, HEVC ou JPEG"));
+      return cb(
+        new Error(
+          "Por favor, envie apenas imagens PNG, JPG, HEIF, HEVC ou JPEG"
+        )
+      );
     }
     cb(null, true);
   },
