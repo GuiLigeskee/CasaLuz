@@ -9,6 +9,9 @@ const imagesStorage = multer.diskStorage({
     if (req.baseUrl.includes("ads")) {
       folder = "ads";
     }
+    if (req.baseUrl.includes("depoiment")) {
+      folder = "depoiment";
+    }
     cb(null, `uploads/${folder}/`);
   },
   filename: (req, file, cb) => {
