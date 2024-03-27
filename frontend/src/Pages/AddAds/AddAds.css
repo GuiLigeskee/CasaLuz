@@ -27,20 +27,6 @@ input[type="file"] {
   display: none;
 }
 
-#buttonFile {
-  margin-top: 2em;
-  background-color: #08273c;
-  color: #fdb303;
-  padding: 1em;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: 500;
-}
-
-#buttonFile:hover {
-  cursor: pointer;
-}
-
 .imagePreviews {
   width: auto;
   border-radius: 10px;

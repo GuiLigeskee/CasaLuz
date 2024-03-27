@@ -16,6 +16,7 @@ import AddAds from "./Pages/AddAds/AddAds.jsx";
 import AdsPage from "./Pages/AdsPage/AdsPage.jsx";
 import Login from "./Pages/Auth/Login.jsx";
 import Register from "./Pages/Auth/Register.jsx";
+import AddDepoiment from "./Pages/AddDepoiment/AddDepoiment.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/ads/:id",
         element: <AdsPage />,
+      },
+      {
+        path: "/addDepoiment",
+        element: <AddDepoiment />,
       },
     ],
   },

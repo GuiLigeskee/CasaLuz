@@ -61,7 +61,6 @@ button,
 input[type="submit"] {
   color: #fdb303;
   background-color: #08273c;
-  border: 1px solid #fdb303;
   border-radius: 10px;
   padding: 0.8em 1.6em;
   font-weight: 600;

@@ -1,0 +1,20 @@
+.AddDepoiment {
+  background-color: #fafafa;
+  padding: 0.5em 2em;
+  border: 1px solid #08273c;
+  border-radius: 10px;
+  margin: 3em auto;
+  max-width: 50%;
+}
+
+.AddDepoiment h1 {
+  color: #08273c;
+  margin: 0.5em auto;
+  text-align: center;
+}
+
+.AddDepoiment h3 {
+  color: #08273c;
+  text-align: center;
+  font-weight: 400;
+}
