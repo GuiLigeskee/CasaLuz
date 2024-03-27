@@ -10,9 +10,9 @@ const initialState = {
   message: null,
 };
 
-// Publish an user's ads
+// Publish an user's depoiment
 export const publishDepoiment = createAsyncThunk(
-  "ads/publish",
+  "depoiment/publish",
   async (depoiment, thunkAPI) => {
     const token = thunkAPI.getState().auth.admin.token;
 
@@ -28,14 +28,14 @@ export const publishDepoiment = createAsyncThunk(
   }
 );
 
-// Get all photos
+// Get all depoiments
 export const getDepoiments = createAsyncThunk("depoiment/getall", async () => {
   const data = await depoimentService.getDepoiments();
 
   return data;
 });
 
-// Get ads details
+// Get depoiment details
 export const getDepoimentDetails = createAsyncThunk(
   "depoiment/get",
   async (id) => {

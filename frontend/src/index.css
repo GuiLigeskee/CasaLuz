@@ -88,3 +88,28 @@ input[type="submit"]:hover {
 .hide {
   display: none;
 }
+
+#buttonFile {
+  margin-top: 2em;
+  background-color: #08273c;
+  color: #fdb303;
+  padding: 1em;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+#buttonFile:hover {
+  cursor: pointer;
+}
+
+textarea {
+  background-color: #fff;
+  color: #08273c;
+  border-radius: 10px;
+  padding: 1em;
+  outline: none;
+  margin-bottom: 0.6em;
+  border: 1px solid #08273c;
+  font-family: "poppins";
+}
