@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import depoimentService from "../Service/depoimentService";
+import depoimentService from "../Service/depoimentService.jsx";
 
 const initialState = {
   depoiments: [],

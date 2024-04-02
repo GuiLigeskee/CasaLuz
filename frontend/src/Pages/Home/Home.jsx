@@ -20,7 +20,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Redux
 import { getAds } from "../../Slice/adsSlice";
+import { getDepoiments } from "../../Slice/depoimentSlice";
 import AdsItem from "../../Components/Ads/AdsItem";
+import DepoimentItem from "../../Components/Depoiment/DepoimentItem";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -29,9 +31,11 @@ const Home = () => {
 
   const { ads } = useSelector((state) => state.ads);
 
+  const { depoiments } = useSelector((state) => state.depoiments);
+
   // Load all ads
   useEffect(() => {
-    dispatch(getAds());
+    dispatch(getAds(), getDepoiments());
   }, [dispatch]);
 
   useEffect(() => {
@@ -63,65 +67,101 @@ const Home = () => {
         </div>
         <SearchBar />
       </div>
-      <div className="carroussel-ads">
-        <h2 id="carroussel-title">
-          Conheça nossos imóveis à <span>venda</span>
-        </h2>
-        <div className="carousel">
-          <Swiper
-            slidesPerView={slidePerView}
-            loop={true}
-            pagination={{
-              clickable: true,
-            }}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            navigation={true}
-            modules={[Pagination, Navigation, Autoplay]}
-          >
-            {ads &&
-              ads.map((add) => (
-                <SwiperSlide key={add._id}>
-                  <div key={add._id}>
-                    <AdsItem add={add} />
-                  </div>
-                </SwiperSlide>
-              ))}
-          </Swiper>
+      {ads && (
+        <div className="carroussel-ads">
+          <h2 id="carroussel-title">
+            Conheça nossos imóveis à <span>venda</span>
+          </h2>
+          <div className="carousel">
+            <Swiper
+              slidesPerView={slidePerView}
+              loop={true}
+              pagination={{
+                clickable: true,
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              navigation={true}
+              modules={[Pagination, Navigation, Autoplay]}
+            >
+              {ads &&
+                ads.map((add) => (
+                  <SwiperSlide key={add._id}>
+                    <div key={add._id}>
+                      <AdsItem add={add} />
+                    </div>
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="carroussel-ads">
-        <h2 id="carroussel-title">
-          Conheça nossos imóveis para <span>alugar</span>
-        </h2>
-        <div className="carousel">
-          <Swiper
-            slidesPerView={slidePerView}
-            loop={true}
-            pagination={{
-              clickable: true,
-            }}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            navigation={true}
-            modules={[Pagination, Navigation, Autoplay]}
-          >
-            {ads &&
-              ads.map((add) => (
-                <SwiperSlide key={add._id}>
-                  <div key={add._id}>
-                    <AdsItem add={add} />
-                  </div>
-                </SwiperSlide>
-              ))}
-          </Swiper>
+      {ads && (
+        <div className="carroussel-ads">
+          <h2 id="carroussel-title">
+            Conheça nossos imóveis para <span>alugar</span>
+          </h2>
+          <div className="carousel">
+            <Swiper
+              slidesPerView={slidePerView}
+              loop={true}
+              pagination={{
+                clickable: true,
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              navigation={true}
+              modules={[Pagination, Navigation, Autoplay]}
+            >
+              {ads &&
+                ads.map((add) => (
+                  <SwiperSlide key={add._id}>
+                    <div key={add._id}>
+                      <AdsItem add={add} />
+                    </div>
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </div>
         </div>
-      </div>
+      )}
+
+      {depoiments && (
+        <div className="carousel-depoiments">
+          <h2 id="carroussel-title">
+            Veja os <span>depoimentos</span> de nossos clientes
+          </h2>
+          <div className="carousel">
+            <Swiper
+              slidesPerView={slidePerView}
+              loop={true}
+              pagination={{
+                clickable: true,
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              navigation={true}
+              modules={[Pagination, Navigation, Autoplay]}
+            >
+              {depoiments &&
+                depoiments.map((depoiment) => (
+                  <SwiperSlide key={depoiment._id}>
+                    <div key={depoiment._id}>
+                      <DepoimentItem depoiment={depoiment} />
+                    </div>
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

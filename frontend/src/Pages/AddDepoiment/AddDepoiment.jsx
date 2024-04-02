@@ -11,7 +11,7 @@ import { useState } from "react";
 import { publishDepoiment } from "../../Slice/depoimentSlice";
 
 const AddDepoiment = () => {
-  const { loading, error, message } = useSelector((state) => state.depoiments);
+  // const { loading, error, message } = useSelector((state) => state.depoiments);
 
   const dispatch = useDispatch();
 
@@ -85,17 +85,28 @@ const AddDepoiment = () => {
         </div>
         <label>
           <span>Titulo</span>
-          <input type="text" placeholder="Titulo do depoimento" />
+          <input
+            type="text"
+            placeholder="Titulo do depoimento"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
         </label>
         <label>
           <span>Depoimento</span>
-          <textarea placeholder="Escreva o depoimento" rows={4}></textarea>
+          <textarea
+            placeholder="Escreva o depoimento"
+            rows={4}
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          ></textarea>
         </label>
 
-        {!loading && <input type="submit" value="Adicionar depoimento" />}
+        {/* {!loading && <input type="submit" value="Adicionar depoimento" />}
         {loading && <input type="submit" disabled value="Aguarde..." />}
         {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />}
+        {message && <Message msg={message} type="success" />} */}
+        <input type="submit" value="Adicionar depoimento" />
       </form>
     </div>
   );
