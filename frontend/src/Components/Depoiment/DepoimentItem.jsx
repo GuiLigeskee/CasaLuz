@@ -2,13 +2,12 @@ import "./DepoimentItem.css";
 import { uploads } from "../../utils/config";
 import { Link } from "react-router-dom";
 
-const DepoimentItem = () => {
+const DepoimentItem = ({ depoiment }) => {
   return (
     <Link>
       <div className="depoiment-item">
         {depoiment.images && (
           <div>
-            <p className="price">R${depoiment.price}</p>
             <img
               src={`${uploads}/depoiment/${depoiment.images[0]}`}
               alt={depoiment.title}

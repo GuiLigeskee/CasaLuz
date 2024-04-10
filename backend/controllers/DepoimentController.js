@@ -52,11 +52,11 @@ const deleteDepoiment = async (req, res) => {
 
 // Obter todos os anúncios
 const getAllDepoiments = async (req, res) => {
-  const depoiment = await Depoiment.find({})
+  const depoiments = await Depoiment.find({})
     .sort([["createdAt", -1]])
     .exec();
 
-  return res.status(200).json(depoiment);
+  return res.status(200).json(depoiments);
 };
 
 // Obter anúncios do admin

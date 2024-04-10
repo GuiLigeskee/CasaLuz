@@ -20,7 +20,7 @@ const getDepoiments = async () => {
   const config = requestConfig("GET");
 
   try {
-    const res = await fetch(api + "/getAllDepoiments/", config)
+    const res = await fetch(api + "/depoiment/", config)
       .then((res) => res.json())
       .catch((err) => err);
 

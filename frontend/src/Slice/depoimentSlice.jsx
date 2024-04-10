@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import depoimentService from "../Service/depoimentService.jsx";
 
 const initialState = {
-  depoiments: [],
+  depoiments: [], // Make sure it's initialized as an empty array
   depoiment: {},
   error: false,
   success: false,
@@ -81,6 +81,7 @@ export const depoimentSlice = createSlice({
         state.error = null;
         state.depoiments = action.payload;
       })
+
       .addCase(getDepoimentDetails.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -89,7 +90,7 @@ export const depoimentSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.depoiments = action.payload;
+        state.depoiment = action.payload;
       });
   },
 });

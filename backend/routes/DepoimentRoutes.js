@@ -19,8 +19,8 @@ const { imagesUpload } = require("../middlewares/imagesUpload");
 router.post("/", authGuard, imagesUpload.array("images"), insertDepoiment);
 router.delete("/:id", authGuard, deleteDepoiment);
 router.put("/:id", authGuard, updateDepoiment);
+router.get("/", getAllDepoiments);
 router.get("/getDepoiment/:id", getDepoimentById);
-router.get("/getAllDepoiments/", getAllDepoiments);
 router.get("/getAdminDepoiments/:id", getAdminDepoiments);
 
 module.exports = router;

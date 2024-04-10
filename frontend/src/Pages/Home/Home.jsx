@@ -5,13 +5,7 @@ import SearchBar from "../../Components/SearchBar/SearchBar";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Pagination,
-  Navigation,
-  Scrollbar,
-  A11y,
-  Autoplay,
-} from "swiper/modules";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css/bundle";
 
 // Hooks
@@ -27,15 +21,16 @@ import DepoimentItem from "../../Components/Depoiment/DepoimentItem";
 const Home = () => {
   const dispatch = useDispatch();
 
-  const [slidePerView, setSlidePerView] = useState(3);
-
   const { ads } = useSelector((state) => state.ads);
 
   const { depoiments } = useSelector((state) => state.depoiments);
 
-  // Load all ads
+  const [slidePerView, setSlidePerView] = useState(3);
+
   useEffect(() => {
-    dispatch(getAds(), getDepoiments());
+    dispatch(getAds());
+    dispatch(getDepoiments());
+    console.log(depoiments);
   }, [dispatch]);
 
   useEffect(() => {
