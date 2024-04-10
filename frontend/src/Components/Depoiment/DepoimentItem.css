@@ -1,18 +1,23 @@
 .depoiment-item {
-  position: relative;
+  padding: 1em;
+  background-color: #fafafa;
+  border-radius: 15px;
 }
 
 .depoiment-item img {
-  display: block;
-  min-width: 450px;
-  height: 300px;
+  width: 100%;
+  border-radius: 15px;
 }
 
-.depoiment-item .title {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 0.5em;
-  background-color: #ffffff85;
+.title {
+  margin: 1em auto;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.2em;
+  letter-spacing: 1px;
+}
+
+.description {
+  text-align: center;
+  float: right;
 }

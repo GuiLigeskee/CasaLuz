@@ -12,7 +12,8 @@ const DepoimentItem = ({ depoiment }) => {
               src={`${uploads}/depoiment/${depoiment.images[0]}`}
               alt={depoiment.title}
             />
-            <p className="title">{depoiment.description}</p>
+            <p className="title">{depoiment.title}</p>
+            <p className="description">"{depoiment.description}"</p>
           </div>
         )}
       </div>
