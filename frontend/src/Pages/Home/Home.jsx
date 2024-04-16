@@ -30,7 +30,6 @@ const Home = () => {
   useEffect(() => {
     dispatch(getAds());
     dispatch(getDepoiments());
-    console.log(depoiments);
   }, [dispatch]);
 
   useEffect(() => {

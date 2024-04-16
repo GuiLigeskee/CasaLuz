@@ -22,6 +22,16 @@ ul {
   list-style: none;
 }
 
+#title {
+  text-align: center;
+  color: #08273c;
+  margin: 1em;
+}
+
+.title span {
+  color: #fdb303;
+}
+
 form {
   display: flex;
   flex-direction: column;

@@ -8,6 +8,10 @@
   color: #fdb303;
 }
 
+.btn-ver-mais a {
+  margin: 1em auto;
+}
+
 .carousel {
   position: relative;
   margin: 20px auto;
