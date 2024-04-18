@@ -27,6 +27,8 @@ const Home = () => {
 
   const [slidePerView, setSlidePerView] = useState(3);
 
+  const [slidePerViewDepoiments, setSlidePerViewDepoiments] = useState(4);
+
   useEffect(() => {
     dispatch(getAds());
     dispatch(getDepoiments());
@@ -36,8 +38,10 @@ const Home = () => {
     function handleResize() {
       if (window.innerWidth < 720) {
         setSlidePerView(1);
+        setSlidePerViewDepoiments(2);
       } else {
         setSlidePerView(3);
+        setSlidePerViewDepoiments(4);
       }
     }
 
@@ -130,9 +134,9 @@ const Home = () => {
           <h2 id="carroussel-title">
             Veja os <span>depoimentos</span> de nossos clientes
           </h2>
-          <div className="carousel">
+          <div className="carousel-depoiments">
             <Swiper
-              slidesPerView={slidePerView}
+              slidesPerView={slidePerViewDepoiments}
               loop={true}
               pagination={{
                 clickable: true,
@@ -141,7 +145,7 @@ const Home = () => {
                 delay: 5000,
                 disableOnInteraction: false,
               }}
-              navigation={true}
+              spaceBetween={"30"}
               modules={[Pagination, Navigation, Autoplay]}
             >
               {depoiments &&

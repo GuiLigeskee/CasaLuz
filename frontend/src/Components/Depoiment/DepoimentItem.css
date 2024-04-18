@@ -2,8 +2,8 @@
   padding: 1em;
   background-color: #fafafa;
   border-radius: 15px;
-  width: 350px;
-  height: auto;
+  width: 100%;
+  max-height: 500px;
 }
 
 .depoiment-item img {

@@ -19,6 +19,12 @@
   width: 100%;
 }
 
+.carousel-depoiments {
+  margin: 20px auto;
+  max-width: 100%;
+  width: 95%;
+}
+
 .intro-home {
   background-image: url("../../assets/background-intro.jpg");
   background-size: cover;
