@@ -12,8 +12,8 @@
 
 .ads-item .price {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 10px;
+  left: 10px;
   width: auto;
   padding: 0.5em;
   background-color: #ffffff85;
@@ -25,5 +25,34 @@
   left: 0;
   width: 100%;
   padding: 0.5em;
-  background-color: #ffffff85;
+  color: #fff;
+}
+
+.admin-options {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.admin-options button {
+  margin-left: 5px;
+  padding: 0.5em 1em;
+  border: none;
+  background-color: #08273c;
+  color: #fff;
+  cursor: pointer;
+}
+
+#admin-option-delete {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+#admin-option-delete:hover {
+  background-color: #ffc4c9;
+}
+
+.admin-options button:hover {
+  background-color: #0f486e;
 }
