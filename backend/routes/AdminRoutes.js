@@ -23,8 +23,8 @@ const authGuard = require("../middlewares/authGuard");
 router.post(
   "/register",
   authGuard,
-  adminCreateValidation(),
-  validate,
+  // adminCreateValidation(),
+  // validate,
   register
 );
 router.get("/profile", authGuard, validate, getCurrentAdmin);

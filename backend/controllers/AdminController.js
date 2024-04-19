@@ -25,20 +25,22 @@ const register = async (req, res) => {
     }
     // Cria um hash da senha
     const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // const hashedPassword = await bcrypt.hash(password, salt);
 
     // Cria um novo administrador
     const newAdmin = new Admin({
       name,
       email,
-      password: hashedPassword,
+      password,
     });
 
     // Salva o novo administrador no banco de dados
     await newAdmin.save();
 
     // Retorna uma resposta de sucesso
-    res.status(201).json({ message: "Administrador registrado com sucesso." });
+    res
+      .status(201)
+      .json({ message: "Administrador registrado com sucesso.", name });
   } catch (error) {
     // Retorna um erro se ocorrer algum problema durante o registro
     console.error("Erro ao registrar novo administrador:", error);
