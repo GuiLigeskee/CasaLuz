@@ -27,7 +27,7 @@ const AdsPage = () => {
 
   const dispatch = useDispatch();
 
-  const { ads } = useSelector((state) => state.ads);
+  const { add } = useSelector((state) => state.ads);
 
   // Load ads data
   useEffect(() => {
@@ -51,13 +51,13 @@ const AdsPage = () => {
           modules={[Pagination, Navigation, Autoplay]}
           className="mySwiper"
         >
-          {ads.images &&
-            ads.images.map((image, index) => (
+          {add.images &&
+            add.images.map((image, index) => (
               <SwiperSlide key={index}>
                 <img
                   key={index}
                   src={`${uploads}/ads/${image}`}
-                  alt={`${ads.title} - Foto ${index + 1}`}
+                  alt={`${add.title} - Foto ${index + 1}`}
                   className="carousel-img"
                 />
               </SwiperSlide>
@@ -69,13 +69,13 @@ const AdsPage = () => {
           <div className="contact-buttons">
             <a
               id="contact-button"
-              href={`https://wa.me/${ads.whatsapp}`}
+              href={`https://wa.me/${add.whatsapp}`}
               target="blank"
             >
               <img src={Whatsapp} alt="Whatsapp" />
               <p>Whatsapp</p>
             </a>
-            <a id="contact-button" href={`tell:${ads.tell}`} target="_blank">
+            <a id="contact-button" href={`tell:${add.tell}`} target="_blank">
               <img src={Tell} alt="Telefone" />
               <p>Telefone</p>
             </a>
@@ -83,54 +83,54 @@ const AdsPage = () => {
         </div>
       </div>
       <div className="details-container">
-        <h2 className="details-title">{ads.title}</h2>
-        {ads.description && (
+        <h2 className="details-title">{add.title}</h2>
+        {add.description && (
           <label>
             <span>Descrição:</span>
-            <p>{ads.description}</p>
+            <p>{add.description}</p>
           </label>
         )}
         <div className="details-flex">
-          {ads.price && (
+          {add.price && (
             <label>
               <span>Preço:</span>
-              <p>R${ads.price}</p>
+              <p>R${add.price}</p>
             </label>
           )}
-          {ads.typeOfRealty && (
+          {add.typeOfRealty && (
             <label>
               <span>Tipo de imóvel:</span>
-              <p>{ads.typeOfRealty}</p>
+              <p>{add.typeOfRealty}</p>
             </label>
           )}
-          {ads.methodOfSale && (
+          {add.methodOfSale && (
             <label>
               <span>Método de venda:</span>
-              <p>{ads.methodOfSale}</p>
+              <p>{add.methodOfSale}</p>
             </label>
           )}
-          {ads.landMeasurement && (
+          {add.landMeasurement && (
             <label>
               <span>Tamanho do imóvel:</span>
-              <p>{ads.landMeasurement}m2</p>
+              <p>{add.landMeasurement}m2</p>
             </label>
           )}
-          {ads.address && (
+          {add.address && (
             <label>
               <span>Endereço:</span>
-              <p>{ads.address}</p>
+              <p>{add.address}</p>
             </label>
           )}
-          {ads.district && (
+          {add.district && (
             <label>
               <span>Bairro:</span>
-              <p>{ads.district}</p>
+              <p>{add.district}</p>
             </label>
           )}
-          {ads.city && (
+          {add.city && (
             <label>
               <span>Cidade:</span>
-              <p>{ads.city}</p>
+              <p>{add.city}</p>
             </label>
           )}
         </div>

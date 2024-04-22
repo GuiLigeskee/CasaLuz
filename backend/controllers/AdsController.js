@@ -119,10 +119,21 @@ const getAdsById = async (req, res) => {
 // Atualizar um anúncio
 const updateAds = async (req, res) => {
   const { id } = req.params;
-  const { title, description, tell, whatsapp, address, landMeasurement } =
-    req.body;
+  const {
+    title,
+    description,
+    tell,
+    whatsapp,
+    address,
+    price,
+    landMeasurement,
+    typeOfRealty,
+    district,
+    city,
+    methodOfSale,
+  } = req.body;
 
-  const ads = await Ads.findById(id);
+  const add = await Ads.findById(id);
 
   let images;
 
@@ -131,46 +142,62 @@ const updateAds = async (req, res) => {
   }
 
   // Verificar se o anúncio existe
-  if (!ads) {
+  if (!add) {
     res.status(404).json({ errors: ["Anúncio não encontrado!"] });
     return;
   }
 
   if (title) {
-    ads.title = title;
+    add.title = title;
   }
 
   if (description) {
-    ads.description = description;
+    add.description = description;
   }
 
   if (price) {
-    ads.price = price;
+    add.price = price;
   }
 
   if (tell) {
-    ads.tell = tell;
+    add.tell = tell;
   }
 
   if (whatsapp) {
-    ads.whatsapp = whatsapp;
+    add.whatsapp = whatsapp;
   }
 
   if (address) {
-    ads.address = address;
+    add.address = address;
   }
 
   if (landMeasurement) {
-    ads.landMeasurement = landMeasurement;
+    add.landMeasurement = landMeasurement;
   }
 
   if (images) {
-    ads.images = images;
+    add.images = images;
   }
 
-  await ads.save();
+  if (typeOfRealty) {
+    add.typeOfRealty = typeOfRealty;
+  }
 
-  res.status(200).json({ ads, message: "Anúncio atualizado com sucesso!" });
+  if (city) {
+    add.city = city;
+  }
+
+  if (district) {
+    add.district = district;
+  }
+
+  if (methodOfSale) {
+    add.methodOfSale = methodOfSale;
+  }
+
+  await add.save();
+
+  res.status(200).json({ add, message: "Anúncio atualizado com sucesso!" });
 };
 
 // Pesquisar um anúncio pelo título

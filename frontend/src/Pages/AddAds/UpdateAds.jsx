@@ -33,15 +33,22 @@ const UpdateAds = () => {
   const [city, setCity] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
   const [methodOfSale, setMethodOfSale] = useState("");
-  const [landMeasurement, setLandMeasurement] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [landMeasurement, setLandMeasurement] = useState(null);
+  const [price, setPrice] = useState(null);
   const [adsImages, setAdsImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
 
   // load button TESTE
   useEffect(() => {
     dispatch(getAdsDetails(id));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (add && add.images) {
+      setExistingImages(add.images);
+    }
+  }, [add]);
 
   // fill button form TESTE
   useEffect(() => {
@@ -57,57 +64,99 @@ const UpdateAds = () => {
       setTell(add.tell);
       setWhatsapp(add.whatsapp);
       setTypeOfRealty(add.typeOfRealty);
-      console.log(add);
     }
   }, [add]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const add = {
-      title,
-      description,
-      address,
-      district,
-      city,
-      typeOfRealty,
-      methodOfSale,
-      price,
-      landMeasurement,
-      tell,
-      whatsapp,
-      id,
-    };
-
-    for (let i = 0; i < adsImages.length; i++) {
-      formData.append("images", adsImages[i]);
-    }
-
-    dispatch(updateAds(add));
-
-    resetMessage();
-  };
 
   const handleFile = (e) => {
     const files = e.target.files;
 
-    const imagePreviewsArray = [];
-    const adsImagesArray = [];
+    const newImages = [];
+    const newImagePreviews = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      adsImagesArray.push(file);
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        imagePreviewsArray.push(reader.result);
-        if (imagePreviewsArray.length === files.length) {
-          setImagePreviews(imagePreviewsArray);
-          setAdsImages(adsImagesArray);
-        }
-      };
-      reader.readAsDataURL(file);
+      newImages.push(URL.createObjectURL(file));
+      newImagePreviews.push(file);
     }
+
+    // Combine as novas imagens com as imagens existentes
+    setAdsImages((prevImages) => [...prevImages, ...newImagePreviews]);
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...newImages]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const addData = {
+      title,
+      id,
+    };
+
+    if (description) {
+      addData.description = description;
+    }
+
+    if (address) {
+      addData.address = address;
+    }
+
+    if (district) {
+      addData.district = district;
+    }
+
+    if (city) {
+      addData.city = city;
+    }
+
+    if (typeOfRealty) {
+      addData.typeOfRealty = typeOfRealty;
+    }
+
+    if (methodOfSale) {
+      addData.methodOfSale = methodOfSale;
+    }
+
+    if (price) {
+      addData.price = price;
+    }
+
+    if (landMeasurement) {
+      addData.landMeasurement = landMeasurement;
+    }
+
+    if (tell) {
+      addData.tell = tell;
+    }
+
+    if (whatsapp) {
+      addData.whatsapp = whatsapp;
+    }
+
+    // Construir formData apenas com os dados do add
+    const formData = new FormData();
+    Object.keys(addData).forEach((key) => formData.append(key, addData[key]));
+
+    // Verificar se há novas fotos adicionadas
+    if (adsImages.length > 0) {
+      // Inclua as imagens existentes
+      for (let i = 0; i < existingImages.length; i++) {
+        formData.append("images", existingImages[i]);
+      }
+
+      // Adicione as novas imagens
+      for (let i = 0; i < adsImages.length; i++) {
+        formData.append("images", adsImages[i]);
+      }
+    } else {
+      // Se não houver novas imagens, apenas inclua as imagens existentes
+      for (let i = 0; i < existingImages.length; i++) {
+        formData.append("images", existingImages[i]);
+      }
+    }
+
+    console.log(formData);
+    dispatch(updateAds(formData));
+    resetMessage();
   };
 
   return (
@@ -128,16 +177,17 @@ const UpdateAds = () => {
           />
         </label>
         <div className="imagePreviews">
-          <div className="imagePreviews">
-            {add.images &&
-              add.images.map((images, index) => (
-                <img
-                  key={index}
-                  src={`${uploads}/ads/${add.images[0]}`}
-                  alt={`Imagem ${index + 1}`}
-                />
-              ))}
-          </div>
+          {add.images &&
+            add.images.map((image, index) => (
+              <img
+                key={index}
+                src={`${uploads}/ads/${image}`}
+                alt={`${add.title} - Foto ${index + 1}`}
+              />
+            ))}
+          {imagePreviews.map((preview, index) => (
+            <img key={index} src={preview} alt={`Preview ${index + 1}`} />
+          ))}
         </div>
         <label>
           <span>Título do anúncio</span>
@@ -255,7 +305,7 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {!loading && <input type="submit" value="Criar anúncio" />}
+        {!loading && <input type="submit" value="Atualizar anúncio" />}
         {loading && <input type="submit" disabled value="Aguarde..." />}
         {error && <Message msg={error} type="error" />}
         {message && <Message msg={message} type="success" />}

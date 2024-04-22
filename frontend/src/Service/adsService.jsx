@@ -46,7 +46,7 @@ const getAdsDetails = async (id) => {
 };
 
 const updateAds = async (data, id, token) => {
-  const config = requestConfig("PUT", data, token);
+  const config = requestConfig("PUT", data, token, true);
 
   try {
     const res = await fetch(api + "/ads/" + id, config)
