@@ -1,4 +1,5 @@
-.createAds {
+.createAds,
+.updateAds {
   background-color: #fafafa;
   padding: 0.5em 2em;
   border: 1px solid #08273c;
@@ -7,17 +8,20 @@
   max-width: 50%;
 }
 
-.createAds h1 {
+.createAds,
+.updateAds h1 {
   color: #08273c;
   margin: 0.5em auto;
   text-align: center;
 }
 
-.createAds h1 span {
+.createAds,
+.updateAds h1 span {
   color: #fdb303;
 }
 
-.createAds h3 {
+.createAds,
+.updateAds h3 {
   color: #08273c;
   text-align: center;
   font-weight: 400;

@@ -1,22 +1,21 @@
 import React from "react";
 import "./AdsItem.css";
 import { uploads } from "../../utils/config";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux"; // Importe o hook useSelector
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const AdsItem = ({ add }) => {
-  // Use o useSelector para acessar o estado global e obter informações sobre o usuário
   const admin = useSelector((state) => state.auth.admin);
 
+  const navigate = useNavigate();
+
   const handleUpdate = (e) => {
-    e.preventDefault(); // Evita o redirecionamento da página ao clicar no botão
-    // Lógica para atualizar o anúncio
-    alert("Atualizando anúncio...");
+    e.preventDefault();
+    navigate(`/updateAds/${add._id}`);
   };
 
   const handleDelete = (e) => {
-    e.preventDefault(); // Evita o redirecionamento da página ao clicar no botão
-    // Lógica para excluir o anúncio
+    e.preventDefault();
     alert("Excluindo anúncio...");
   };
 

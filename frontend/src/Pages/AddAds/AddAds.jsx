@@ -115,13 +115,12 @@ const AddAds = () => {
         </label>
         <label>
           <span>Descrição do imóvel</span>
-          <input
-            type="text"
-            placeholder="descrição"
+          <textarea
+            placeholder="Escreva o depoimento"
+            rows={4}
             onChange={(e) => setDescription(e.target.value)}
-            value={description || ""}
-            required
-          />
+            value={description}
+          ></textarea>
         </label>
         <label>
           <span>Categoria do imóvel</span>

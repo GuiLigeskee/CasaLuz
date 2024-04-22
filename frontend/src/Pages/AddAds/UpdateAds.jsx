@@ -1,17 +1,28 @@
 import "./AddAds.css";
+import { uploads } from "../../utils/config";
 
 // Hooks
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
+import { useParams } from "react-router-dom";
 
 // Redux
-import { updateAds } from "../../Slice/adsSlice";
+import { updateAds, getAdsDetails } from "../../Slice/adsSlice";
+
+// Components
+import Message from "../../Components/Messages/Message";
 
 const UpdateAds = () => {
+  const { id } = useParams();
+
+  const { admin } = useSelector((state) => state.auth.admin);
+
+  const { add, loading, error, message } = useSelector((state) => state.ads);
+
   const dispatch = useDispatch();
 
-  const { loading, error, message } = useSelector((state) => state.ads);
+  const resetMessage = useResetComponentMessage();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -27,8 +38,84 @@ const UpdateAds = () => {
   const [adsImages, setAdsImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
+  // load button TESTE
+  useEffect(() => {
+    dispatch(getAdsDetails(id));
+  }, [dispatch]);
+
+  // fill button form TESTE
+  useEffect(() => {
+    if (add) {
+      setTitle(add.title);
+      setDescription(add.description);
+      setAddress(add.address);
+      setDistrict(add.district);
+      setCity(add.city);
+      setLandMeasurement(add.landMeasurement);
+      setMethodOfSale(add.methodOfSale);
+      setPrice(add.price);
+      setTell(add.tell);
+      setWhatsapp(add.whatsapp);
+      setTypeOfRealty(add.typeOfRealty);
+      console.log(add);
+    }
+  }, [add]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const add = {
+      title,
+      description,
+      address,
+      district,
+      city,
+      typeOfRealty,
+      methodOfSale,
+      price,
+      landMeasurement,
+      tell,
+      whatsapp,
+      id,
+    };
+
+    for (let i = 0; i < adsImages.length; i++) {
+      formData.append("images", adsImages[i]);
+    }
+
+    dispatch(updateAds(add));
+
+    resetMessage();
+  };
+
+  const handleFile = (e) => {
+    const files = e.target.files;
+
+    const imagePreviewsArray = [];
+    const adsImagesArray = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      adsImagesArray.push(file);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        imagePreviewsArray.push(reader.result);
+        if (imagePreviewsArray.length === files.length) {
+          setImagePreviews(imagePreviewsArray);
+          setAdsImages(adsImagesArray);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
-    <div>
+    <div className="updateAds">
+      <h1>
+        <span>Atualizar</span> anúncio de imóvel
+      </h1>
+      <h3>Altere os campos abaixo para atualizar o anúncio</h3>
       <form onSubmit={handleSubmit}>
         <label htmlFor="arquivo" className="foto-perfil">
           <span id="buttonFile">Carregar imagens do imóvel</span>
@@ -41,9 +128,16 @@ const UpdateAds = () => {
           />
         </label>
         <div className="imagePreviews">
-          {imagePreviews.map((preview, index) => (
-            <img key={index} src={preview} alt={`Preview ${index + 1}`} />
-          ))}
+          <div className="imagePreviews">
+            {add.images &&
+              add.images.map((images, index) => (
+                <img
+                  key={index}
+                  src={`${uploads}/ads/${add.images[0]}`}
+                  alt={`Imagem ${index + 1}`}
+                />
+              ))}
+          </div>
         </div>
         <label>
           <span>Título do anúncio</span>
@@ -57,13 +151,12 @@ const UpdateAds = () => {
         </label>
         <label>
           <span>Descrição do imóvel</span>
-          <input
-            type="text"
-            placeholder="descrição"
+          <textarea
+            placeholder="Escreva o depoimento"
+            rows={4}
             onChange={(e) => setDescription(e.target.value)}
-            value={description || ""}
-            required
-          />
+            value={description}
+          ></textarea>
         </label>
         <label>
           <span>Categoria do imóvel</span>

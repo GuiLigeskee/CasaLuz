@@ -41,6 +41,22 @@ export const getAdsDetails = createAsyncThunk("ads/get", async (id) => {
   return data;
 });
 
+export const updateAds = createAsyncThunk(
+  "ads/update",
+  async (ads, thunkAPI) => {
+    const token = thunkAPI.getState().auth.admin.token;
+
+    const data = await adsService.updateAds(ads, token);
+
+    // Check for errors
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+);
+
 export const photoSlice = createSlice({
   name: "publish",
   initialState,
@@ -86,7 +102,29 @@ export const photoSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.ads = action.payload;
+        state.add = action.payload;
+      })
+      .addCase(updateAds.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateAds.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.images.map((add) => {
+          if (add._id === action.payload.add._id) {
+            return (add.title = action.payload.add.title);
+          }
+          return add;
+        });
+
+        state.message = action.payload.message;
+      })
+      .addCase(updateAds.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.photo = null;
       });
   },
 });

@@ -19,6 +19,7 @@ import Register from "./Pages/Auth/Register.jsx";
 import AddDepoiment from "./Pages/AddDepoiment/AddDepoiment.jsx";
 import GetAds from "./Pages/GetAll/GetAds.jsx";
 import GetDepoiments from "./Pages/GetAll/GetDepoiments.jsx";
+import UpdateAds from "./Pages/AddAds/UpdateAds.jsx";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "/depoiments",
         element: <GetDepoiments />,
+      },
+      {
+        path: "/updateAds/:id",
+        element: <UpdateAds />,
       },
     ],
   },
