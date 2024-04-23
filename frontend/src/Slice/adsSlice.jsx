@@ -58,6 +58,23 @@ export const updateAds = createAsyncThunk(
   }
 );
 
+export const deleteAdd = createAsyncThunk(
+  "photo/delete",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.admin.token;
+
+    const data = await adsService.deleteAdd(id, token);
+
+    console.log(data.errors);
+    // Check for errors
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+);
+
 export const photoSlice = createSlice({
   name: "publish",
   initialState,
@@ -126,6 +143,26 @@ export const photoSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.photo = null;
+      })
+      .addCase(deleteAdd.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteAdd.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+
+        state.ads = state.ads.filter((add) => {
+          return add._id !== action.payload.id;
+        });
+
+        state.message = action.payload.message;
+      })
+      .addCase(deleteAdd.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.add = null;
       });
   },
 });

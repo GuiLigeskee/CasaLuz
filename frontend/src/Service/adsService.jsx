@@ -59,11 +59,27 @@ const updateAds = async (data, id, token) => {
   }
 };
 
+// Delete a add
+const deleteAdd = async (id, token) => {
+  const config = requestConfig("DELETE", "", token, true);
+
+  try {
+    const res = await fetch(api + "/ads/" + id, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const adsService = {
   publishAds,
   getAds,
   getAdsDetails,
   updateAds,
+  deleteAdd,
 };
 
 export default adsService;
