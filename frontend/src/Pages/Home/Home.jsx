@@ -25,7 +25,7 @@ const Home = () => {
 
   const { depoiments } = useSelector((state) => state.depoiments);
 
-  const [slidePerView, setSlidePerView] = useState(3);
+  const [slidePerView, setSlidePerView] = useState(4);
 
   const [slidePerViewDepoiments, setSlidePerViewDepoiments] = useState(4);
 
@@ -39,9 +39,15 @@ const Home = () => {
       if (window.innerWidth < 720) {
         setSlidePerView(1);
         setSlidePerViewDepoiments(2);
-      } else {
+      } else if (window.innerWidth < 1050) {
+        setSlidePerView(2);
+        setSlidePerViewDepoiments(3);
+      } else if (window.innerWidth < 1350) {
         setSlidePerView(3);
         setSlidePerViewDepoiments(4);
+      } else {
+        setSlidePerView(4);
+        setSlidePerViewDepoiments(5);
       }
     }
 

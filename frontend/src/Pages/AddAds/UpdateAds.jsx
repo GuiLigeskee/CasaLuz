@@ -1,28 +1,18 @@
 import "./AddAds.css";
 import { uploads } from "../../utils/config";
-
-// Hooks
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
-import { useParams } from "react-router-dom";
-
-// Redux
+import { useParams, useNavigate } from "react-router-dom";
 import { updateAds, getAdsDetails } from "../../Slice/adsSlice";
-
-// Components
 import Message from "../../Components/Messages/Message";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const UpdateAds = () => {
   const { id } = useParams();
-
-  const { admin } = useSelector((state) => state.auth.admin);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { add, loading, error, message } = useSelector((state) => state.ads);
-
-  const dispatch = useDispatch();
-
-  const resetMessage = useResetComponentMessage();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -33,132 +23,102 @@ const UpdateAds = () => {
   const [city, setCity] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
   const [methodOfSale, setMethodOfSale] = useState("");
-  const [landMeasurement, setLandMeasurement] = useState(null);
-  const [price, setPrice] = useState(null);
+  const [landMeasurement, setLandMeasurement] = useState("");
+  const [price, setPrice] = useState("");
   const [adsImages, setAdsImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
 
-  // load button TESTE
   useEffect(() => {
     dispatch(getAdsDetails(id));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
-  useEffect(() => {
-    if (add && add.images) {
-      setExistingImages(add.images);
-    }
-  }, [add]);
-
-  // fill button form TESTE
   useEffect(() => {
     if (add) {
-      setTitle(add.title);
-      setDescription(add.description);
-      setAddress(add.address);
-      setDistrict(add.district);
-      setCity(add.city);
-      setLandMeasurement(add.landMeasurement);
-      setMethodOfSale(add.methodOfSale);
-      setPrice(add.price);
-      setTell(add.tell);
-      setWhatsapp(add.whatsapp);
-      setTypeOfRealty(add.typeOfRealty);
+      setTitle(add.title || "");
+      setDescription(add.description || "");
+      setAddress(add.address || "");
+      setDistrict(add.district || "");
+      setCity(add.city || "");
+      setTypeOfRealty(add.typeOfRealty || "");
+      setMethodOfSale(add.methodOfSale || "");
+      setLandMeasurement(add.landMeasurement || "");
+      setPrice(add.price || "");
+      setTell(add.tell || "");
+      setWhatsapp(add.whatsapp || "");
+      setExistingImages(add.images || []);
     }
   }, [add]);
+
+  const handleDragEnd = (result) => {
+    // Verificar se a operação de arrastar e soltar foi completada com sucesso
+    if (!result.destination) {
+      return;
+    }
+
+    // Obter as posições inicial e final da imagem arrastada
+    const startIndex = result.source.index;
+    const endIndex = result.destination.index;
+
+    // Reordenar as imagens no estado de acordo com a posição inicial e final
+    const reorderedImages = Array.from(adsImages);
+    const [removed] = reorderedImages.splice(startIndex, 1);
+    reorderedImages.splice(endIndex, 0, removed);
+
+    // Atualizar o estado das imagens
+    setAdsImages(reorderedImages);
+  };
 
   const handleFile = (e) => {
     const files = e.target.files;
 
-    const newImages = [];
-    const newImagePreviews = [];
+    if (files.length > 0) {
+      const newImages = [];
+      const newImagePreviews = [];
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      newImages.push(URL.createObjectURL(file));
-      newImagePreviews.push(file);
+      // Processar cada arquivo
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        // Adicionar o arquivo à lista de novas imagens
+        newImages.push(file);
+
+        // Criar a pré-visualização usando URL.createObjectURL
+        newImagePreviews.push(URL.createObjectURL(file));
+      }
+
+      // Atualizar as pré-visualizações e as imagens
+      setImagePreviews((prevPreviews) => [
+        ...prevPreviews,
+        ...newImagePreviews,
+      ]);
+      setAdsImages((prevImages) => [...prevImages, ...newImages]);
     }
-
-    // Combine as novas imagens com as imagens existentes
-    setAdsImages((prevImages) => [...prevImages, ...newImagePreviews]);
-    setImagePreviews((prevPreviews) => [...prevPreviews, ...newImages]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const addData = {
-      title,
-      id,
-    };
-
-    if (description) {
-      addData.description = description;
-    }
-
-    if (address) {
-      addData.address = address;
-    }
-
-    if (district) {
-      addData.district = district;
-    }
-
-    if (city) {
-      addData.city = city;
-    }
-
-    if (typeOfRealty) {
-      addData.typeOfRealty = typeOfRealty;
-    }
-
-    if (methodOfSale) {
-      addData.methodOfSale = methodOfSale;
-    }
-
-    if (price) {
-      addData.price = price;
-    }
-
-    if (landMeasurement) {
-      addData.landMeasurement = landMeasurement;
-    }
-
-    if (tell) {
-      addData.tell = tell;
-    }
-
-    if (whatsapp) {
-      addData.whatsapp = whatsapp;
-    }
-
-    // Construir formData apenas com os dados do add
     const formData = new FormData();
-    Object.keys(addData).forEach((key) => formData.append(key, addData[key]));
+    formData.append("id", id);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("address", address);
+    formData.append("district", district);
+    formData.append("city", city);
+    formData.append("typeOfRealty", typeOfRealty);
+    formData.append("methodOfSale", methodOfSale);
+    formData.append("landMeasurement", landMeasurement);
+    formData.append("price", price);
+    formData.append("tell", tell);
+    formData.append("whatsapp", whatsapp);
 
-    // Verificar se há novas fotos adicionadas
-    if (adsImages.length > 0) {
-      // Inclua as imagens existentes
-      for (let i = 0; i < existingImages.length; i++) {
-        formData.append("images", existingImages[i]);
-      }
+    // Adicionar novas imagens
+    adsImages.forEach((images) => formData.append("images", images));
 
-      // Adicione as novas imagens
-      for (let i = 0; i < adsImages.length; i++) {
-        formData.append("images", adsImages[i]);
-      }
-    } else {
-      // Se não houver novas imagens, apenas inclua as imagens existentes
-      for (let i = 0; i < existingImages.length; i++) {
-        formData.append("images", existingImages[i]);
-      }
-    }
-
-    console.log(formData);
     dispatch(updateAds(formData));
-    resetMessage();
+    navigate(`/ads/${id}`);
   };
-
   return (
     <div className="updateAds">
       <h1>
@@ -166,6 +126,7 @@ const UpdateAds = () => {
       </h1>
       <h3>Altere os campos abaixo para atualizar o anúncio</h3>
       <form onSubmit={handleSubmit}>
+        {/* Input para carregar imagens */}
         <label htmlFor="arquivo" className="foto-perfil">
           <span id="buttonFile">Carregar imagens do imóvel</span>
           <input
@@ -177,18 +138,36 @@ const UpdateAds = () => {
           />
         </label>
         <div className="imagePreviews">
-          {add.images &&
-            add.images.map((image, index) => (
-              <img
-                key={index}
-                src={`${uploads}/ads/${image}`}
-                alt={`${add.title} - Foto ${index + 1}`}
-              />
-            ))}
-          {imagePreviews.map((preview, index) => (
-            <img key={index} src={preview} alt={`Preview ${index + 1}`} />
-          ))}
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="imagePreviews"
+                >
+                  {imagePreviews.map((preview, index) => (
+                    <Draggable key={index} draggableId={index} index={index}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <img src={preview} alt={`Preview ${index + 1}`} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
+        <p className="obs">
+          Adicionando novas imagens, as imagens antigas serão removidas.
+        </p>
         <label>
           <span>Título do anúncio</span>
           <input
@@ -305,8 +284,12 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {!loading && <input type="submit" value="Atualizar anúncio" />}
-        {loading && <input type="submit" disabled value="Aguarde..." />}
+        {!loading ? (
+          <input type="submit" value="Atualizar anúncio" />
+        ) : (
+          <input type="submit" disabled value="Aguarde..." />
+        )}
+        {/* Mensagens de erro ou sucesso */}
         {error && <Message msg={error} type="error" />}
         {message && <Message msg={message} type="success" />}
       </form>
