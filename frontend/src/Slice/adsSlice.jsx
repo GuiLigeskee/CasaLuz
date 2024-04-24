@@ -45,7 +45,7 @@ export const updateAds = createAsyncThunk(
   "ads/update",
   async (formData, thunkAPI) => {
     const token = thunkAPI.getState().auth.admin.token;
-    const id = formData.get("id"); // Extrair o id do formData
+    const id = formData.get("id");
 
     const data = await adsService.updateAds(formData, id, token);
 

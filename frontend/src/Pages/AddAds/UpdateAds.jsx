@@ -23,8 +23,6 @@ const UpdateAds = () => {
   const [methodOfSale, setMethodOfSale] = useState("");
   const [landMeasurement, setLandMeasurement] = useState("");
   const [price, setPrice] = useState("");
-  const [adsImages, setAdsImages] = useState([]);
-  const [existingImages, setExistingImages] = useState([]);
 
   useEffect(() => {
     dispatch(getAdsDetails(id));
@@ -62,12 +60,7 @@ const UpdateAds = () => {
     formData.append("price", price);
     formData.append("tell", tell);
     formData.append("whatsapp", whatsapp);
-
-    // Adicionar novas imagens
-    adsImages.forEach((image) => formData.append("images", image));
-
-    // Adicionar imagens existentes
-    existingImages.forEach((image) => formData.append("existingImages", image));
+    formData.append("images", add.images);
 
     dispatch(updateAds(formData));
     navigate(`/ads/${id}`);
