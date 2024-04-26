@@ -59,14 +59,14 @@ const adsInsertValidation = () => {
 
 const adsUpdateValidation = () => {
   return [
-    body("images")
-      .optional()
-      .custom((value, { req }) => {
-        if (!req.files || req.files.length === 0) {
-          throw new Error("Pelo menos uma foto é obrigatória");
-        }
-        return true;
-      }),
+    // body("images")
+    //   .optional()
+    //   .custom((value, { req }) => {
+    //     if (!req.files || req.files.length === 0) {
+    //       throw new Error("Pelo menos uma foto é obrigatória");
+    //     }
+    //     return true;
+    //   }),
     body("title")
       .optional()
       .isString()

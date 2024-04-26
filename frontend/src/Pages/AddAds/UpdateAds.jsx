@@ -23,6 +23,8 @@ const UpdateAds = () => {
   const [methodOfSale, setMethodOfSale] = useState("");
   const [landMeasurement, setLandMeasurement] = useState("");
   const [price, setPrice] = useState("");
+  const [newImages, setNewImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
     dispatch(getAdsDetails(id));
@@ -60,7 +62,14 @@ const UpdateAds = () => {
     formData.append("price", price);
     formData.append("tell", tell);
     formData.append("whatsapp", whatsapp);
-    formData.append("images", add.images);
+
+    // Verifique se novas imagens foram selecionadas
+    if (newImages.length > 0) {
+      // Se sim, adicione as novas imagens ao FormData
+      newImages.forEach((image) => {
+        formData.append("images", image);
+      });
+    }
 
     dispatch(updateAds(formData));
     navigate(`/ads/${id}`);
@@ -73,8 +82,40 @@ const UpdateAds = () => {
       </h1>
       <h3>Altere os campos abaixo para atualizar o anúncio</h3>
       <form onSubmit={handleSubmit}>
-        {/* Inputs para atualização dos dados */}
-        {/* Título */}
+        <p className="alert">
+          Caso for atualizar o anúncio, adicione novamente as imagens do imóvel.
+        </p>
+        <label>
+          <span id="buttonFile">Carregar imagens do imóvel</span>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={(e) => {
+              const files = e.target.files;
+              const previews = [];
+              setNewImages(Array.from(files));
+              for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  previews.push(e.target.result);
+                  if (previews.length === files.length) {
+                    setImagePreviews(previews);
+                  }
+                };
+                reader.readAsDataURL(files[i]);
+              }
+            }}
+          />
+        </label>
+        {/*Renderize os previews das imagens selecionadas*/}
+        <div className="imagePreviews">
+          {imagePreviews.map((preview, index) => (
+            <div key={index}>
+              <img src={preview} alt={`Imagem ${index}`} />
+            </div>
+          ))}
+        </div>
         <label>
           <span>Título do anúncio</span>
           <input
@@ -85,7 +126,6 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {/* Descrição */}
         <label>
           <span>Descrição do imóvel</span>
           <textarea
@@ -95,7 +135,6 @@ const UpdateAds = () => {
             value={description}
           ></textarea>
         </label>
-        {/* Categoria */}
         <label>
           <span>Categoria do imóvel</span>
           <select
@@ -110,7 +149,6 @@ const UpdateAds = () => {
             <option value="Comercial">Comercial</option>
           </select>
         </label>
-        {/* Endereço */}
         <label>
           <span>Endereço</span>
           <input
@@ -121,7 +159,6 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {/* Bairro */}
         <label>
           <span>Bairro</span>
           <input
@@ -132,7 +169,6 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {/* Cidade */}
         <label>
           <span>Cidade</span>
           <input
@@ -143,7 +179,6 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {/* Tamanho */}
         <label>
           <span>Tamanho do imóvel (m2)</span>
           <input
@@ -154,7 +189,6 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {/* Preço */}
         <label>
           <span>Preço do imóvel</span>
           <input
@@ -165,7 +199,6 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {/* Método de venda */}
         <label>
           <span>Método de negócio</span>
           <select
@@ -179,7 +212,6 @@ const UpdateAds = () => {
             <option value="Aluguel e venda">Aluguel e venda</option>
           </select>
         </label>
-        {/* Telefone */}
         <label>
           <span>Telefone do vendedor</span>
           <input
@@ -190,7 +222,6 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {/* Whatsapp */}
         <label>
           <span>Whatsapp do vendedor</span>
           <input
@@ -201,13 +232,11 @@ const UpdateAds = () => {
             required
           />
         </label>
-        {/* Botão de envio */}
         {!loading ? (
           <input type="submit" value="Atualizar anúncio" />
         ) : (
           <input type="submit" disabled value="Aguarde..." />
         )}
-        {/* Mensagens de erro ou sucesso */}
         {error && <Message msg={error} type="error" />}
         {message && <Message msg={message} type="success" />}
       </form>

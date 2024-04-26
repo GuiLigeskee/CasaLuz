@@ -130,7 +130,7 @@ export const photoSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.images.map((add) => {
+        state.ads.map((add) => {
           if (add._id === action.payload.add._id) {
             return (add.title = action.payload.add.title);
           }
@@ -142,7 +142,7 @@ export const photoSlice = createSlice({
       .addCase(updateAds.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.photo = null;
+        state.add = null;
       })
       .addCase(deleteAdd.pending, (state) => {
         state.loading = true;
