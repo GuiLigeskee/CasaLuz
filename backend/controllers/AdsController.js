@@ -200,13 +200,181 @@ const updateAds = async (req, res) => {
   res.status(200).json({ add, message: "Anúncio atualizado com sucesso!" });
 };
 
-// Pesquisar um anúncio pelo título
-const searchAds = async (req, res) => {
+const getByTypeOfRealty = async (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    return res.status(400).json({ error: "Parâmetro 'q' ausente ou vazio." });
+  }
+
+  try {
+    const results = await Ads.find({ typeOfRealty: q });
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Anúncio não encontrado." });
+    }
+    res.json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar anúncios por tipo de imóvel." });
+  }
+};
+
+const getByMethodOfSale = async (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    return res.status(400).json({ error: "Parâmetro 'q' ausente ou vazio." });
+  }
+
+  try {
+    const results = await Ads.find({ methodOfSale: q });
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Anúncio não encontrado." });
+    }
+    res.json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar anúncios por tipo de imóvel." });
+  }
+};
+
+const getByTitle = async (req, res) => {
   const { q } = req.query;
 
-  const ads = await Ads.find({ titulo: new RegExp(q, "i") }).exec();
+  // Verificar se a palavra-chave está presente na consulta
+  if (!q) {
+    return res.status(400).json({ error: "Parâmetro 'q' ausente." });
+  }
 
-  res.status(200).json(ads);
+  try {
+    const regex = new RegExp(q, "i"); // 'i' para ignorar maiúsculas e minúsculas
+    const results = await Ads.find({ title: { $regex: regex } });
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Anúncio não encontrado." });
+    }
+
+    res.json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar anúncios por palavra-chave." });
+  }
+};
+
+const getByCity = async (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    return res.status(400).json({ error: "Parâmetro 'q' ausente ou vazio." });
+  }
+
+  try {
+    const results = await Ads.find({ city: q });
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Anúncio não encontrado." });
+    }
+    res.json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar anúncios por tipo de imóvel." });
+  }
+};
+
+const getByDistrict = async (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    return res.status(400).json({ error: "Parâmetro 'q' ausente ou vazio." });
+  }
+
+  try {
+    const results = await Ads.find({ district: q });
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Anúncio não encontrado." });
+    }
+    res.json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar anúncios por tipo de imóvel." });
+  }
+};
+
+const getByPrice = async (req, res) => {
+  let { minSpace, maxSpace } = req.query;
+
+  // Validar e converter minSpace e maxPrice para números
+  minSpace = parseFloat(minSpace);
+  maxSpace = parseFloat(maxSpace);
+
+  // Verificar se minSpace e maxSpace são números válidos
+  if (!isNaN(minSpace) && !isNaN(maxSpace) && minSpace > maxSpace) {
+    return res
+      .status(400)
+      .json({ error: "Preço mínimo não pode ser maior que o preço máximo." });
+  }
+
+  try {
+    let filterConditions = {};
+
+    // Se minSpace e/ou maxSpace forem definidos, adicione condições de filtro
+    if (!isNaN(minPrice)) {
+      filterConditions.$gte = minPrice;
+    }
+    if (!isNaN(maxSpace)) {
+      filterConditions.$lte = maxSpace;
+    }
+
+    const results = await Ads.find({ landMeasurement: filterConditions });
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Anúncio não encontrado." });
+    }
+
+    res.json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar anúncios por tamanho de terreno." });
+  }
+};
+
+const getByLandMeasurement = async (req, res) => {
+  let { minSpace, maxSpace } = req.query;
+
+  // Validar e converter minSpace e maxSpace para números
+  minSpace = parseFloat(minSpace);
+  maxSpace = parseFloat(maxSpace);
+
+  // Verificar se minSpace e maxSpace são números válidos
+  if (!isNaN(minSpace) && !isNaN(maxSpace) && minSpace > maxSpace) {
+    return res.status(400).json({
+      error:
+        "A medição mínima da terra não pode ser maior que a medição máxima.",
+    });
+  }
+
+  try {
+    let filterConditions = {};
+
+    // Se minSpace e/ou maxSpace forem definidos, adicione condições de filtro
+    if (!isNaN(minSpace)) {
+      filterConditions.$gte = minSpace;
+    }
+    if (!isNaN(maxSpace)) {
+      filterConditions.$lte = maxSpace;
+    }
+
+    const results = await Ads.find({ landMeasurement: filterConditions });
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Anúncio não encontrado." });
+    }
+
+    res.json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar anúncios por medição da terra." });
+  }
 };
 
 module.exports = {
@@ -216,5 +384,11 @@ module.exports = {
   getAdminAds,
   getAdsById,
   updateAds,
-  searchAds,
+  getByTitle,
+  getByTypeOfRealty,
+  getByMethodOfSale,
+  getByPrice,
+  getByLandMeasurement,
+  getByCity,
+  getByDistrict,
 };

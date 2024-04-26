@@ -9,7 +9,13 @@ const {
   getAdminAds,
   getAdsById,
   updateAds,
-  searchAds,
+  getByTitle,
+  getByTypeOfRealty,
+  getByMethodOfSale,
+  getByPrice,
+  getByLandMeasurement,
+  getByDistrict,
+  getByCity,
 } = require("../controllers/AdsController");
 
 // Middlewares
@@ -43,7 +49,15 @@ router.put(
 router.delete("/:id", authGuard, deleteAds);
 router.get("/", getAllAds);
 router.get("/admin/:id", getAdminAds);
-router.get("/search", searchAds);
 router.get("/:id", getAdsById);
+
+// Filtros de pesquisa:
+router.get("/filter/title", getByTitle);
+router.get("/filter/district", getByDistrict);
+router.get("filter/city", getByCity);
+router.get("/filter/type", getByTypeOfRealty);
+router.get("/filter/method", getByMethodOfSale);
+router.get("/filter/price", getByPrice);
+router.get("/filter/space", getByLandMeasurement);
 
 module.exports = router;
