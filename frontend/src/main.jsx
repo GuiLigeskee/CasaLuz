@@ -20,6 +20,7 @@ import AddDepoiment from "./Pages/AddDepoiment/AddDepoiment.jsx";
 import GetAds from "./Pages/GetAll/GetAds.jsx";
 import GetDepoiments from "./Pages/GetAll/GetDepoiments.jsx";
 import UpdateAds from "./Pages/AddAds/UpdateAds.jsx";
+import SearchResultsPage from "./Pages/GetAll/SearchResultsPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/updateAds/:id",
         element: <UpdateAds />,
+      },
+      {
+        path: "/search/:keyword",
+        element: <SearchResultsPage />,
       },
     ],
   },

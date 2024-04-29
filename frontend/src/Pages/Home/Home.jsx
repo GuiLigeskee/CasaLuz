@@ -90,7 +90,8 @@ const Home = () => {
               navigation={true}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {ads &&
+              {Array.isArray(ads) &&
+                ads.length > 0 &&
                 ads.map((add) => (
                   <SwiperSlide key={add._id}>
                     <div key={add._id}>
@@ -154,7 +155,8 @@ const Home = () => {
               spaceBetween={"30"}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {depoiments &&
+              {Array.isArray(depoiments) &&
+                depoiments.length > 0 &&
                 depoiments.map((depoiment) => (
                   <SwiperSlide key={depoiment._id}>
                     <div key={depoiment._id}>

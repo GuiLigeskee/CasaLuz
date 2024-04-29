@@ -75,8 +75,33 @@ export const deleteAdd = createAsyncThunk(
   }
 );
 
+// Filters
+export const searchAdsByKeyword = createAsyncThunk(
+  "ads/searchByKeyword",
+  async (keyword, thunkAPI) => {
+    try {
+      const data = await adsService.searchAdsByKeyword(keyword);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const searchAdsByMethodOfSale = createAsyncThunk(
+  "ads/searchAdsByMethodOfSale",
+  async (q, thunkAPI) => {
+    try {
+      const data = await adsService.searchAdsByMethodOfSale(q);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const photoSlice = createSlice({
-  name: "publish",
+  name: "ads",
   initialState,
   reducers: {
     resetMessage: (state) => {
@@ -163,6 +188,34 @@ export const photoSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.add = null;
+      })
+      .addCase(searchAdsByKeyword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchAdsByKeyword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.ads = action.payload;
+      })
+      .addCase(searchAdsByKeyword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(searchAdsByMethodOfSale.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchAdsByMethodOfSale.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.ads = action.payload;
+      })
+      .addCase(searchAdsByMethodOfSale.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

@@ -74,12 +74,45 @@ const deleteAdd = async (id, token) => {
   }
 };
 
+// filters
+
+// Search ads by keyword
+const searchAdsByKeyword = async (keyword) => {
+  const config = requestConfig("GET");
+
+  try {
+    const res = await fetch(api + "/ads/filter/title?q=" + keyword, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const searchAdsByMethodOfSale = async (q) => {
+  const config = requestConfig("GET");
+
+  try {
+    const res = await fetch(api + "/ads/filter/method?q=" + q, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const adsService = {
   publishAds,
   getAds,
   getAdsDetails,
   updateAds,
   deleteAdd,
+  searchAdsByKeyword,
+  searchAdsByMethodOfSale,
 };
 
 export default adsService;
