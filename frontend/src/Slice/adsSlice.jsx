@@ -100,12 +100,36 @@ export const searchAdsByMethodOfSale = createAsyncThunk(
   }
 );
 
-export const photoSlice = createSlice({
+export const searchAdsByTypeOfRealty = createAsyncThunk(
+  "ads/searchAdsByTypeOfRealty",
+  async (q, thunkAPI) => {
+    try {
+      const data = await adsService.searchAdsByTypeOfRealty(q);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const adsSlice = createSlice({
   name: "ads",
   initialState,
   reducers: {
     resetMessage: (state) => {
       state.message = null;
+    },
+    fetchAdsStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchAdsSuccess(state, action) {
+      state.loading = false;
+      state.ads = action.payload;
+    },
+    fetchAdsFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -216,9 +240,24 @@ export const photoSlice = createSlice({
       .addCase(searchAdsByMethodOfSale.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(searchAdsByTypeOfRealty.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchAdsByTypeOfRealty.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.ads = action.payload;
+      })
+      .addCase(searchAdsByTypeOfRealty.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { resetMessage } = photoSlice.actions;
-export default photoSlice.reducer;
+export const { resetMessage, fetchAdsStart, fetchAdsSuccess, fetchAdsFailure } =
+  adsSlice.actions;
+export default adsSlice.reducer;

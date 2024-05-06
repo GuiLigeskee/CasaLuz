@@ -16,6 +16,7 @@ const {
   getByLandMeasurement,
   getByDistrict,
   getByCity,
+  searchAds,
 } = require("../controllers/AdsController");
 
 // Middlewares
@@ -59,5 +60,6 @@ router.get("/filter/type", getByTypeOfRealty);
 router.get("/filter/method", getByMethodOfSale);
 router.get("/filter/price", getByPrice);
 router.get("/filter/space", getByLandMeasurement);
+router.get("/filter/search", searchAds);
 
 module.exports = router;

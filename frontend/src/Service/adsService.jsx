@@ -105,6 +105,54 @@ const searchAdsByMethodOfSale = async (q) => {
   }
 };
 
+const searchAdsByTypeOfRealty = async (q) => {
+  const config = requestConfig("GET");
+
+  try {
+    const res = await fetch(api + "/ads/filter/type?q=" + q, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const searchAds = async (params) => {
+  // Criar um objeto de consulta vazio
+  const queryParams = {};
+
+  // Adicionar o filtro 'keyword' se estiver presente
+  if (params.keyword) {
+    queryParams.keyword = params.keyword;
+  }
+
+  // Adicionar o filtro 'methodOfSale' se estiver presente
+  if (params.methodOfSale) {
+    queryParams.methodOfSale = params.methodOfSale;
+  }
+
+  // Adicionar o filtro 'typeOfRealty' se estiver presente
+  if (params.typeOfRealty) {
+    queryParams.typeOfRealty = params.typeOfRealty;
+  }
+
+  const queryString = new URLSearchParams(queryParams).toString(); // Converter o objeto de consulta em uma string de consulta
+
+  const config = requestConfig("GET");
+
+  try {
+    const res = await fetch(api + "/ads/filter/search?" + queryString, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const adsService = {
   publishAds,
   getAds,
@@ -113,6 +161,8 @@ const adsService = {
   deleteAdd,
   searchAdsByKeyword,
   searchAdsByMethodOfSale,
+  searchAdsByTypeOfRealty,
+  searchAds,
 };
 
 export default adsService;

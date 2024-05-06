@@ -242,17 +242,17 @@ const getByTitle = async (req, res) => {
   const { q } = req.query;
 
   // Verificar se a palavra-chave está presente na consulta
-  if (!q) {
-    return res.status(400).json({ error: "Parâmetro 'q' ausente." });
-  }
+  // if (!q) {
+  //   return res.status(400).json({ error: "Parâmetro 'q' ausente." });
+  // }
 
   try {
     const regex = new RegExp(q, "i"); // 'i' para ignorar maiúsculas e minúsculas
     const results = await Ads.find({ title: { $regex: regex } });
 
-    if (results.length === 0) {
-      return res.status(404).json({ error: "Anúncio não encontrado." });
-    }
+    // if (results.length === 0) {
+    //   return res.status(404).json({ error: "Anúncio não encontrado." });
+    // }
 
     res.json(results);
   } catch (error) {
@@ -377,6 +377,37 @@ const getByLandMeasurement = async (req, res) => {
   }
 };
 
+const searchAds = async (req, res) => {
+  const { keyword, typeOfRealty, methodOfSale } = req.query;
+
+  try {
+    let filter = {};
+
+    if (keyword) {
+      const regex = new RegExp(keyword, "i");
+      filter.title = { $regex: regex };
+    }
+
+    if (typeOfRealty) {
+      filter.typeOfRealty = typeOfRealty;
+    }
+
+    if (methodOfSale) {
+      filter.methodOfSale = methodOfSale;
+    }
+
+    const results = await Ads.find(filter);
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Anúncio não encontrado." });
+    }
+
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao buscar anúncios." });
+  }
+};
+
 module.exports = {
   insertAds,
   deleteAds,
@@ -391,4 +422,5 @@ module.exports = {
   getByLandMeasurement,
   getByCity,
   getByDistrict,
+  searchAds,
 };
