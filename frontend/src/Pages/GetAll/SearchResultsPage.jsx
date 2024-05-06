@@ -1,3 +1,4 @@
+import "./GetAll.css";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -24,20 +25,22 @@ const SearchResultsPage = () => {
 
   return (
     <div>
-      <h1>Resultados da busca por --{keyword}--:</h1>
-      {Array.isArray(ads) && ads.length > 0 ? (
-        ads.map((add) => (
-          <div key={add._id}>
-            <AdsItem add={add} />
-          </div>
-        ))
-      ) : (
-        <Message
-          msg="Nenhum anúncio encontrado com a palavra-chave fornecida."
-          type="error"
-        />
-      )}
-      {message && <Message msg={message} type="success" />}
+      <h1 className="title">Resultados da busca por --{keyword}--:</h1>
+      <div className="getResults">
+        {Array.isArray(ads) && ads.length > 0 ? (
+          ads.map((add) => (
+            <div key={add._id}>
+              <AdsItem add={add} />
+            </div>
+          ))
+        ) : (
+          <Message
+            msg="Nenhum anúncio encontrado com a palavra-chave fornecida."
+            type="error"
+          />
+        )}
+        {message && <Message msg={message} type="success" />}
+      </div>
     </div>
   );
 };

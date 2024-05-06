@@ -1,12 +1,12 @@
 import "./GetAll.css";
 
 // Hooks
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Components
 import AdsItem from "../../Components/Ads/AdsItem";
-import Message from "../../Components/Messages/Message";
+// import Message from "../../Components/Messages/Message";
 
 // redux
 import { getAds } from "../../Slice/adsSlice";
@@ -14,7 +14,7 @@ import { getAds } from "../../Slice/adsSlice";
 const GetAds = () => {
   const dispatch = useDispatch();
 
-  const { ads, loading, message } = useSelector((state) => state.ads);
+  const { ads } = useSelector((state) => state.ads);
 
   useEffect(() => {
     dispatch(getAds());

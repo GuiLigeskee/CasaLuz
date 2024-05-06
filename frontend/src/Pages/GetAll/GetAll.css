@@ -1,10 +1,12 @@
 .getAds,
-.getDepoiments {
+.getDepoiments,
+.getResults {
   padding: 1em;
 }
 
 .ads-content,
-.depoiments-content {
+.depoiments-content,
+.getResults {
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
