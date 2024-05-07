@@ -71,7 +71,7 @@ const Home = () => {
         </div>
         <SearchBar />
       </div>
-      {ads && (
+      {ads && ads.length > 0 && (
         <div className="carroussel-ads">
           <h2 id="carroussel-title">
             Conheça nossos imóveis à <span>venda</span>
@@ -104,7 +104,7 @@ const Home = () => {
         </div>
       )}
 
-      {ads && (
+      {ads && ads.length > 0 && (
         <div className="carroussel-ads">
           <h2 id="carroussel-title">
             Conheça nossos imóveis para <span>alugar</span>
@@ -136,7 +136,7 @@ const Home = () => {
         </div>
       )}
 
-      {depoiments && (
+      {depoiments && depoiments.length > 0 && (
         <div className="carousel-depoiments">
           <h2 id="carroussel-title">
             Veja os <span>depoimentos</span> de nossos clientes
