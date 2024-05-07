@@ -1,5 +1,4 @@
-// Na página de resultados (SearchResultsPage.js)
-
+import "./GetAll.css";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -10,6 +9,7 @@ import {
 } from "../../Slice/adsSlice";
 import adsService from "../../Service/adsService";
 import AdsItem from "../../Components/Ads/AdsItem";
+import Message from "../../Components/Messages/Message";
 
 const SearchResultsPage = () => {
   const { keyword, methodOfSale, typeOfRealty } = useParams();
@@ -47,14 +47,21 @@ const SearchResultsPage = () => {
 
   return (
     <div>
-      <h1>Resultados da busca por "{keyword}":</h1>
-      <div>
-        {ads.map((add, index) => (
-          <div key={index}>
-            <AdsItem add={add} />
-          </div>
-        ))}
-      </div>
+      <h1 className="title">Resultados para sua busca</h1>
+      {ads && ads.length > 0 ? (
+        <div className="getResults">
+          {ads.map((add, index) => (
+            <div key={index}>
+              <AdsItem add={add} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <Message
+          msg="Nenhum resultado encontrado para a sua busca."
+          type="error"
+        />
+      )}
     </div>
   );
 };
