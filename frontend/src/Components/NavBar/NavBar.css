@@ -1,13 +1,68 @@
-.navbar {
+/* NavBar.css */
+
+/* Estilos para o menu lateral */
+.sidebar {
   position: fixed;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #fbfbfb8a;
-  padding: 10px 20px;
-  transition: 0.3s;
-  z-index: 9999;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #fafafa;
+  transition: left 0.3s ease;
+  z-index: 999;
+}
+
+.sidebar.open {
+  left: 0; /* Exibe o menu lateral quando aberto */
+}
+
+.sidebar__content {
+  padding: 1em;
+}
+
+.logo {
+  margin: 2.5em 0 0.5em 0;
+}
+
+.sidebar__options {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar__options li {
+  margin-bottom: 1em;
+}
+
+.sidebar__options a {
+  color: #08273c;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.sidebar__options a:hover {
+  color: #fdb303; /* Cor de destaque ao passar o mouse */
+}
+
+/* Estilos para o botão do menu */
+.menu__toggle {
+  position: fixed;
+  top: 0.5em;
+  left: 1em;
+  background-color: #08273c;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.menu__toggle:hover {
+  background-color: #fdb303;
+}
+
+#exit {
+  color: red;
+  cursor: pointer;
 }
 
 .logo {
@@ -16,23 +71,4 @@
 
 .logo span {
   color: #fdb303;
-}
-
-.navbar__right {
-  display: flex;
-}
-
-.navbar__options {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.navbar__option {
-  display: inline-block;
-  margin-left: 10px;
-  padding: 0 0.5em;
-  color: #08273c;
-  cursor: pointer;
-  font-weight: 300;
 }

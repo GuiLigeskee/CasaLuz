@@ -68,3 +68,11 @@ select option {
   padding: 1em;
   border: none;
 }
+
+@media screen and (max-width: 767px) {
+  .createAds,
+  .updateAds {
+    margin: 4em 1em;
+    max-width: 100%;
+  }
+}

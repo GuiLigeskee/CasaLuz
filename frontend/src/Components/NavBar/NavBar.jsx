@@ -1,71 +1,80 @@
-import "./NavBar.css";
-
-// react-router
 import { NavLink } from "react-router-dom";
-
-// Hooks
 import { useAuth } from "../../Hooks/useAuth";
-// import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import { UseSelector } from "react-redux";
-
-// Redux
 import { logout, reset } from "../../Slice/authSlice";
+import { useState } from "react";
+import "./NavBar.css";
 
 const NavBar = () => {
   const { auth } = useAuth();
-  // const { admin } = useSelector((state) => state.auth);
-
-  // const [query, setQuery] = useState("");
-
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
     dispatch(reset());
-
     navigate("/login");
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
     <div>
-      <nav className="navbar">
-        <div className="navbar__left">
+      <aside className={`sidebar ${isMenuOpen ? "open" : ""}`}>
+        <div className="sidebar__content">
           <h1 className="logo">
             <NavLink to="/">
               Casa <span>Luz</span> Imóveis
             </NavLink>
           </h1>
-        </div>
-        <div className="navbar__right">
-          <ul className="navbar__options">
+          <ul className="sidebar__options">
             {auth ? (
               <>
-                <li className="navbar__option">
+                <li>
+                  <NavLink to="/Ads">Ver anúncios</NavLink>
+                </li>
+                <li>
                   <NavLink to="/createAds">Novo anúncio</NavLink>
                 </li>
-                <li className="navbar__option">
+                <li>
+                  <NavLink to="/depoiments">Ver depoimentos</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/createAds">Novo depoimento</NavLink>
+                </li>
+                <li>
                   <NavLink to="/register">Novo admin</NavLink>
                 </li>
-                <li className="navbar__option">
-                  <span onClick={handleLogout}>Sair</span>
+                <li>
+                  <span id="exit" onClick={handleLogout}>
+                    Sair
+                  </span>
                 </li>
               </>
             ) : (
               <>
-                <li className="navbar__option">Contato</li>
-                <li className="navbar__option">Sobre</li>
-                <li className="navbar__option">
+                <li>Contato</li>
+                <li>Sobre</li>
+                <li>
                   <NavLink to="/login">Sou admin</NavLink>
                 </li>
               </>
             )}
           </ul>
         </div>
-      </nav>
+      </aside>
+      <div className="navbar">
+        <div className="navbar__left">
+          <button className="menu__toggle" onClick={toggleMenu}>
+            Menu
+          </button>
+        </div>
+      </div>
+      <footer className="footer">{/* Conteúdo do rodapé */}</footer>
     </div>
   );
 };

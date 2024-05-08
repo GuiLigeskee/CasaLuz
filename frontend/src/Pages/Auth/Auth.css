@@ -25,13 +25,10 @@
   margin-bottom: 1.2em;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
   #login,
   #register {
-    width: 100%;
-    margin: 0;
-    border: none;
-    padding: 2em;
-    height: 90vh;
+    margin: 4em 1em;
+    max-width: 100%;
   }
 }
