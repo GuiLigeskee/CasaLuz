@@ -54,7 +54,6 @@ h4 {
   background-color: #08273c;
   color: #fafafa;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
   width: 50%;
@@ -65,4 +64,34 @@ h4 {
 #contact-button img {
   width: 3em;
   filter: invert(1);
+}
+
+@media screen and (max-width: 767px) {
+  .adsPage {
+    padding: 1em; /* Reduz o preenchimento para dispositivos móveis */
+  }
+
+  .carousel-container,
+  .details-container {
+    width: 100%; /* Define a largura total para os contêineres em dispositivos móveis */
+    max-width: none; /* Remove a largura máxima */
+  }
+
+  .contact-section h3,
+  .contact-section h4 {
+    text-align: center; /* Centraliza o texto dos botões de contato */
+  }
+
+  .contact-buttons {
+    margin: 1em 0;
+  }
+
+  #contact-button {
+    width: 50%;
+    padding: 0.5em;
+  }
+
+  .details-container {
+    padding: 0;
+  }
 }

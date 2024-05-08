@@ -1,15 +1,14 @@
-import React from "react";
 import "./AdsItem.css";
 import { uploads } from "../../utils/config";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteAdd } from "../../Slice/adsSlice";
-import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
+// import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 const AdsItem = ({ add }) => {
   const admin = useSelector((state) => state.auth.admin);
   const dispatch = useDispatch();
-  const resetMessage = useResetComponentMessage();
+  // const resetMessage = useResetComponentMessage();
   const navigate = useNavigate();
 
   const handleUpdate = (e) => {
