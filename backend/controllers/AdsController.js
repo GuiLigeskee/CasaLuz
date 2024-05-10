@@ -135,7 +135,7 @@ const updateAds = async (req, res) => {
     district,
     city,
     bathrooms,
-    bedrooms
+    bedrooms,
     methodOfSale,
   } = req.body;
 
