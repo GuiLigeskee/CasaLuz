@@ -16,6 +16,8 @@ const insertAds = async (req, res) => {
     district,
     city,
     methodOfSale,
+    bedrooms,
+    bathrooms,
   } = req.body;
   const images = req.files.map((file) => file.filename);
 
@@ -36,6 +38,8 @@ const insertAds = async (req, res) => {
     district,
     city,
     methodOfSale,
+    bedrooms,
+    bathrooms,
     images,
     adminId: admin._id,
     adminName: admin.name,
@@ -130,6 +134,8 @@ const updateAds = async (req, res) => {
     typeOfRealty,
     district,
     city,
+    bathrooms,
+    bedrooms
     methodOfSale,
   } = req.body;
 
@@ -193,6 +199,14 @@ const updateAds = async (req, res) => {
 
   if (methodOfSale) {
     add.methodOfSale = methodOfSale;
+  }
+
+  if (bedrooms) {
+    add.bedrooms = bedrooms;
+  }
+
+  if (bathrooms) {
+    add.bathrooms = bathrooms;
   }
 
   await add.save();

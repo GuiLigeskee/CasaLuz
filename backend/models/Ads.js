@@ -19,6 +19,8 @@ const adsSchema = new Schema(
     landMeasurement: Number,
     tell: String,
     whatsapp: String,
+    bedrooms: Number,
+    bathrooms: Number,
   },
   {
     timestamps: true,
