@@ -24,8 +24,10 @@ const AddAds = () => {
   const [city, setCity] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
   const [methodOfSale, setMethodOfSale] = useState("");
-  const [landMeasurement, setLandMeasurement] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [landMeasurement, setLandMeasurement] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [bedrooms, setBedrooms] = useState(null);
+  const [bathrooms, setBathrooms] = useState(null);
   const [adsImages, setAdsImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -44,6 +46,8 @@ const AddAds = () => {
       city,
       typeOfRealty,
       methodOfSale,
+      bedrooms,
+      bathrooms,
     };
 
     const formData = new FormData();
@@ -173,6 +177,26 @@ const AddAds = () => {
             placeholder="tamanho"
             onChange={(e) => setLandMeasurement(e.target.value)}
             value={landMeasurement}
+            required
+          />
+        </label>
+        <label>
+          <span>Quartos</span>
+          <input
+            type="number"
+            placeholder="quartos"
+            onChange={(e) => setBedrooms(e.target.value)}
+            value={bedrooms}
+            required
+          />
+        </label>
+        <label>
+          <span>Banheiros</span>
+          <input
+            type="number"
+            placeholder="banheiros"
+            onChange={(e) => setBathrooms(e.target.value)}
+            value={bathrooms}
             required
           />
         </label>

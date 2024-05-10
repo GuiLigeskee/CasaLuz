@@ -23,6 +23,8 @@ const UpdateAds = () => {
   const [methodOfSale, setMethodOfSale] = useState("");
   const [landMeasurement, setLandMeasurement] = useState("");
   const [price, setPrice] = useState("");
+  const [bedrooms, setBedrooms] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
   const [newImages, setNewImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -43,6 +45,8 @@ const UpdateAds = () => {
       setPrice(add.price || "");
       setTell(add.tell || "");
       setWhatsapp(add.whatsapp || "");
+      setBathrooms(add.bathrooms || "");
+      setBedrooms(add.bedrooms || "");
     }
   }, [add]);
 
@@ -62,6 +66,8 @@ const UpdateAds = () => {
     formData.append("price", price);
     formData.append("tell", tell);
     formData.append("whatsapp", whatsapp);
+    formData.append("bedrooms", bedrooms);
+    formData.append("bathrooms", bathrooms);
 
     // Verifique se novas imagens foram selecionadas
     if (newImages.length > 0) {
@@ -186,6 +192,26 @@ const UpdateAds = () => {
             placeholder="tamanho"
             onChange={(e) => setLandMeasurement(e.target.value)}
             value={landMeasurement}
+            required
+          />
+        </label>
+        <label>
+          <span>Quartos</span>
+          <input
+            type="number"
+            placeholder="quartos"
+            onChange={(e) => setBedrooms(e.target.value)}
+            value={bedrooms}
+            required
+          />
+        </label>
+        <label>
+          <span>Banheiros</span>
+          <input
+            type="number"
+            placeholder="banheiros"
+            onChange={(e) => setBathrooms(e.target.value)}
+            value={bathrooms}
             required
           />
         </label>
