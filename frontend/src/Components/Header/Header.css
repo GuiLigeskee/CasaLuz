@@ -1,0 +1,26 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 999;
+}
+
+.logo {
+  color: #08273c;
+  margin: 0.5em auto;
+}
+
+.logo span {
+  color: #fdb303;
+}
+
+@media (max-width: 768px) {
+  .header {
+    text-align: right;
+    padding-right: 1em;
+  }
+}

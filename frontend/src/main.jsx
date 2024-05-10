@@ -48,7 +48,7 @@ const router = createBrowserRouter([
         element: <AdsPage />,
       },
       {
-        path: "/addDepoiment",
+        path: "/createDepoiment",
         element: <AddDepoiment />,
       },
       {

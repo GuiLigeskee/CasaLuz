@@ -15,6 +15,7 @@
 .carousel-img {
   max-width: 100%;
   object-fit: cover;
+  border-radius: 15px;
 }
 
 .details-container {
@@ -44,7 +45,6 @@ h4 {
 }
 
 .contact-buttons {
-  margin: 1em;
   display: flex;
   justify-content: space-between;
   gap: 1em;
@@ -64,6 +64,61 @@ h4 {
 #contact-button img {
   width: 3em;
   filter: invert(1);
+}
+
+.addDetails-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.addDetails {
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+  background-color: #fafafa;
+  border: solid 3px #08273c;
+  border-radius: 15px;
+  margin: 0.5em;
+}
+
+.addDetails .icon {
+  font-size: 2em;
+  margin-right: 10px;
+  color: #08273c;
+}
+
+.addDetails span {
+  font-weight: bold;
+  margin-right: 5px;
+  color: #08273c;
+}
+
+.addDetails p {
+  font-size: 1.5em;
+  color: #08273c;
+}
+
+.addMaps {
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+  background-color: #08273c;
+  border: solid 3px #08273c;
+  border-radius: 15px;
+  margin: 0.5em;
+}
+
+.addMaps .icon {
+  font-size: 2em;
+  margin-right: 10px;
+  color: #fafafa;
+}
+
+.addMaps p {
+  font-size: 1.2em;
+  color: #fafafa;
 }
 
 @media screen and (max-width: 767px) {

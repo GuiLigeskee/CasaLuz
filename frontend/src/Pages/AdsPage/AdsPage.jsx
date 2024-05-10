@@ -8,11 +8,20 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+// Uploads
 import { uploads } from "../../utils/config";
 
 // Components
 import Whatsapp from "../../assets/whatsapp.svg";
 import Tell from "../../assets/phone.svg";
+
+// Icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBed,
+  faBath,
+  faMapMarkerAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Hooks
 import { useEffect } from "react";
@@ -63,6 +72,31 @@ const AdsPage = () => {
               </SwiperSlide>
             ))}
         </Swiper>
+        <div className="addDetails-container">
+          <a
+            href={`https://www.google.com/maps?q=${add.address},${add.district},${add.city}`}
+            target="_blank"
+          >
+            <div className="addMaps">
+              <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
+              <p>Ver no mapa</p>
+            </div>
+          </a>
+          {add.bedrooms && (
+            <div className="addDetails">
+              <FontAwesomeIcon icon={faBed} className="icon" />
+              <span>Quartos:</span>
+              <p>{add.bedrooms}</p>
+            </div>
+          )}
+          {add.bathrooms && (
+            <div className="addDetails">
+              <FontAwesomeIcon icon={faBath} className="icon" />
+              <span>Banheiros:</span>
+              <p>{add.bathrooms}</p>
+            </div>
+          )}
+        </div>
         <div className="contact-section">
           <h3>Gostou do que viu?</h3>
           <h4>Entre em contato com nossos corretores!</h4>

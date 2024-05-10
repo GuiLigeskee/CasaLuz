@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { logout, reset } from "../../Slice/authSlice";
 import { useState } from "react";
 import "./NavBar.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const NavBar = () => {
   const { auth } = useAuth();
@@ -26,11 +28,6 @@ const NavBar = () => {
     <div>
       <aside className={`sidebar ${isMenuOpen ? "open" : ""}`}>
         <div className="sidebar__content">
-          <h1 className="logo">
-            <NavLink to="/">
-              Casa <span>Luz</span> Imóveis
-            </NavLink>
-          </h1>
           <ul className="sidebar__options">
             {auth ? (
               <>
@@ -44,7 +41,7 @@ const NavBar = () => {
                   <NavLink to="/depoiments">Ver depoimentos</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/createAds">Novo depoimento</NavLink>
+                  <NavLink to="/createDepoiment">Novo depoimento</NavLink>
                 </li>
                 <li>
                   <NavLink to="/register">Novo admin</NavLink>
@@ -70,11 +67,10 @@ const NavBar = () => {
       <div className="navbar">
         <div className="navbar__left">
           <button className="menu__toggle" onClick={toggleMenu}>
-            Menu
+            <FontAwesomeIcon icon={faBars} />
           </button>
         </div>
       </div>
-      <footer className="footer">{/* Conteúdo do rodapé */}</footer>
     </div>
   );
 };

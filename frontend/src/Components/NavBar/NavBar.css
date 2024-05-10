@@ -18,10 +18,7 @@
 
 .sidebar__content {
   padding: 1em;
-}
-
-.logo {
-  margin: 2.5em 0 0.5em 0;
+  margin-top: 5em;
 }
 
 .sidebar__options {
@@ -46,29 +43,18 @@
 /* Estilos para o botão do menu */
 .menu__toggle {
   position: fixed;
-  top: 0.5em;
-  left: 1em;
-  background-color: #08273c;
-  color: #fff;
+  top: 15px;
+  left: 15px;
+  background-color: transparent;
+  color: #08273c;
   border: none;
-  padding: 0.5em 1em;
+  padding: 0;
   cursor: pointer;
   z-index: 1000;
-}
-
-.menu__toggle:hover {
-  background-color: #fdb303;
+  font-size: 1.5em;
 }
 
 #exit {
   color: red;
   cursor: pointer;
-}
-
-.logo {
-  color: #08273c;
-}
-
-.logo span {
-  color: #fdb303;
 }
