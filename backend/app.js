@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // cors
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ credentials: true, origin: "https://casaluzimoveis.com" }));
 
 // upload directory
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
