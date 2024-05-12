@@ -1,5 +1,5 @@
-export const api = "https://casaluzimoveis.com/api";
-export const uploads = "https://casaluzimoveis.com/uploads";
+export const api = "http://77.37.69.144:81/api";
+export const uploads = "http://77.37.69.144:81/uploads";
 
 export const requestConfig = (method, data, token = null, image = null) => {
   let config;
