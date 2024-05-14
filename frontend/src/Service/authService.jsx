@@ -1,8 +1,9 @@
 import { api, requestConfig } from "../utils/config";
 
 // Register a user
-const register = async (data, token) => {
-  const config = requestConfig("POST", data, token, true);
+// Register a user
+const register = async (formData, token) => {
+  const config = requestConfig("POST", formData, token, false);
 
   try {
     const res = await fetch(api + "/admin/register", config)

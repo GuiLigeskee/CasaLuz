@@ -15,38 +15,42 @@ const generateToken = (id) => {
 
 // Register admin
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
-
   try {
-    // Verifica se o e-mail já está cadastrado
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
-      return res.status(400).json({ message: "Este e-mail já está em uso." });
-    }
-    // Cria um hash da senha
-    const salt = await bcrypt.genSalt();
-    // const hashedPassword = await bcrypt.hash(password, salt);
+    const { name, email, password } = req.body;
 
-    // Cria um novo administrador
+    // Verificar se todos os campos necessários foram fornecidos
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Todos os campos são obrigatórios." });
+    }
+
+    // Verificar se o administrador já existe no banco de dados
+    const existingAdmin = await Admin.findOne({ email });
+
+    if (existingAdmin) {
+      return res
+        .status(400)
+        .json({ message: "Já existe um administrador com esse e-mail." });
+    }
+
+    // Criar um novo administrador no banco de dados
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newAdmin = new Admin({
       name,
       email,
-      password,
+      password: hashedPassword,
     });
 
-    // Salva o novo administrador no banco de dados
     await newAdmin.save();
 
-    // Retorna uma resposta de sucesso
-    res
-      .status(201)
-      .json({ message: "Administrador registrado com sucesso.", name });
+    res.status(201).json({ message: "Novo administrador criado com sucesso." });
   } catch (error) {
-    // Retorna um erro se ocorrer algum problema durante o registro
     console.error("Erro ao registrar novo administrador:", error);
     res
       .status(500)
-      .json({ message: "Ocorreu um erro ao registrar o administrador." });
+      .json({ message: "Ocorreu um erro ao registrar novo administrador." });
   }
 };
 

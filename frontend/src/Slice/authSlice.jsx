@@ -18,7 +18,9 @@ export const register = createAsyncThunk(
 
     const data = await authService.register(adminData, token);
 
-    return adminData;
+    console.log(data);
+
+    return data;
   }
 );
 

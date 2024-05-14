@@ -24,17 +24,15 @@ const Register = () => {
     e.preventDefault();
 
     const adminData = {
-      name: name,
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
+      name,
+      email,
+      password,
+      confirmPassword,
     };
 
     console.log(adminData);
 
     dispatch(register(adminData));
-
-    reset();
   };
 
   return (
