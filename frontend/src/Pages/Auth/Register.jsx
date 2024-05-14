@@ -4,16 +4,19 @@ import "./Auth.css";
 import Message from "../../Components/Messages/Message";
 
 // Redux
-import { register, reset } from "../../Slice/authSlice";
+import { register } from "../../Slice/authSlice";
 
 // Hooks
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 const Register = () => {
   const dispatch = useDispatch();
 
-  const { message, loading, error } = useSelector((state) => state.auth);
+  const resetMessage = useResetComponentMessage();
+
+  const { message, loading, error } = useSelector((state) => state.auth.admin);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,6 +26,18 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validar se os campos estão preenchidos
+    if (!name || !email || !password || !confirmPassword) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    // Validar se a senha e a confirmação de senha correspondem
+    if (password !== confirmPassword) {
+      alert("A senha e a confirmação de senha não correspondem.");
+      return;
+    }
+
     const adminData = {
       name,
       email,
@@ -30,9 +45,8 @@ const Register = () => {
       confirmPassword,
     };
 
-    console.log(adminData);
-
     dispatch(register(adminData));
+    resetMessage();
   };
 
   return (

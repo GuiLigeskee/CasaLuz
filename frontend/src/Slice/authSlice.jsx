@@ -66,6 +66,7 @@ export const authSlice = createSlice({
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.admin = null;
       })
       .addCase(logout.fulfilled, (state) => {
         state.admin = null;

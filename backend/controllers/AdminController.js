@@ -16,13 +16,20 @@ const generateToken = (id) => {
 // Register admin
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
 
     // Verificar se todos os campos necessários foram fornecidos
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !confirmPassword) {
       return res
-        .status(400)
-        .json({ message: "Todos os campos são obrigatórios." });
+        .status(404)
+        .json({ error: "Todos os campos são obrigatórios." });
+    }
+
+    // Verificar se a senha e a confirmação de senha são iguais
+    if (password !== confirmPassword) {
+      return res.status(404).json({
+        error: "A senha e a confirmação de senha não correspondem.",
+      });
     }
 
     // Verificar se o administrador já existe no banco de dados
@@ -30,8 +37,8 @@ const register = async (req, res) => {
 
     if (existingAdmin) {
       return res
-        .status(400)
-        .json({ message: "Já existe um administrador com esse e-mail." });
+        .status(404)
+        .json({ error: "Já existe um administrador com esse e-mail." });
     }
 
     // Criar um novo administrador no banco de dados
@@ -45,12 +52,12 @@ const register = async (req, res) => {
 
     await newAdmin.save();
 
-    res.status(201).json({ message: "Novo administrador criado com sucesso." });
+    res.status(201).json({ error: "Novo administrador criado com sucesso." });
   } catch (error) {
     console.error("Erro ao registrar novo administrador:", error);
     res
       .status(500)
-      .json({ message: "Ocorreu um erro ao registrar novo administrador." });
+      .json({ error: "Ocorreu um erro ao registrar novo administrador." });
   }
 };
 
