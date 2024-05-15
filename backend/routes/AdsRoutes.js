@@ -23,7 +23,7 @@ const {
 const authGuard = require("../middlewares/authGuard");
 const validate = require("../middlewares/handleValidation");
 const { imagesUpload } = require("../middlewares/imagesUpload");
-const { processFiles } = require("../middlewares/processFiles");
+const { convertFiles } = require("../middlewares/convertFiles");
 const {
   adsInsertValidation,
   adsUpdateValidation,
@@ -34,7 +34,7 @@ router.post(
   "/",
   authGuard,
   imagesUpload.array("images"),
-  processFiles,
+  convertFiles,
   adsInsertValidation(),
   validate,
   insertAds
