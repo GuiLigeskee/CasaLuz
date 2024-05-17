@@ -14,11 +14,33 @@ const {
 // Middlewares
 const authGuard = require("../middlewares/authGuard");
 const { imagesUpload } = require("../middlewares/imagesUpload");
+const { convertFiles } = require("../middlewares/convertFiles");
+const {
+  depoimentInsertValidation,
+  depoimentUpdateValidation,
+} = require("../middlewares/depoimentValidation");
+const validate = require("../middlewares/handleValidation");
 
 // Routes
-router.post("/", authGuard, imagesUpload.array("images"), insertDepoiment);
+router.post(
+  "/",
+  authGuard,
+  imagesUpload.array("images"),
+  convertFiles,
+  depoimentInsertValidation(),
+  validate,
+  insertDepoiment
+);
+router.put(
+  "/:id",
+  authGuard,
+  imagesUpload.array("images"),
+  convertFiles,
+  depoimentUpdateValidation(),
+  validate,
+  updateDepoiment
+);
 router.delete("/:id", authGuard, deleteDepoiment);
-router.put("/:id", authGuard, updateDepoiment);
 router.get("/", getAllDepoiments);
 router.get("/getDepoiment/:id", getDepoimentById);
 router.get("/getAdminDepoiments/:id", getAdminDepoiments);

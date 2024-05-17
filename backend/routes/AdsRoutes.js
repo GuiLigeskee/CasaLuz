@@ -43,6 +43,7 @@ router.put(
   "/:id",
   authGuard,
   imagesUpload.array("images"),
+  convertFiles,
   adsUpdateValidation(),
   validate,
   updateAds

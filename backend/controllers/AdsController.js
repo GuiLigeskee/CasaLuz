@@ -2,6 +2,9 @@ const Ads = require("../models/Ads");
 const Admin = require("../models/Admin");
 const mongoose = require("mongoose");
 
+// Utils
+const { deleteImages } = require("../utils/deleteImages");
+
 // Inserir um anúncio
 const insertAds = async (req, res) => {
   const {
@@ -19,41 +22,54 @@ const insertAds = async (req, res) => {
     bedrooms,
     bathrooms,
   } = req.body;
-  const images = req.files.map((file) => file.filename);
 
-  const reqAdmin = req.admin;
+  try {
+    const images = req.files.map((file) => file.filename);
 
-  const admin = await Admin.findById(reqAdmin._id);
+    throw new Error("Este é um erro gerado de propósito!");
 
-  // Criar anúncio
-  const newAds = await Ads.create({
-    title,
-    description,
-    tell,
-    whatsapp,
-    address,
-    price,
-    landMeasurement,
-    typeOfRealty,
-    district,
-    city,
-    methodOfSale,
-    bedrooms,
-    bathrooms,
-    images,
-    adminId: admin._id,
-    adminName: admin.name,
-  });
+    const reqAdmin = req.admin;
 
-  // Se o anúncio foi criado com sucesso, retornar os dados
-  if (!newAds) {
-    res.status(422).json({
-      errors: ["Houve um erro, por favor tente novamente mais tarde."],
+    const admin = await Admin.findById(reqAdmin._id);
+
+    // Criar anúncio
+    const newAds = await Ads.create({
+      title,
+      description,
+      tell,
+      whatsapp,
+      address,
+      price,
+      landMeasurement,
+      typeOfRealty,
+      district,
+      city,
+      methodOfSale,
+      bedrooms,
+      bathrooms,
+      images,
+      adminId: admin._id,
+      adminName: admin.name,
     });
-    return;
-  }
 
-  res.status(201).json(newAds);
+    // Se o anúncio foi criado com sucesso, retornar os dados
+    if (!newAds) {
+      res.status(422).json({
+        errors: ["Houve um erro, por favor tente novamente mais tarde."],
+      });
+      return;
+    }
+
+    res.status(201).json(newAds);
+  } catch (error) {
+    if (req.file) {
+      await deleteImages("ads", req.file.filename);
+    }
+    console.log(error);
+    res
+      .status(500)
+      .send("Houve um erro, por favor tente novamente mais tarde.");
+  }
 };
 
 // Remover um anúncio do banco de dados

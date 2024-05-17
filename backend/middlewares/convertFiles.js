@@ -1,8 +1,6 @@
 const sharp = require("sharp");
-const fs = require("fs/promises");
-const path = require("path");
 const fse = require("fs-extra");
-const { v4: uuidv4 } = require("uuid");
+const path = require("path");
 
 // Middleware para converter imagens e atualizar nomes em req.files
 const convertFiles = async (req, res, next) => {
@@ -21,19 +19,15 @@ const convertFiles = async (req, res, next) => {
 
     const filesPromises = fieldFiles.map(async (file) => {
       const inputPath = file.path;
-      const randomFileName = `${uuidv4()}.webp`; // Gerar um nome de arquivo aleatório
-      const outputPath = path.join(
-        __dirname,
-        `../uploads/ads/${randomFileName}`
-      );
+      const outputPath = inputPath.replace(/\.[^.]+$/, "") + ".webp";
 
       // Usando o Sharp para converter a imagem para WebP
       await sharp(inputPath).webp().toFile(outputPath);
 
-      // Movendo o arquivo convertido para a pasta de destino e excluindo o original
+      // Excluir o arquivo original
       await fse.move(inputPath, outputPath, { overwrite: true });
 
-      file.filename = randomFileName;
+      file.filename = path.basename(outputPath);
     });
 
     await Promise.all(filesPromises);

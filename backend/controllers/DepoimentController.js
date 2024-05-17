@@ -2,33 +2,47 @@ const Depoiment = require("../models/Depoiments");
 const Admin = require("../models/Admin");
 const mongoose = require("mongoose");
 
+// Utils
+const { deleteImages } = require("../utils/deleteImages");
+
 // Inserir um anúncio
 const insertDepoiment = async (req, res) => {
   const { title, description } = req.body;
-  const images = req.files.map((file) => file.filename);
 
-  const reqAdmin = req.admin;
+  try {
+    const images = req.files.map((file) => file.filename);
 
-  const admin = await Admin.findById(reqAdmin._id);
+    const reqAdmin = req.admin;
 
-  // Criar anúncio
-  const newDepoiment = await Depoiment.create({
-    title,
-    description,
-    images,
-    adminId: admin._id,
-    adminName: admin.name,
-  });
-
-  // Se o anúncio foi criado com sucesso, retornar os dados
-  if (!newDepoiment) {
-    res.status(422).json({
-      errors: ["Houve um erro, por favor tente novamente mais tarde."],
+    const admin = await Admin.findById(reqAdmin._id);
+    throw new Error("Este é um erro gerado de propósito!");
+    // Criar anúncio
+    const newDepoiment = await Depoiment.create({
+      title,
+      description,
+      images,
+      adminId: admin._id,
+      adminName: admin.name,
     });
-    return;
-  }
 
-  res.status(201).json(newDepoiment);
+    // Se o anúncio foi criado com sucesso, retornar os dados
+    if (!newDepoiment) {
+      res.status(422).json({
+        errors: ["Houve um erro, por favor tente novamente mais tarde."],
+      });
+      return;
+    }
+
+    res.status(201).json(newDepoiment);
+  } catch (error) {
+    if (req.files) {
+      req.files.map((file) => deleteImages("depoiment", file.filename));
+    }
+    console.log(error);
+    res
+      .status(500)
+      .send("Houve um erro, por favor tente novamente mais tarde.");
+  }
 };
 
 // Remover um anúncio do banco de dados

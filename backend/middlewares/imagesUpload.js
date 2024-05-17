@@ -1,21 +1,22 @@
 const multer = require("multer");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 // Destination to store images
 const imagesStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     let folder = "";
 
     if (req.baseUrl.includes("ads")) {
       folder = "ads";
-    }
-    if (req.baseUrl.includes("depoiment")) {
+    } else if (req.baseUrl.includes("depoiment")) {
       folder = "depoiment";
     }
+
     cb(null, `uploads/${folder}/`);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, `${Date.now()}_${uuidv4()}${path.extname(file.originalname)}`);
   },
 });
 
