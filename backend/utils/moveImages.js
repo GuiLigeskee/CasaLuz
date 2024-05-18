@@ -38,3 +38,11 @@ const moveImages = async (imageType, oldImageName) => {
 };
 
 module.exports = { moveImages };
+// efgafyaefyafeygafy
+// efgafyaefyafeygafy
+// efgafyaefyafeygafy
+// efgafyaefyafeygafy
+// efgafyaefyafeygafy
+// efgafyaefyafeygafy
+// efgafyaefyafeygafy
+// efgafyaefyafeygafy
