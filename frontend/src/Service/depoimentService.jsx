@@ -15,6 +15,20 @@ const publishDepoiment = async (data, token) => {
   }
 };
 
+const deleteDepoiment = async (id, token) => {
+  const config = requestConfig("DELETE", "", token, true);
+
+  try {
+    const res = await fetch(api + "/depoiment/" + id, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // Get all ads
 const getDepoiments = async () => {
   const config = requestConfig("GET");
@@ -49,6 +63,7 @@ const adsService = {
   publishDepoiment,
   getDepoimentDetails,
   getDepoiments,
+  deleteDepoiment,
 };
 
 export default adsService;

@@ -3,7 +3,7 @@ const Admin = require("../models/Admin");
 const mongoose = require("mongoose");
 
 // Utils
-const { deleteImages } = require("../utils/deleteImages");
+const { moveImages } = require("../utils/moveImages");
 
 // Inserir um anúncio
 const insertAds = async (req, res) => {
@@ -26,7 +26,7 @@ const insertAds = async (req, res) => {
   try {
     const images = req.files.map((file) => file.filename);
 
-    throw new Error("Este é um erro gerado de propósito!");
+    // throw new Error("Este é um erro gerado de propósito!");
 
     const reqAdmin = req.admin;
 
@@ -63,7 +63,7 @@ const insertAds = async (req, res) => {
     res.status(201).json(newAds);
   } catch (error) {
     if (req.file) {
-      await deleteImages("ads", req.file.filename);
+      await moveImages("ads", req.file.filename);
     }
     console.log(error);
     res

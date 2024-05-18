@@ -3,7 +3,7 @@ const Admin = require("../models/Admin");
 const mongoose = require("mongoose");
 
 // Utils
-const { deleteImages } = require("../utils/deleteImages");
+const { moveImages } = require("../utils/moveImages");
 
 // Inserir um anúncio
 const insertDepoiment = async (req, res) => {
@@ -15,7 +15,7 @@ const insertDepoiment = async (req, res) => {
     const reqAdmin = req.admin;
 
     const admin = await Admin.findById(reqAdmin._id);
-    throw new Error("Este é um erro gerado de propósito!");
+    // throw new Error("Este é um erro gerado de propósito!");
     // Criar anúncio
     const newDepoiment = await Depoiment.create({
       title,
@@ -35,10 +35,23 @@ const insertDepoiment = async (req, res) => {
 
     res.status(201).json(newDepoiment);
   } catch (error) {
-    if (req.files) {
-      req.files.map((file) => deleteImages("depoiment", file.filename));
-    }
     console.log(error);
+
+    // Mover imagens para a pasta de backup
+    if (req.files) {
+      try {
+        await Promise.all(
+          req.files.map((file) => moveImages("depoiment", file.filename))
+        );
+      } catch (moveError) {
+        console.error("Erro ao mover imagens:", moveError);
+        res
+          .status(500)
+          .send("Erro ao mover imagens, por favor tente novamente mais tarde.");
+        return;
+      }
+    }
+
     res
       .status(500)
       .send("Houve um erro, por favor tente novamente mais tarde.");
@@ -49,19 +62,28 @@ const insertDepoiment = async (req, res) => {
 const deleteDepoiment = async (req, res) => {
   const { id } = req.params;
 
-  const depoiment = await Depoiment.findById(new mongoose.Types.ObjectId(id));
+  try {
+    const depoiment = await Depoiment.findById(new mongoose.Types.ObjectId(id));
 
-  // Verificar se o anúncio existe
-  if (!depoiment) {
-    res.status(404).json({ errors: ["Depoimento não encontrado!"] });
+    // Verificar se o anúncio existe
+    if (!depoiment) {
+      res.status(404).json({ errors: ["Depoimento não encontrado!"] });
+      return;
+    }
+
+    await Depoiment.findByIdAndDelete(depoiment._id);
+
+    if (depoiment.images) {
+      moveImages("depoiment", depoiment.images);
+    }
+
+    res
+      .status(200)
+      .json({ id: depoiment._id, message: "Depoimento excluído com sucesso." });
+  } catch (error) {
+    res.status(404).json({ errors: ["Profissional não encontrado!"] });
     return;
   }
-
-  await Depoiment.findByIdAndDelete(depoiment._id);
-
-  res
-    .status(200)
-    .json({ id: depoiment._id, message: "Depoimento excluído com sucesso." });
 };
 
 // Obter todos os anúncios

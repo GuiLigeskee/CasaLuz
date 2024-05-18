@@ -28,6 +28,23 @@ export const publishDepoiment = createAsyncThunk(
   }
 );
 
+export const deleteDepoiment = createAsyncThunk(
+  "depoiment/delete",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.admin.token;
+
+    const data = await depoimentService.deleteDepoiment(id, token);
+
+    console.log(data.errors);
+    // Check for errors
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+);
+
 // Get all depoiments
 export const getDepoiments = createAsyncThunk("depoiment/getall", async () => {
   const data = await depoimentService.getDepoiments();
@@ -91,6 +108,26 @@ export const depoimentSlice = createSlice({
         state.success = true;
         state.error = null;
         state.depoiment = action.payload;
+      })
+      .addCase(deleteDepoiment.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteDepoiment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+
+        state.depoiments = state.depoiments.filter((depoiment) => {
+          return depoiment._id !== action.payload.id;
+        });
+
+        state.message = action.payload.message;
+      })
+      .addCase(deleteDepoiment.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.depoiment = null;
       });
   },
 });
