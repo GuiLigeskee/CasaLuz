@@ -52,7 +52,7 @@ const register = async (req, res) => {
 
     await newAdmin.save();
 
-    res.status(201).json({ error: "Novo administrador criado com sucesso." });
+    res.status(201).json({ message: "Novo administrador criado com sucesso." });
   } catch (error) {
     console.error("Erro ao registrar novo administrador:", error);
     res

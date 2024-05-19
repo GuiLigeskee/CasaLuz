@@ -2,7 +2,7 @@
   padding: 1em;
   background-color: #fafafa;
   border-radius: 15px;
-  width: 100%;
+  max-width: 500px;
   max-height: 500px;
 }
 
