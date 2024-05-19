@@ -1,8 +1,38 @@
 const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
+const fse = require("fs-extra");
 
-// Destination to store images
+// Função para criar os diretórios necessários de forma assíncrona
+const ensureUploadsFolder = async () => {
+  const uploadsPath = path.join(__dirname, "..", "uploads");
+  const adsPath = path.join(uploadsPath, "ads");
+  const depoimentPath = path.join(uploadsPath, "depoiment");
+
+  try {
+    // Verifica e cria a pasta uploads
+    await fse.ensureDir(uploadsPath);
+
+    // Verifica e cria a pasta ads
+    await fse.ensureDir(adsPath);
+
+    // Verifica e cria a pasta depoiment
+    await fse.ensureDir(depoimentPath);
+
+    console.log(
+      "Pastas de uploads/ads/depoiment criadas com sucesso ou já existentes!"
+    );
+  } catch (err) {
+    console.error("Erro ao criar pastas:", err);
+  }
+};
+
+// Chama a função para garantir que as pastas existam
+ensureUploadsFolder().catch((err) => {
+  console.error("Erro ao garantir que as pastas existam:", err);
+});
+
+// Destino para armazenar as imagens
 const imagesStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     let folder = "";
