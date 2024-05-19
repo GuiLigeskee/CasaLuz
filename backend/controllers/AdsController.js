@@ -3,7 +3,7 @@ const Admin = require("../models/Admin");
 const mongoose = require("mongoose");
 
 // Utils
-const { moveImages } = require("../utils/moveImages");
+// const { deleteImages } = require("../utils/deleteImages");
 
 // Inserir um anúncio
 const insertAds = async (req, res) => {
@@ -62,9 +62,9 @@ const insertAds = async (req, res) => {
 
     res.status(201).json(newAds);
   } catch (error) {
-    if (req.file) {
-      await moveImages("ads", req.file.filename);
-    }
+    // if (req.file) {
+    //   await deleteImages("ads", req.file.filename);
+    // }
     console.log(error);
     res
       .status(500)
