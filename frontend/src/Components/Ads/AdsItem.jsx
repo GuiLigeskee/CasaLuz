@@ -3,18 +3,10 @@ import { uploads } from "../../utils/config";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteAdd } from "../../Slice/adsSlice";
-// import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 const AdsItem = ({ add }) => {
   const admin = useSelector((state) => state.auth.admin);
   const dispatch = useDispatch();
-  // const resetMessage = useResetComponentMessage();
-  const navigate = useNavigate();
-
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    navigate(`/updateAds/${add._id}`);
-  };
 
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza de que deseja excluir este anúncio?")) {
@@ -26,9 +18,6 @@ const AdsItem = ({ add }) => {
     if (admin) {
       return (
         <div className="admin-options">
-          <button id="admin-option-update" onClick={handleUpdate}>
-            Atualizar
-          </button>
           <button
             id="admin-option-delete"
             onClick={() => handleDelete(add._id)}

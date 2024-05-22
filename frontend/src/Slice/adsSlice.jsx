@@ -112,6 +112,12 @@ export const searchAdsByTypeOfRealty = createAsyncThunk(
   }
 );
 
+export const getAdsFilters = createAsyncThunk("ads/getAds", async (filters) => {
+  const queryString = new URLSearchParams(filters).toString();
+  const data = await adsService.searchAds(queryString);
+  return data;
+});
+
 export const adsSlice = createSlice({
   name: "ads",
   initialState,
@@ -252,6 +258,20 @@ export const adsSlice = createSlice({
         state.ads = action.payload;
       })
       .addCase(searchAdsByTypeOfRealty.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAdsFilters.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAdsFilters.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.ads = action.payload;
+      })
+      .addCase(getAdsFilters.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -54,13 +54,13 @@ router.get("/admin/:id", getAdminAds);
 router.get("/:id", getAdsById);
 
 // Filtros de pesquisa:
-router.get("/filter/title", getByTitle);
-router.get("/filter/district", getByDistrict);
-router.get("filter/city", getByCity);
-router.get("/filter/type", getByTypeOfRealty);
-router.get("/filter/method", getByMethodOfSale);
-router.get("/filter/price", getByPrice);
-router.get("/filter/space", getByLandMeasurement);
+// router.get("/filter/title", getByTitle);
+// router.get("/filter/district", getByDistrict);
+// router.get("filter/city", getByCity);
+// router.get("/filter/type", getByTypeOfRealty);
+// router.get("/filter/method", getByMethodOfSale);
+// router.get("/filter/price", getByPrice);
+// router.get("/filter/space", getByLandMeasurement);
 router.get("/filter/search", searchAds);
 
 module.exports = router;

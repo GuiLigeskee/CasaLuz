@@ -64,7 +64,7 @@ const router = createBrowserRouter([
         element: <UpdateAds />,
       },
       {
-        path: "/search/:keyword?/:methodOfSale/:typeOfRealty",
+        path: "/search/:keyword?/:methodOfSale?/:typeOfRealty?/:city?/:district?/:minPrice?/:maxPrice?/minSpace?/:maxSpace?/",
         element: <SearchResultsPage />,
       },
     ],
