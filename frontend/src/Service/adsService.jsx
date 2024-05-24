@@ -122,9 +122,10 @@ const searchAdsByTypeOfRealty = async (q) => {
 const searchAds = async (queryString) => {
   try {
     const response = await fetch(`${api}/ads/filter/search?${queryString}`);
-    return response.data;
+    const data = await response.json(); // Corrigir para obter JSON
+    return data;
   } catch (error) {
-    throw new Error(error.response?.data?.error || "Erro ao buscar anúncios");
+    throw new Error(error.message || "Erro ao buscar anúncios");
   }
 };
 

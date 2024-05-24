@@ -1,3 +1,38 @@
 .filters {
-  height: 25%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: #fafafa;
+  border-radius: 15px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  margin: 1em 0;
+}
+
+.filter-input {
+  padding: 0.5em;
+  border: 2px solid #576670;
+  border-radius: 15px;
+  font-size: 0.875rem;
+  max-width: 150px;
+}
+
+.filter-input::placeholder {
+  color: #94b4cb;
+}
+
+.filter-button {
+  padding: 0.5em;
+  background-color: #08273c;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  flex: 1 1 150px;
+}
+
+.filter-button:hover {
+  background-color: #135b8a;
 }

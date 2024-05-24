@@ -75,48 +75,18 @@ export const deleteAdd = createAsyncThunk(
   }
 );
 
-// Filters
-export const searchAdsByKeyword = createAsyncThunk(
-  "ads/searchByKeyword",
-  async (keyword, thunkAPI) => {
+export const getAdsFilters = createAsyncThunk(
+  "ads/getAds",
+  async (filters, thunkAPI) => {
     try {
-      const data = await adsService.searchAdsByKeyword(keyword);
+      const queryString = new URLSearchParams(filters).toString();
+      const data = await adsService.searchAds(queryString);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
-
-export const searchAdsByMethodOfSale = createAsyncThunk(
-  "ads/searchAdsByMethodOfSale",
-  async (q, thunkAPI) => {
-    try {
-      const data = await adsService.searchAdsByMethodOfSale(q);
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const searchAdsByTypeOfRealty = createAsyncThunk(
-  "ads/searchAdsByTypeOfRealty",
-  async (q, thunkAPI) => {
-    try {
-      const data = await adsService.searchAdsByTypeOfRealty(q);
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const getAdsFilters = createAsyncThunk("ads/getAds", async (filters) => {
-  const queryString = new URLSearchParams(filters).toString();
-  const data = await adsService.searchAds(queryString);
-  return data;
-});
 
 export const adsSlice = createSlice({
   name: "ads",
@@ -218,48 +188,6 @@ export const adsSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.add = null;
-      })
-      .addCase(searchAdsByKeyword.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(searchAdsByKeyword.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.ads = action.payload;
-      })
-      .addCase(searchAdsByKeyword.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(searchAdsByMethodOfSale.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(searchAdsByMethodOfSale.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.ads = action.payload;
-      })
-      .addCase(searchAdsByMethodOfSale.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(searchAdsByTypeOfRealty.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(searchAdsByTypeOfRealty.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.ads = action.payload;
-      })
-      .addCase(searchAdsByTypeOfRealty.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
       })
       .addCase(getAdsFilters.pending, (state) => {
         state.loading = true;
