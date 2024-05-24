@@ -1,5 +1,3 @@
-// No componente SearchBar.js
-
 import "./SearchBar.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -23,23 +21,19 @@ const SearchBar = () => {
     dispatch(fetchAdsStart());
 
     try {
-      // Verifica se o keyword está vazio
-      if (keyword.trim() !== "") {
-        const params = {
-          keyword,
-          methodOfSale,
-          typeOfRealty,
-        };
-        const data = await adsService.searchAds(params);
-        dispatch(fetchAdsSuccess(data));
-        navigate(`/search/${keyword}/${methodOfSale}/${typeOfRealty}`);
-      } else {
-        // Se o keyword estiver vazio, apenas atualize o estado local e não faça a pesquisa
-        dispatch(fetchAdsSuccess([])); // Pode ser necessário ajustar como o estado de 'ads' é atualizado
-        navigate(`/search/${methodOfSale}/${typeOfRealty}`);
-      }
+      const params = {
+        ...(keyword.trim() && { keyword }),
+        methodOfSale,
+        typeOfRealty,
+      };
+
+      const data = await adsService.searchAds(params);
+      dispatch(fetchAdsSuccess(data));
+
+      const query = new URLSearchParams(params).toString();
+      navigate(`/search?${query}`);
     } catch (error) {
-      dispatch(fetchAdsFailure(error));
+      dispatch(fetchAdsFailure(error.message));
     }
   };
 

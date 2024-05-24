@@ -119,10 +119,11 @@ const searchAdsByTypeOfRealty = async (q) => {
   }
 };
 
-const searchAds = async (queryString) => {
+const searchAds = async (params) => {
   try {
+    const queryString = new URLSearchParams(params).toString();
     const response = await fetch(`${api}/ads/filter/search?${queryString}`);
-    const data = await response.json(); // Corrigir para obter JSON
+    const data = await response.json(); // Certifique-se de que a resposta é convertida para JSON
     return data;
   } catch (error) {
     throw new Error(error.message || "Erro ao buscar anúncios");
