@@ -1,22 +1,23 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
+
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASS;
+const dbName = process.env.DB_NAME;
+const dbHost = process.env.DB_HOST;
 
 const conn = async () => {
-    try {
+  try {
+    const dbConn = await mongoose.connect(
+      `mongodb://${dbUser}:${dbPassword}@${dbHost}:27017/${dbName}?authSource=admin`
+    );
 
-        const dbConn = await mongoose.connect(
-            `mongodb+srv://${dbUser}:${dbPassword}@cluster0.ijipr5w.mongodb.net/?retryWrites=true&w=majority`
-        )
+    console.log(`Conectado ao banco de dados MongoDB no servidor ${dbHost}`);
+    return dbConn;
+  } catch (error) {
+    console.error("Erro ao conectar ao banco de dados MongoDB:", error.message);
+    process.exit(1);
+  }
+};
 
-        console.log(`Conectou ao banco`)
-        return dbConn
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-conn();
-
-module.exports = conn
+module.exports = conn();
