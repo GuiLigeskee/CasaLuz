@@ -7,20 +7,22 @@ const dbName = process.env.DB_NAME;
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
 
-const uri = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
+const authDatabase = "adminCasaLuz"; // Ajuste para o banco de dados onde o usuário adminCasaLuz está definido
 
-const conn = mongoose.connect(uri, {
+const uri = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=${authDatabase}`;
+
+const conn = mongoose.createConnection(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-mongoose.connection.on("connected", () => {
+conn.on("connected", () => {
   console.log(
     `Conectado ao banco de dados MongoDB no servidor ${dbHost}:${dbPort}`
   );
 });
 
-mongoose.connection.on("error", (err) => {
+conn.on("error", (err) => {
   console.error("Erro ao conectar ao banco de dados MongoDB:", err.message);
   process.exit(1);
 });
