@@ -17,7 +17,7 @@ const SearchResultsPage = () => {
   useEffect(() => {
     const params = {
       keyword: query.get("keyword") || "",
-      methodOfSale: query.get("methodOfSale") || "Aluguel",
+      methodOfSale: query.get("methodOfSale") || "Venda",
       typeOfRealty: query.get("typeOfRealty") || "Casa",
     };
 

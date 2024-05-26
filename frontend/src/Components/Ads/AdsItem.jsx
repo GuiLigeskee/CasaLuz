@@ -7,6 +7,7 @@ import { deleteAdd } from "../../Slice/adsSlice";
 const AdsItem = ({ add }) => {
   const admin = useSelector((state) => state.auth.admin);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza de que deseja excluir este anúncio?")) {
@@ -18,6 +19,12 @@ const AdsItem = ({ add }) => {
     if (admin) {
       return (
         <div className="admin-options">
+          <button
+            id="admin-option-update"
+            onClick={() => navigate(`/updateAds/${add._id}`)}
+          >
+            Editar
+          </button>
           <button
             id="admin-option-delete"
             onClick={() => handleDelete(add._id)}
@@ -36,7 +43,11 @@ const AdsItem = ({ add }) => {
         <div>
           {renderAdminOptions()}
           <Link to={`/ads/${add._id}`}>
-            <p className="price">R${add.price}</p>
+            <p className="price">
+              {add.methodOfSale === "Venda"
+                ? `R$${add.price}`
+                : `R$${add.price}/mês`}
+            </p>
             <img src={`${uploads}/ads/${add.images[0]}`} alt={add.title} />
             <p className="title">
               {add.typeOfRealty}

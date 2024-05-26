@@ -1,7 +1,6 @@
 const Ads = require("../models/Ads");
 const Admin = require("../models/Admin");
 const mongoose = require("mongoose");
-const axios = require("axios");
 
 // Utils
 // const { deleteImages } = require("../utils/deleteImages");
@@ -58,57 +57,6 @@ const insertAds = async (req, res) => {
       return;
     }
 
-    // Obter o access_token da OLX (supondo que você tenha uma função getOlxAccessToken)
-    const accessToken = await getOlxAccessToken();
-
-    // Montar o payload para enviar para a OLX
-    const olxAd = {
-      access_token: accessToken,
-      ad_list: [
-        {
-          id: newAds._id.toString(), // Usar o ID do anúncio criado localmente
-          operation: "insert",
-          category: 1000, // Definir a categoria correta conforme necessário
-          Subject: title,
-          Body: description,
-          Phone: tell,
-          type: "s", // Supondo que seja para venda, ajuste conforme necessário
-          price: price,
-          zipcode: address.zipcode, // Assumindo que address contém um campo zipcode
-          phone_hidden: false,
-          params: [
-            { key: "landMeasurement", value: landMeasurement },
-            { key: "bedrooms", value: bedrooms },
-            { key: "bathrooms", value: bathrooms },
-          ],
-          images: images.map(
-            (image) => `http://yourserver.com/uploads/${image}`
-          ), // URL completa da imagem
-        },
-      ],
-    };
-
-    // Enviar o anúncio para a OLX
-    const olxResponse = await axios.put(
-      "https://apps.olx.com.br/autoupload/import",
-      olxAd,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    // Tratar a resposta da OLX
-    if (olxResponse.data.statusCode !== 0) {
-      console.error("Erro ao enviar anúncio para a OLX:", olxResponse.data);
-      res.status(500).json({
-        message:
-          "Anúncio criado localmente, mas houve um erro ao enviá-lo para a OLX.",
-      });
-      return;
-    }
-
     res.status(201).json(newAds);
   } catch (error) {
     console.log(error);
@@ -116,24 +64,6 @@ const insertAds = async (req, res) => {
       .status(500)
       .send("Houve um erro, por favor tente novamente mais tarde.");
   }
-};
-
-// Função para obter o access_token da OLX
-const getOlxAccessToken = async () => {
-  const response = await axios.post(
-    "https://auth.olx.com.br/oauth/token",
-    {
-      grant_type: "client_credentials",
-      client_id: process.env.OLX_CLIENT_ID,
-      client_secret: process.env.OLX_CLIENT_SECRET,
-    },
-    {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    }
-  );
-  return response.data.access_token;
 };
 
 // Remover um anúncio do banco de dados

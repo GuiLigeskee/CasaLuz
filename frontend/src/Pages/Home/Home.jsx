@@ -26,7 +26,6 @@ const Home = () => {
   const { depoiments } = useSelector((state) => state.depoiments);
 
   const [slidePerView, setSlidePerView] = useState(4);
-
   const [slidePerViewDepoiments, setSlidePerViewDepoiments] = useState(4);
 
   useEffect(() => {
@@ -60,6 +59,9 @@ const Home = () => {
     };
   }, []);
 
+  const adsForSale = ads.filter((add) => add.methodOfSale === "Venda");
+  const adsForRent = ads.filter((add) => add.methodOfSale === "Aluguel");
+
   return (
     <div>
       <div className="intro-home">
@@ -71,6 +73,7 @@ const Home = () => {
         </div>
         <SearchBar />
       </div>
+
       {ads && ads.length > 0 && (
         <div className="carroussel-ads">
           <h2 id="carroussel-title">
@@ -91,7 +94,6 @@ const Home = () => {
               modules={[Pagination, Navigation, Autoplay]}
             >
               {Array.isArray(ads) &&
-                ads.length > 0 &&
                 ads.map((add) => (
                   <SwiperSlide key={add._id}>
                     <div key={add._id}>
@@ -123,7 +125,7 @@ const Home = () => {
               navigation={true}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {ads &&
+              {Array.isArray(ads) &&
                 ads.map((add) => (
                   <SwiperSlide key={add._id}>
                     <div key={add._id}>
@@ -152,11 +154,10 @@ const Home = () => {
                 delay: 5000,
                 disableOnInteraction: false,
               }}
-              spaceBetween={"30"}
+              spaceBetween={30}
               modules={[Pagination, Navigation, Autoplay]}
             >
               {Array.isArray(depoiments) &&
-                depoiments.length > 0 &&
                 depoiments.map((depoiment) => (
                   <SwiperSlide key={depoiment._id}>
                     <div key={depoiment._id}>
