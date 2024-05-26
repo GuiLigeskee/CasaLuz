@@ -91,7 +91,6 @@ const Home = () => {
               modules={[Pagination, Navigation, Autoplay]}
             >
               {Array.isArray(ads) &&
-                ads.length > 0 &&
                 ads.map((add) => (
                   <SwiperSlide key={add._id}>
                     <div key={add._id}>
@@ -123,7 +122,7 @@ const Home = () => {
               navigation={true}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {ads &&
+              {Array.isArray(ads) &&
                 ads.map((add) => (
                   <SwiperSlide key={add._id}>
                     <div key={add._id}>
@@ -152,11 +151,10 @@ const Home = () => {
                 delay: 5000,
                 disableOnInteraction: false,
               }}
-              spaceBetween={"30"}
+              spaceBetween={30}
               modules={[Pagination, Navigation, Autoplay]}
             >
               {Array.isArray(depoiments) &&
-                depoiments.length > 0 &&
                 depoiments.map((depoiment) => (
                   <SwiperSlide key={depoiment._id}>
                     <div key={depoiment._id}>
