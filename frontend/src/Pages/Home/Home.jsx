@@ -74,7 +74,7 @@ const Home = () => {
         <SearchBar />
       </div>
 
-      {adsForSale.length > 0 && (
+      {ads && ads.length > 0 && (
         <div className="carroussel-ads">
           <h2 id="carroussel-title">
             Conheça nossos imóveis à <span>venda</span>
@@ -83,24 +83,30 @@ const Home = () => {
             <Swiper
               slidesPerView={slidePerView}
               loop={true}
-              pagination={{ clickable: true }}
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              pagination={{
+                clickable: true,
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
               navigation={true}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {adsForSale.map((add) => (
-                <SwiperSlide key={add._id}>
-                  <div key={add._id}>
-                    <AdsItem add={add} />
-                  </div>
-                </SwiperSlide>
-              ))}
+              {Array.isArray(ads) &&
+                ads.map((add) => (
+                  <SwiperSlide key={add._id}>
+                    <div key={add._id}>
+                      <AdsItem add={add} />
+                    </div>
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </div>
         </div>
       )}
 
-      {adsForRent.length > 0 && (
+      {ads && ads.length > 0 && (
         <div className="carroussel-ads">
           <h2 id="carroussel-title">
             Conheça nossos imóveis para <span>alugar</span>
@@ -109,18 +115,24 @@ const Home = () => {
             <Swiper
               slidesPerView={slidePerView}
               loop={true}
-              pagination={{ clickable: true }}
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              pagination={{
+                clickable: true,
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
               navigation={true}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {adsForRent.map((add) => (
-                <SwiperSlide key={add._id}>
-                  <div key={add._id}>
-                    <AdsItem add={add} />
-                  </div>
-                </SwiperSlide>
-              ))}
+              {Array.isArray(ads) &&
+                ads.map((add) => (
+                  <SwiperSlide key={add._id}>
+                    <div key={add._id}>
+                      <AdsItem add={add} />
+                    </div>
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </div>
         </div>
@@ -135,18 +147,24 @@ const Home = () => {
             <Swiper
               slidesPerView={slidePerViewDepoiments}
               loop={true}
-              pagination={{ clickable: true }}
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
-              spaceBetween={"30"}
+              pagination={{
+                clickable: true,
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              spaceBetween={30}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {depoiments.map((depoiment) => (
-                <SwiperSlide key={depoiment._id}>
-                  <div key={depoiment._id}>
-                    <DepoimentItem depoiment={depoiment} />
-                  </div>
-                </SwiperSlide>
-              ))}
+              {Array.isArray(depoiments) &&
+                depoiments.map((depoiment) => (
+                  <SwiperSlide key={depoiment._id}>
+                    <div key={depoiment._id}>
+                      <DepoimentItem depoiment={depoiment} />
+                    </div>
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </div>
         </div>
