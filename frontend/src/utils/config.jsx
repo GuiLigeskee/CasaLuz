@@ -1,7 +1,7 @@
 // export const api = "http://localhost:5000/api";
 // export const uploads = "http://localhost:5000/uploads";
-export const uploads = "http://77.37.69.144:81/uploads";
-export const api = "http://77.37.69.144:81/api";
+export const api = "https://apicasaluz.shop/api";
+export const uploads = "https://apicasaluz.shop/uploads";
 
 export const requestConfig = (method, data, token = null, image = null) => {
   let config;
