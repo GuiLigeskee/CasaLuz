@@ -79,9 +79,9 @@ const deleteDepoiment = async (req, res) => {
 
     await Depoiment.findByIdAndDelete(depoiment._id);
 
-    // if (depoiment.images && depoiment.images.length > 0) {
-    //   await deleteImages("depoiment", depoiment.images);
-    // }
+    if (depoiment.images && depoiment.images.length > 0) {
+      await deleteImages("depoiment", depoiment.images);
+    }
 
     return res
       .status(200)
