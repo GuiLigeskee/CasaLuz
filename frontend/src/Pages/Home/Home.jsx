@@ -59,8 +59,8 @@ const Home = () => {
     };
   }, []);
 
-  const adsForSale = ads.filter((add) => add.methodOfSale === "Venda");
-  const adsForRent = ads.filter((add) => add.methodOfSale === "Aluguel");
+  // const adsForSale = ads.filter((add) => add.methodOfSale === "Venda");
+  // const adsForRent = ads.filter((add) => add.methodOfSale === "Aluguel");
 
   return (
     <div>
