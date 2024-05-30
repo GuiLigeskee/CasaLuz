@@ -16,11 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     credentials: true,
-    origin: [
-      "http://localhost:5173",
-      "https://casaluzimoveis.com",
-      "http://77.37.69.144:81",
-    ],
+    origin: ["http://localhost:5173", "https://casaluzimoveis.com"],
   })
 );
 
