@@ -38,6 +38,9 @@ const AdsPage = () => {
 
   const { add } = useSelector((state) => state.ads);
 
+  const cleanedNumberWhatsapp = add.whatsapp.replace(/[()\s-]/g, "");
+  const cleanedNumberTell = add.tell.replace(/[()\s-]/g, "");
+
   // Load ads data
   useEffect(() => {
     dispatch(getAdsDetails(id));
@@ -103,13 +106,17 @@ const AdsPage = () => {
           <div className="contact-buttons">
             <a
               id="contact-button"
-              href={`https://wa.me/${add.whatsapp}`}
+              href={`https://wa.me/${cleanedNumberWhatsapp}`}
               target="blank"
             >
               <img src={Whatsapp} alt="Whatsapp" />
               <p>Whatsapp</p>
             </a>
-            <a id="contact-button" href={`tell:${add.tell}`} target="_blank">
+            <a
+              id="contact-button"
+              href={`tell:${cleanedNumberTell}`}
+              target="_blank"
+            >
               <img src={Tell} alt="Telefone" />
               <p>Telefone</p>
             </a>
@@ -128,7 +135,7 @@ const AdsPage = () => {
           {add.price && (
             <label>
               <span>Preço:</span>
-              <p>R${add.price}</p>
+              <p>{add.price}</p>
             </label>
           )}
           {add.typeOfRealty && (

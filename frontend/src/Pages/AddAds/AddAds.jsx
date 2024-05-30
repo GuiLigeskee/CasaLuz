@@ -2,6 +2,8 @@ import "./AddAds.css";
 
 // Components
 import Message from "../../Components/Messages/Message";
+import MaskedInput from "react-text-mask";
+import { NumericFormat } from "react-number-format";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -24,10 +26,10 @@ const AddAds = () => {
   const [city, setCity] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
   const [methodOfSale, setMethodOfSale] = useState("");
-  const [landMeasurement, setLandMeasurement] = useState(null);
-  const [price, setPrice] = useState(null);
-  const [bedrooms, setBedrooms] = useState(null);
-  const [bathrooms, setBathrooms] = useState(null);
+  const [landMeasurement, setLandMeasurement] = useState("");
+  const [price, setPrice] = useState("");
+  const [bedrooms, setBedrooms] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
   const [adsImages, setAdsImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -123,7 +125,7 @@ const AddAds = () => {
             placeholder="Escreva o depoimento"
             rows={4}
             onChange={(e) => setDescription(e.target.value)}
-            value={description}
+            value={description || ""}
           ></textarea>
         </label>
         <label>
@@ -176,7 +178,7 @@ const AddAds = () => {
             type="number"
             placeholder="tamanho"
             onChange={(e) => setLandMeasurement(e.target.value)}
-            value={landMeasurement}
+            value={landMeasurement || ""}
             required
           />
         </label>
@@ -186,7 +188,7 @@ const AddAds = () => {
             type="number"
             placeholder="quartos"
             onChange={(e) => setBedrooms(e.target.value)}
-            value={bedrooms}
+            value={bedrooms || ""}
             required
           />
         </label>
@@ -196,17 +198,22 @@ const AddAds = () => {
             type="number"
             placeholder="banheiros"
             onChange={(e) => setBathrooms(e.target.value)}
-            value={bathrooms}
+            value={bathrooms || ""}
             required
           />
         </label>
         <label>
           <span>Preço do imóvel</span>
-          <input
-            type="number"
-            placeholder="preço"
+          <NumericFormat
+            thousandSeparator="."
+            decimalSeparator=","
+            prefix="R$ "
+            allowNegative={false}
+            decimalScale={2}
+            fixedDecimalScale
             onChange={(e) => setPrice(e.target.value)}
-            value={price}
+            value={price || ""}
+            placeholder="preço"
             required
           />
         </label>
@@ -225,9 +232,26 @@ const AddAds = () => {
         </label>
         <label>
           <span>Telefone do vendedor</span>
-          <input
+          <MaskedInput
+            mask={[
+              "(",
+              /[1-9]/,
+              /\d/,
+              ")",
+              " ",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+              "-",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+            ]}
             type="text"
-            placeholder="telefone"
+            placeholder="Telefone"
             onChange={(e) => setTell(e.target.value)}
             value={tell || ""}
             required
@@ -235,9 +259,26 @@ const AddAds = () => {
         </label>
         <label>
           <span>Whatsapp do vendedor</span>
-          <input
+          <MaskedInput
+            mask={[
+              "(",
+              /[1-9]/,
+              /\d/,
+              ")",
+              " ",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+              "-",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+            ]}
             type="text"
-            placeholder="whatsapp"
+            placeholder="Whatsapp"
             onChange={(e) => setWhatsapp(e.target.value)}
             value={whatsapp || ""}
             required
