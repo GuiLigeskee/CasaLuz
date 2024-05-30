@@ -1,9 +1,17 @@
 import "./AddAds.css";
+
+// Components
+import Message from "../../Components/Messages/Message";
+import MaskedInput from "react-text-mask";
+import { NumericFormat } from "react-number-format";
+
+// Hooks
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
+
+// Redux
 import { updateAds, getAdsDetails } from "../../Slice/adsSlice";
-import Message from "../../Components/Messages/Message";
 
 const UpdateAds = () => {
   const { id } = useParams();
@@ -191,7 +199,7 @@ const UpdateAds = () => {
             type="number"
             placeholder="tamanho"
             onChange={(e) => setLandMeasurement(e.target.value)}
-            value={landMeasurement}
+            value={landMeasurement || ""}
             required
           />
         </label>
@@ -201,7 +209,7 @@ const UpdateAds = () => {
             type="number"
             placeholder="quartos"
             onChange={(e) => setBedrooms(e.target.value)}
-            value={bedrooms}
+            value={bedrooms || ""}
             required
           />
         </label>
@@ -211,17 +219,22 @@ const UpdateAds = () => {
             type="number"
             placeholder="banheiros"
             onChange={(e) => setBathrooms(e.target.value)}
-            value={bathrooms}
+            value={bathrooms || ""}
             required
           />
         </label>
         <label>
           <span>Preço do imóvel</span>
-          <input
-            type="number"
-            placeholder="preço"
+          <NumericFormat
+            thousandSeparator="."
+            decimalSeparator=","
+            prefix="R$ "
+            allowNegative={false}
+            decimalScale={2}
+            fixedDecimalScale
             onChange={(e) => setPrice(e.target.value)}
-            value={price}
+            value={price || ""}
+            placeholder="preço"
             required
           />
         </label>
@@ -240,9 +253,26 @@ const UpdateAds = () => {
         </label>
         <label>
           <span>Telefone do vendedor</span>
-          <input
+          <MaskedInput
+            mask={[
+              "(",
+              /[1-9]/,
+              /\d/,
+              ")",
+              " ",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+              "-",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+            ]}
             type="text"
-            placeholder="telefone"
+            placeholder="Telefone"
             onChange={(e) => setTell(e.target.value)}
             value={tell || ""}
             required
@@ -250,9 +280,26 @@ const UpdateAds = () => {
         </label>
         <label>
           <span>Whatsapp do vendedor</span>
-          <input
+          <MaskedInput
+            mask={[
+              "(",
+              /[1-9]/,
+              /\d/,
+              ")",
+              " ",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+              "-",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+            ]}
             type="text"
-            placeholder="whatsapp"
+            placeholder="Whatsapp"
             onChange={(e) => setWhatsapp(e.target.value)}
             value={whatsapp || ""}
             required
