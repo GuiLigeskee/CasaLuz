@@ -24,6 +24,7 @@ const UpdateAds = () => {
   const [description, setDescription] = useState("");
   const [tell, setTell] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [zipCode, setZipCode] = useState("");
   const [address, setAddress] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
@@ -43,14 +44,15 @@ const UpdateAds = () => {
   useEffect(() => {
     if (add) {
       setTitle(add.title || "");
+      setTypeOfRealty(add.typeOfRealty || "");
       setDescription(add.description || "");
+      setPrice(add.price || "");
+      setZipCode(add.zipCode || "");
       setAddress(add.address || "");
       setDistrict(add.district || "");
       setCity(add.city || "");
-      setTypeOfRealty(add.typeOfRealty || "");
       setMethodOfSale(add.methodOfSale || "");
       setLandMeasurement(add.landMeasurement || "");
-      setPrice(add.price || "");
       setTell(add.tell || "");
       setWhatsapp(add.whatsapp || "");
       setBathrooms(add.bathrooms || "");
@@ -64,14 +66,15 @@ const UpdateAds = () => {
     const formData = new FormData();
     formData.append("id", id);
     formData.append("title", title);
+    formData.append("typeOfRealty", typeOfRealty);
     formData.append("description", description);
+    formData.append("price", price);
+    formData.append("zipCode", zipCode);
     formData.append("address", address);
     formData.append("district", district);
     formData.append("city", city);
-    formData.append("typeOfRealty", typeOfRealty);
     formData.append("methodOfSale", methodOfSale);
     formData.append("landMeasurement", landMeasurement);
-    formData.append("price", price);
     formData.append("tell", tell);
     formData.append("whatsapp", whatsapp);
     formData.append("bedrooms", bedrooms);
@@ -162,6 +165,17 @@ const UpdateAds = () => {
             <option value="Terreno">Terreno</option>
             <option value="Comercial">Comercial</option>
           </select>
+        </label>
+        <label>
+          <span>CEP</span>
+          <MaskedInput
+            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
+            type="text"
+            placeholder="CEP"
+            onChange={(e) => setZipCode(e.target.value)}
+            value={zipCode || ""}
+            required
+          />
         </label>
         <label>
           <span>Endereço</span>

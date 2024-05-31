@@ -9,16 +9,17 @@ const mongoose = require("mongoose");
 const insertAds = async (req, res) => {
   const {
     title,
-    description,
-    tell,
-    whatsapp,
-    address,
-    landMeasurement,
-    price,
     typeOfRealty,
+    description,
+    price,
+    zipCode,
+    address,
     district,
     city,
     methodOfSale,
+    landMeasurement,
+    tell,
+    whatsapp,
     bedrooms,
     bathrooms,
   } = req.body;
@@ -32,16 +33,17 @@ const insertAds = async (req, res) => {
     // Criar anúncio no seu site
     const newAds = await Ads.create({
       title,
-      description,
-      tell,
-      whatsapp,
-      address,
-      price,
-      landMeasurement,
       typeOfRealty,
+      description,
+      price,
+      zipCode,
+      address,
       district,
       city,
       methodOfSale,
+      landMeasurement,
+      tell,
+      whatsapp,
       bedrooms,
       bathrooms,
       images,
@@ -135,18 +137,19 @@ const updateAds = async (req, res) => {
   const { id } = req.params;
   const {
     title,
-    description,
-    tell,
-    whatsapp,
-    address,
-    price,
-    landMeasurement,
     typeOfRealty,
+    description,
+    price,
+    zipCode,
+    address,
     district,
     city,
-    bathrooms,
-    bedrooms,
     methodOfSale,
+    landMeasurement,
+    tell,
+    whatsapp,
+    bedrooms,
+    bathrooms,
   } = req.body;
 
   const add = await Ads.findById(id);
@@ -167,12 +170,40 @@ const updateAds = async (req, res) => {
     add.title = title;
   }
 
+  if (typeOfRealty) {
+    add.typeOfRealty = typeOfRealty;
+  }
+
   if (description) {
     add.description = description;
   }
 
   if (price) {
     add.price = price;
+  }
+
+  if (zipCode) {
+    add.zipCode = zipCode;
+  }
+
+  if (address) {
+    add.address = address;
+  }
+
+  if (district) {
+    add.district = district;
+  }
+
+  if (city) {
+    add.city = city;
+  }
+
+  if (methodOfSale) {
+    add.methodOfSale = methodOfSale;
+  }
+
+  if (landMeasurement) {
+    add.landMeasurement = landMeasurement;
   }
 
   if (tell) {
@@ -183,32 +214,8 @@ const updateAds = async (req, res) => {
     add.whatsapp = whatsapp;
   }
 
-  if (address) {
-    add.address = address;
-  }
-
-  if (landMeasurement) {
-    add.landMeasurement = landMeasurement;
-  }
-
   if (images) {
     add.images = images;
-  }
-
-  if (typeOfRealty) {
-    add.typeOfRealty = typeOfRealty;
-  }
-
-  if (city) {
-    add.city = city;
-  }
-
-  if (district) {
-    add.district = district;
-  }
-
-  if (methodOfSale) {
-    add.methodOfSale = methodOfSale;
   }
 
   if (bedrooms) {

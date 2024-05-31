@@ -11,7 +11,7 @@ const AdsItem = ({ add }) => {
 
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza de que deseja excluir este anúncio?")) {
-      dispatch(deleteAdd(id)); // Despacha a ação deleteAdd com o ID do anúncio
+      dispatch(deleteAdd(id));
     }
   };
 
@@ -44,9 +44,7 @@ const AdsItem = ({ add }) => {
           {renderAdminOptions()}
           <Link to={`/ads/${add._id}`}>
             <p className="price">
-              {add.methodOfSale === "Venda"
-                ? `R$${add.price}`
-                : `R$${add.price}/mês`}
+              {add.methodOfSale === "Venda" ? add.price : `${add.price}/mês`}
             </p>
             <img src={`${uploads}/ads/${add.images[0]}`} alt={add.title} />
             <p className="title">
