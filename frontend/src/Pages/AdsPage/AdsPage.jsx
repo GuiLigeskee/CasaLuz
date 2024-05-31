@@ -38,8 +38,9 @@ const AdsPage = () => {
 
   const { add } = useSelector((state) => state.ads);
 
-  const cleanedNumberWhatsapp = add.whatsapp.replace(/[()\s-]/g, "");
-  const cleanedNumberTell = add.tell.replace(/[()\s-]/g, "");
+  const cleanedNumberWhatsapp =
+    add.whatsapp && add.whatsapp.replace(/[()\s-]/g, "");
+  const cleanedNumberTell = add.tell && add.tell.replace(/[()\s-]/g, "");
 
   // Load ads data
   useEffect(() => {
@@ -85,14 +86,14 @@ const AdsPage = () => {
               <p>Ver no mapa</p>
             </div>
           </a>
-          {add.bedrooms && (
+          {add.bedrooms !== undefined && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faBed} className="icon" />
               <span>Quartos:</span>
               <p>{add.bedrooms}</p>
             </div>
           )}
-          {add.bathrooms && (
+          {add.bathrooms !== undefined && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faBath} className="icon" />
               <span>Banheiros:</span>
@@ -106,7 +107,7 @@ const AdsPage = () => {
           <div className="contact-buttons">
             <a
               id="contact-button"
-              href={`https://wa.me/${cleanedNumberWhatsapp}`}
+              href={`https://wa.me/+55${cleanedNumberWhatsapp}`}
               target="blank"
             >
               <img src={Whatsapp} alt="Whatsapp" />
@@ -114,7 +115,7 @@ const AdsPage = () => {
             </a>
             <a
               id="contact-button"
-              href={`tell:${cleanedNumberTell}`}
+              href={`tell:+55${cleanedNumberTell}`}
               target="_blank"
             >
               <img src={Tell} alt="Telefone" />
