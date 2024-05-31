@@ -21,6 +21,7 @@ const AddAds = () => {
   const [description, setDescription] = useState("");
   const [tell, setTell] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [zipCode, setZipCode] = useState("");
   const [address, setAddress] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
@@ -38,16 +39,17 @@ const AddAds = () => {
 
     const adsData = {
       title,
+      typeOfRealty,
       description,
-      tell,
-      whatsapp,
-      address,
-      landMeasurement,
       price,
+      zipCode,
+      address,
       district,
       city,
-      typeOfRealty,
       methodOfSale,
+      landMeasurement,
+      tell,
+      whatsapp,
       bedrooms,
       bathrooms,
     };
@@ -113,7 +115,7 @@ const AddAds = () => {
           <span>Título do anúncio</span>
           <input
             type="text"
-            placeholder="título"
+            placeholder="Título"
             onChange={(e) => setTitle(e.target.value)}
             value={title || ""}
             required
@@ -143,10 +145,21 @@ const AddAds = () => {
           </select>
         </label>
         <label>
+          <span>CEP</span>
+          <MaskedInput
+            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
+            type="text"
+            placeholder="CEP"
+            onChange={(e) => setZipCode(e.target.value)}
+            value={zipCode || ""}
+            required
+          />
+        </label>
+        <label>
           <span>Endereço</span>
           <input
             type="text"
-            placeholder="endereço"
+            placeholder="Endereço"
             onChange={(e) => setAddress(e.target.value)}
             value={address || ""}
             required
@@ -156,7 +169,7 @@ const AddAds = () => {
           <span>Bairro</span>
           <input
             type="text"
-            placeholder="bairro"
+            placeholder="Bairro"
             onChange={(e) => setDistrict(e.target.value)}
             value={district || ""}
             required
@@ -166,7 +179,7 @@ const AddAds = () => {
           <span>Cidade</span>
           <input
             type="text"
-            placeholder="cidade"
+            placeholder="Cidade"
             onChange={(e) => setCity(e.target.value)}
             value={city || ""}
             required
@@ -176,7 +189,7 @@ const AddAds = () => {
           <span>Tamanho do imóvel (m2)</span>
           <input
             type="number"
-            placeholder="tamanho"
+            placeholder="Tamanho"
             onChange={(e) => setLandMeasurement(e.target.value)}
             value={landMeasurement || ""}
             required
@@ -186,7 +199,7 @@ const AddAds = () => {
           <span>Quartos</span>
           <input
             type="number"
-            placeholder="quartos"
+            placeholder="Quartos"
             onChange={(e) => setBedrooms(e.target.value)}
             value={bedrooms || ""}
             required
@@ -196,7 +209,7 @@ const AddAds = () => {
           <span>Banheiros</span>
           <input
             type="number"
-            placeholder="banheiros"
+            placeholder="Banheiros"
             onChange={(e) => setBathrooms(e.target.value)}
             value={bathrooms || ""}
             required
@@ -213,7 +226,7 @@ const AddAds = () => {
             fixedDecimalScale
             onChange={(e) => setPrice(e.target.value)}
             value={price || ""}
-            placeholder="preço"
+            placeholder="Preço"
             required
           />
         </label>

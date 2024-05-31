@@ -10,44 +10,48 @@ const adsInsertValidation = () => {
       .withMessage("O título precisa ser uma string")
       .isLength({ min: 5 })
       .withMessage("O título precisa ter no mínimo 5 caracteres."),
-    body("address")
+    body("typeOfRealty")
       .not()
       .equals("undefined")
-      .withMessage("O endereço é obrigatório")
-      .isString()
-      .withMessage("O endereço precisa ser uma string"),
+      .withMessage("A categoria do imóvel é obrigatória"),
     body("description")
       .not()
       .equals("undefined")
       .withMessage("A descrição é obrigatória")
       .isString()
       .withMessage("A descrição precisa ser uma string"),
-    body("tell").isString().withMessage("O telefone precisa ser uma string"),
-    body("whatsapp")
+    body("zipCode")
+      .not()
+      .equals("undefined")
+      .withMessage("O CEP é obrigatório"),
+    body("address")
+      .not()
+      .equals("undefined")
+      .withMessage("O endereço é obrigatório")
       .isString()
-      .withMessage("O número do WhatsApp precisa ser um texto"),
+      .withMessage("O endereço precisa ser uma string"),
+    body("district")
+      .not()
+      .equals("undefined")
+      .withMessage("O bairro obrigatório"),
+    body("city")
+      .not()
+      .equals("undefined")
+      .withMessage("A cidade é obrigatória"),
+    body("methodOfSale")
+      .not()
+      .equals("undefined")
+      .withMessage("O tipo de venda é obrigatório"),
     body("landMeasurement")
       .not()
       .equals("undefined")
       .withMessage("O tamanho do imovel é obrigatório")
       .isNumeric()
       .withMessage("O tamanho do imovel precisa ser um número"),
-    body("methodOfSale")
-      .not()
-      .equals("undefined")
-      .withMessage("O tipo de venda é obrigatório"),
-    body("city")
-      .not()
-      .equals("undefined")
-      .withMessage("A cidade é obrigatória"),
-    body("district")
-      .not()
-      .equals("undefined")
-      .withMessage("O bairro obrigatório"),
-    body("typeOfRealty")
-      .not()
-      .equals("undefined")
-      .withMessage("A categoria do imóvel é obrigatória"),
+    body("tell").isString().withMessage("O telefone precisa ser uma string"),
+    body("whatsapp")
+      .isString()
+      .withMessage("O número do WhatsApp precisa ser um texto"),
     body("bedrooms")
       .not()
       .equals("undefined")
