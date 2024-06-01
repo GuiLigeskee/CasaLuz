@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "./Filters.css"; // Importando o arquivo CSS
 
+// Components
+import { NumericFormat } from "react-number-format";
+
 const Filters = ({ filters, onFilterChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);
 
@@ -59,19 +62,27 @@ const Filters = ({ filters, onFilterChange }) => {
         placeholder="Bairro"
         className="filter-input"
       />
-      <input
-        type="number"
-        name="minPrice"
-        value={localFilters.minPrice}
+      <NumericFormat
+        thousandSeparator="."
+        decimalSeparator=","
+        prefix="R$ "
+        allowNegative={false}
+        decimalScale={2}
+        fixedDecimalScale
         onChange={handleChange}
+        value={localFilters.minPrice}
         placeholder="Preço Mínimo"
         className="filter-input"
       />
-      <input
-        type="number"
-        name="maxPrice"
-        value={localFilters.maxPrice}
+      <NumericFormat
+        thousandSeparator="."
+        decimalSeparator=","
+        prefix="R$ "
+        allowNegative={false}
+        decimalScale={2}
+        fixedDecimalScale
         onChange={handleChange}
+        value={localFilters.maxPrice}
         placeholder="Preço Máximo"
         className="filter-input"
       />
