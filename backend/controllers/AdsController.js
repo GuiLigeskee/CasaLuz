@@ -277,9 +277,11 @@ const searchAds = async (req, res) => {
       let priceFilter = {};
       if (minPrice) {
         priceFilter.$gte = parsePrice(minPrice);
+        // console.log(minPrice);
       }
       if (maxPrice) {
         priceFilter.$lte = parsePrice(maxPrice);
+        // console.log(maxPrice);
       }
       filter.price = priceFilter;
     }
