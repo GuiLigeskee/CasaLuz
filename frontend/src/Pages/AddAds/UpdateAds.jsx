@@ -221,6 +221,7 @@ const UpdateAds = () => {
           <span>Quartos</span>
           <input
             type="number"
+            min={0}
             placeholder="quartos"
             onChange={(e) => setBedrooms(e.target.value)}
             value={bedrooms || ""}
@@ -231,6 +232,7 @@ const UpdateAds = () => {
           <span>Banheiros</span>
           <input
             type="number"
+            min={0}
             placeholder="banheiros"
             onChange={(e) => setBathrooms(e.target.value)}
             value={bathrooms || ""}
