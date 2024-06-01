@@ -51,6 +51,21 @@ label span {
   font-size: 0.8em;
 }
 
+.label-input-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5em; /* Espaço entre o input e o botão */
+}
+
+.label-input-button input {
+  flex-grow: 1; /* Faz o input crescer para ocupar o espaço disponível */
+}
+
+.label-input-button button {
+  flex-shrink: 0; /* Impede que o botão encolha */
+  white-space: nowrap; /* Impede que o texto do botão quebre */
+}
+
 input {
   background-color: #fff;
   color: #08273c;
@@ -72,7 +87,7 @@ input[type="submit"] {
   color: #fafafa;
   background-color: #08273c;
   border-radius: 10px;
-  padding: 0.8em 1.6em;
+  padding: 1em;
   font-weight: 600;
   font-size: 1em;
   text-align: center;
@@ -133,4 +148,31 @@ textarea {
   border: 2px solid #fdb303;
   border-radius: 15px;
   margin: 1em auto;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay {
+  background: #ececec;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 500px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
 }

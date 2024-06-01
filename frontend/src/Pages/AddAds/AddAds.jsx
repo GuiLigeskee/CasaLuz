@@ -1,4 +1,5 @@
 import "./AddAds.css";
+import Modal from "react-modal";
 
 // Components
 import Message from "../../Components/Messages/Message";
@@ -12,10 +13,14 @@ import { useState } from "react";
 // Redux
 import { publishAds } from "../../Slice/adsSlice";
 
+Modal.setAppElement("#root");
+
 const AddAds = () => {
   const dispatch = useDispatch();
 
   const { loading, error, message } = useSelector((state) => state.ads);
+
+  const [modalIsOpen, setIsOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -89,8 +94,26 @@ const AddAds = () => {
     }
   };
 
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="createAds">
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+        overlayClassName="modal-overlay"
+        className="modal-content"
+      >
+        <h1>Teste funcionando</h1>
+        <button onClick={closeModal}>Feito!</button>
+      </Modal>
       <h1>
         <span>Adicionar</span> anúncio de imóvel
       </h1>
@@ -124,7 +147,7 @@ const AddAds = () => {
         <label>
           <span>Descrição do imóvel</span>
           <textarea
-            placeholder="Escreva o depoimento"
+            placeholder="Escreva a descrição"
             rows={4}
             onChange={(e) => setDescription(e.target.value)}
             value={description || ""}
@@ -146,14 +169,17 @@ const AddAds = () => {
         </label>
         <label>
           <span>CEP</span>
-          <MaskedInput
-            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
-            type="text"
-            placeholder="CEP"
-            onChange={(e) => setZipCode(e.target.value)}
-            value={zipCode || ""}
-            required
-          />
+          <div className="label-input-button">
+            <MaskedInput
+              mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
+              type="text"
+              placeholder="CEP"
+              onChange={(e) => setZipCode(e.target.value)}
+              value={zipCode || ""}
+              required
+            />
+            <button onClick={openModal}>Verificar CEP</button>
+          </div>
         </label>
         <label>
           <span>Endereço</span>
