@@ -150,12 +150,6 @@ textarea {
   margin: 1em auto;
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .modal-overlay {
   background: #ececec;
   position: fixed;
