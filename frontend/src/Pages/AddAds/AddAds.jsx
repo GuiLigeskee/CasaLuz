@@ -12,6 +12,12 @@ import { useState } from "react";
 
 // Redux
 import { publishAds } from "../../Slice/adsSlice";
+import {
+  getZipCode,
+  resetZipCode,
+  selectZipCodeApi,
+  selectZipCodeError,
+} from "../../Slice/zipCodeSlice";
 
 Modal.setAppElement("#root");
 
@@ -20,7 +26,13 @@ const AddAds = () => {
 
   const { loading, error, message } = useSelector((state) => state.ads);
 
-  const [modalIsOpen, setIsOpen] = useState(false);
+  // ZipCode da Api
+  const zipCodeApi = useSelector(selectZipCodeApi);
+  const zipCodeError = useSelector(selectZipCodeError);
+  const [messageZipCode, setMessageZipCode] = useState("");
+
+  // Modal
+  const [isOpen, setIsOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -94,25 +106,52 @@ const AddAds = () => {
     }
   };
 
-  const openModal = () => {
+  // Api CEP
+  const handleZipCode = () => {
+    const cleanedZipCode = zipCode && zipCode.replace("-", "");
+    dispatch(getZipCode(cleanedZipCode));
+
+    if (zipCodeError) {
+      setMessageZipCode("CEP não encontrado ou não existe.");
+    } else {
+      console.log(zipCodeError);
+      setMessageZipCode("CEP encontrado com sucesso!");
+    }
+  };
+
+  const openModal = (e) => {
+    e.preventDefault();
+    if (zipCode) {
+      handleZipCode();
+    }
     setIsOpen(true);
   };
 
   const closeModal = () => {
+    if (zipCodeApi) {
+      setAddress(zipCodeApi.logradouro || "");
+      setDistrict(zipCodeApi.bairro || "");
+      setCity(zipCodeApi.localidade || "");
+    }
+    console.log(zipCodeError);
+    dispatch(resetZipCode());
+    setMessageZipCode("");
     setIsOpen(false);
   };
 
   return (
     <div className="createAds">
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={isOpen}
         onRequestClose={closeModal}
         contentLabel="Example Modal"
         overlayClassName="modal-overlay"
         className="modal-content"
       >
-        <h1>Teste funcionando</h1>
-        <button onClick={closeModal}>Feito!</button>
+        <h1>Pesquisando CEP</h1>
+        {messageZipCode && <p>{messageZipCode}</p>}
+
+        <button onClick={closeModal}>Fechar</button>
       </Modal>
       <h1>
         <span>Adicionar</span> anúncio de imóvel
