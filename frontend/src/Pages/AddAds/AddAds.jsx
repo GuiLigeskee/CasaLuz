@@ -1,5 +1,6 @@
 import "./AddAds.css";
 import Modal from "react-modal";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 // Components
 import Message from "../../Components/Messages/Message";
@@ -82,6 +83,16 @@ const AddAds = () => {
     }
 
     dispatch(publishAds(formData));
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return; // Se não houver destino, não fazer nada
+
+    const items = Array.from(imagePreviews);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setImagePreviews(items);
   };
 
   const handleFile = (e) => {
@@ -168,11 +179,42 @@ const AddAds = () => {
             multiple
           />
         </label>
-        <div className="imagePreviews">
-          {imagePreviews.map((preview, index) => (
-            <img key={index} src={preview} alt={`Preview ${index + 1}`} />
-          ))}
-        </div>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="imagePreviews" direction="horizontal">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="imagePreviews"
+              >
+                {imagePreviews.map((preview, index) => (
+                  <Draggable
+                    key={index}
+                    draggableId={`preview-${index}`}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="imagePreviewContainer"
+                      >
+                        <img
+                          src={preview}
+                          alt={`Preview ${index + 1}`}
+                          className="imagePreview"
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+
         <label>
           <span>Título do anúncio</span>
           <input

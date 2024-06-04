@@ -32,18 +32,22 @@ input[type="file"] {
 }
 
 .imagePreviews {
-  width: auto;
-  border-radius: 10px;
-  padding: 1em;
-  margin-bottom: 1em;
+  display: flex;
+  overflow-x: auto; /* Adiciona rolagem horizontal quando as imagens ultrapassam a largura do contêiner */
+  padding: 10px; /* Adiciona algum espaçamento entre as imagens */
+  width: 100%; /* Garante que o contêiner ocupe toda a largura disponível */
 }
 
-.imagePreviews img {
-  max-width: 180px;
-  max-height: 100px;
-  margin: 0 0.2em;
-  border-radius: 10px;
-  object-fit: cover;
+.imagePreviewContainer {
+  flex: 0 0 auto; /* Garante que as imagens tenham largura fixa e não se estendam */
+  margin-right: 10px; /* Adiciona algum espaçamento entre as imagens */
+}
+
+.imagePreview {
+  max-width: 150px; /* Define a largura máxima para as imagens */
+  height: auto; /* Mantém a proporção da imagem */
+  border: 1px solid #ccc; /* Adiciona uma borda ao redor das imagens */
+  border-radius: 5px; /* Adiciona uma borda arredondada às imagens */
 }
 
 select {
