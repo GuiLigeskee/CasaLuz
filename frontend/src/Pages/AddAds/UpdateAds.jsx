@@ -1,16 +1,11 @@
 import "./AddAds.css";
-
-// Components
-import Message from "../../Components/Messages/Message";
-import MaskedInput from "react-text-mask";
-import { NumericFormat } from "react-number-format";
-
-// Hooks
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-
-// Redux
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import Message from "../../Components/Messages/Message";
+import MaskedInput from "react-text-mask";
+import { NumericFormat } from "react-number-format";
 import { updateAds, getAdsDetails } from "../../Slice/adsSlice";
 
 const UpdateAds = () => {
@@ -80,9 +75,7 @@ const UpdateAds = () => {
     formData.append("bedrooms", bedrooms);
     formData.append("bathrooms", bathrooms);
 
-    // Verifique se novas imagens foram selecionadas
     if (newImages.length > 0) {
-      // Se sim, adicione as novas imagens ao FormData
       newImages.forEach((image) => {
         formData.append("images", image);
       });
@@ -90,6 +83,36 @@ const UpdateAds = () => {
 
     dispatch(updateAds(formData));
     navigate(`/ads/${id}`);
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    const previews = [];
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previews.push(e.target.result);
+        if (previews.length === files.length) {
+          setImagePreviews(previews);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+    setNewImages(files);
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const reorderedPreviews = Array.from(imagePreviews);
+    const [removed] = reorderedPreviews.splice(result.source.index, 1);
+    reorderedPreviews.splice(result.destination.index, 0, removed);
+    setImagePreviews(reorderedPreviews);
+
+    const reorderedImages = Array.from(newImages);
+    const [removedImage] = reorderedImages.splice(result.source.index, 1);
+    reorderedImages.splice(result.destination.index, 0, removedImage);
+    setNewImages(reorderedImages);
   };
 
   return (
@@ -108,31 +131,44 @@ const UpdateAds = () => {
             type="file"
             accept="image/*"
             multiple
-            onChange={(e) => {
-              const files = e.target.files;
-              const previews = [];
-              setNewImages(Array.from(files));
-              for (let i = 0; i < files.length; i++) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                  previews.push(e.target.result);
-                  if (previews.length === files.length) {
-                    setImagePreviews(previews);
-                  }
-                };
-                reader.readAsDataURL(files[i]);
-              }
-            }}
+            onChange={handleFileChange}
           />
         </label>
-        {/*Renderize os previews das imagens selecionadas*/}
-        <div className="imagePreviews">
-          {imagePreviews.map((preview, index) => (
-            <div key={index}>
-              <img src={preview} alt={`Imagem ${index}`} />
-            </div>
-          ))}
-        </div>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="imagePreviews" direction="horizontal">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="imagePreviews"
+              >
+                {imagePreviews.map((preview, index) => (
+                  <Draggable
+                    key={index}
+                    draggableId={`preview-${index}`}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="imagePreviewContainer"
+                      >
+                        <img
+                          src={preview}
+                          alt={`Preview ${index + 1}`}
+                          className="imagePreview"
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
         <label>
           <span>Título do anúncio</span>
           <input
