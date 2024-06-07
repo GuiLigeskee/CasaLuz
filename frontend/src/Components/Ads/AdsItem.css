@@ -5,9 +5,9 @@
 
 .ads-item img {
   display: block;
-  min-width: 450px;
-  max-width: 800px;
-  height: 300px;
+  max-height: 300px;
+  width: 100%; /* Ensure the image scales with the container */
+  object-fit: cover; /* Ensure the image covers the area without distortion */
 }
 
 .ads-item .price {

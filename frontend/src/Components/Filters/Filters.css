@@ -1,38 +1,109 @@
+/* Filters.css */
+
+/* Estilos base */
 .filters {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  background-color: #fafafa;
-  border-radius: 15px;
-  flex-direction: row;
-  justify-content: center;
-  align-items: baseline;
-  margin: 1em 0;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+}
+
+.filters label span {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333;
 }
 
 .filter-input {
-  padding: 0.5em;
-  border: 2px solid #576670;
-  border-radius: 15px;
-  font-size: 0.875rem;
-  max-width: 150px;
-}
-
-.filter-input::placeholder {
-  color: #94b4cb;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 .filter-button {
-  padding: 0.5em;
-  background-color: #08273c;
-  color: white;
+  padding: 0.75rem;
   border: none;
-  border-radius: 15px;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 1rem;
   cursor: pointer;
-  flex: 1 1 150px;
+  transition: background-color 0.3s ease;
 }
 
 .filter-button:hover {
-  background-color: #135b8a;
+  background-color: #0056b3;
+}
+
+/* Estilos responsivos */
+@media (min-width: 768px) {
+  .filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .filters label {
+    flex: 1 1 48%;
+  }
+
+  .filters label.span-double {
+    flex: 1 1 48%;
+  }
+
+  .filters label span {
+    font-size: 0.9rem;
+  }
+
+  .filter-input {
+    font-size: 0.9rem;
+  }
+
+  .filter-button {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .filters {
+    padding: 2rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .filters label {
+    flex: 1 1 23%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filters label.span-double {
+    flex: 1 1 23%;
+  }
+
+  .filters label span {
+    font-size: 1rem;
+  }
+
+  .filter-input {
+    font-size: 1rem;
+  }
+
+  .filter-button {
+    flex: 1 1 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    align-self: center;
+  }
 }
