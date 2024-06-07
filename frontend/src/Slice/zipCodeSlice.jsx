@@ -10,12 +10,12 @@ const initialState = {
 // Get CEP
 export const getZipCode = createAsyncThunk(
   "zipCode/getZipCode",
-  async (zipCode) => {
+  async (zipCode, { rejectWithValue }) => {
     try {
       const data = await zipCodeService.searchZipCode(zipCode);
       return data;
     } catch (error) {
-      return error;
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -38,20 +38,19 @@ const zipCodeSlice = createSlice({
       })
       .addCase(getZipCode.fulfilled, (state, action) => {
         state.loading = false;
-        state.errorZipCodeApi = null;
         state.zipCodeApi = action.payload;
+        state.errorZipCodeApi = null;
       })
       .addCase(getZipCode.rejected, (state, action) => {
         state.loading = false;
-        state.errorZipCodeApi = action.error;
+        state.errorZipCodeApi = action.payload;
         state.zipCodeApi = null;
       });
   },
 });
 
+export const { resetZipCode } = zipCodeSlice.actions;
 export const selectZipCodeApi = (state) => state.zipCode.zipCodeApi;
 export const selectZipCodeError = (state) => state.zipCode.errorZipCodeApi;
-
-export const { resetZipCode } = zipCodeSlice.actions;
 
 export default zipCodeSlice.reducer;

@@ -30,6 +30,10 @@ const adsInsertValidation = () => {
       .withMessage("O endereço é obrigatório")
       .isString()
       .withMessage("O endereço precisa ser uma string"),
+    body("addressNumber")
+      .not()
+      .equals("undefined")
+      .withMessage("O número de endereço é obrigatório"),
     body("district")
       .not()
       .equals("undefined")

@@ -14,6 +14,7 @@ const adsSchema = new Schema(
     price: String,
     zipCode: String,
     address: String,
+    addressNumber: Number,
     district: String,
     city: String,
     methodOfSale: String,
