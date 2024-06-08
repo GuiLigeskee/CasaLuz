@@ -1,12 +1,25 @@
 import "./AddAds.css";
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
+// Components
 import Message from "../../Components/Messages/Message";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
+import Modal from "react-modal";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
+// Hooks
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+// Redux
 import { updateAds, getAdsDetails } from "../../Slice/adsSlice";
+import {
+  getZipCode,
+  resetZipCode,
+  selectZipCodeApi,
+  selectZipCodeError,
+} from "../../Slice/zipCodeSlice";
 
 const UpdateAds = () => {
   const { id } = useParams();
@@ -15,12 +28,21 @@ const UpdateAds = () => {
 
   const { add, loading, error, message } = useSelector((state) => state.ads);
 
+  // ZipCode da Api
+  const zipCodeApi = useSelector(selectZipCodeApi);
+  const zipCodeError = useSelector(selectZipCodeError);
+  const [messageZipCode, setMessageZipCode] = useState("");
+
+  // Modal
+  const [isOpen, setIsOpen] = useState(false);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tell, setTell] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [address, setAddress] = useState("");
+  const [addressNumber, setAddressNumber] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
@@ -37,6 +59,17 @@ const UpdateAds = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
+    if (zipCodeError) {
+      setMessageZipCode("CEP não encontrado ou não existe.");
+    } else if (zipCodeApi) {
+      setMessageZipCode("CEP encontrado com sucesso!");
+      setAddress(zipCodeApi.logradouro || "");
+      setDistrict(zipCodeApi.bairro || "");
+      setCity(zipCodeApi.localidade || "");
+    }
+  }, [zipCodeApi, zipCodeError]);
+
+  useEffect(() => {
     if (add) {
       setTitle(add.title || "");
       setTypeOfRealty(add.typeOfRealty || "");
@@ -44,6 +77,7 @@ const UpdateAds = () => {
       setPrice(add.price || "");
       setZipCode(add.zipCode || "");
       setAddress(add.address || "");
+      setAddressNumber(add.addressNumber || "");
       setDistrict(add.district || "");
       setCity(add.city || "");
       setMethodOfSale(add.methodOfSale || "");
@@ -58,6 +92,8 @@ const UpdateAds = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    handleConvertAdressNumber();
+
     const formData = new FormData();
     formData.append("id", id);
     formData.append("title", title);
@@ -66,6 +102,7 @@ const UpdateAds = () => {
     formData.append("price", price);
     formData.append("zipCode", zipCode);
     formData.append("address", address);
+    formData.append("addressNumber", addressNumber);
     formData.append("district", district);
     formData.append("city", city);
     formData.append("methodOfSale", methodOfSale);
@@ -115,8 +152,70 @@ const UpdateAds = () => {
     setNewImages(reorderedImages);
   };
 
+  // Converter o numero de endereço pra Number
+  const handleConvertAdressNumber = () => {
+    const string = addressNumber;
+    if (string) {
+      setAddressNumber(parseFloat(addressNumber));
+    }
+  };
+
+  // Api CEP
+  const handleZipCode = async () => {
+    const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
+
+    if (cleanedZipCode.length !== 8) {
+      console.log(cleanedZipCode);
+      setMessageZipCode("Por favor, insira um CEP válido.");
+      setIsOpen(true);
+      return;
+    }
+
+    await dispatch(getZipCode(cleanedZipCode));
+    setIsOpen(true);
+  };
+
+  const openModal = (e) => {
+    e.preventDefault();
+    handleZipCode();
+  };
+
+  const closeModal = () => {
+    dispatch(resetZipCode());
+    setMessageZipCode("");
+    setIsOpen(false);
+  };
+
   return (
     <div className="updateAds">
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+        contentLabel="Verificação de CEP"
+        overlayClassName="modal-overlay"
+        className="modal-content"
+      >
+        <h1>Resultado da Pesquisa</h1>
+        {messageZipCode && <p>{messageZipCode}</p>}
+        {zipCodeApi && (
+          <div>
+            <p>
+              <strong>Rua:</strong> {zipCodeApi.logradouro}
+            </p>
+            <p>
+              <strong>Cidade:</strong> {zipCodeApi.localidade}
+            </p>
+            <p>
+              <strong>Estado:</strong> {zipCodeApi.uf}
+            </p>
+            <p>
+              <strong>Bairro:</strong> {zipCodeApi.bairro}
+            </p>
+          </div>
+        )}
+
+        <button onClick={closeModal}>Fechar</button>
+      </Modal>
       <h1>
         <span>Atualizar</span> anúncio de imóvel
       </h1>
@@ -204,14 +303,17 @@ const UpdateAds = () => {
         </label>
         <label>
           <span>CEP</span>
-          <MaskedInput
-            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
-            type="text"
-            placeholder="CEP"
-            onChange={(e) => setZipCode(e.target.value)}
-            value={zipCode || ""}
-            required
-          />
+          <div className="label-input-button">
+            <MaskedInput
+              mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
+              type="text"
+              placeholder="CEP"
+              onChange={(e) => setZipCode(e.target.value)}
+              value={zipCode || ""}
+              required
+            />
+            <button onClick={openModal}>Pesquisar CEP</button>
+          </div>
         </label>
         <label>
           <span>Endereço</span>
@@ -220,6 +322,17 @@ const UpdateAds = () => {
             placeholder="endereço"
             onChange={(e) => setAddress(e.target.value)}
             value={address || ""}
+            required
+          />
+        </label>
+        <label>
+          <span>Número de Endereço:</span>
+          <NumericFormat
+            allowNegative={false}
+            maxLength={10}
+            placeholder="Número"
+            onChange={(e) => setAddressNumber(e.target.value)}
+            value={addressNumber || ""}
             required
           />
         </label>
