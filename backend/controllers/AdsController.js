@@ -16,6 +16,7 @@ const insertAds = async (req, res) => {
     zipCode,
     address,
     addressNumber,
+    complement,
     district,
     city,
     methodOfSale,
@@ -41,6 +42,7 @@ const insertAds = async (req, res) => {
       zipCode,
       address,
       addressNumber,
+      complement,
       district,
       city,
       methodOfSale,
@@ -146,6 +148,7 @@ const updateAds = async (req, res) => {
     zipCode,
     address,
     addressNumber,
+    complement,
     district,
     city,
     methodOfSale,
@@ -196,6 +199,10 @@ const updateAds = async (req, res) => {
 
   if (addressNumber) {
     add.addressNumber = addressNumber;
+  }
+
+  if (complement) {
+    add.complement = complement;
   }
 
   if (district) {

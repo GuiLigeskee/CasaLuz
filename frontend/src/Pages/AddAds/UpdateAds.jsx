@@ -43,6 +43,7 @@ const UpdateAds = () => {
   const [zipCode, setZipCode] = useState("");
   const [address, setAddress] = useState("");
   const [addressNumber, setAddressNumber] = useState("");
+  const [complement, setComplement] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
@@ -78,6 +79,7 @@ const UpdateAds = () => {
       setZipCode(add.zipCode || "");
       setAddress(add.address || "");
       setAddressNumber(add.addressNumber || "");
+      setComplement(add.complement || "");
       setDistrict(add.district || "");
       setCity(add.city || "");
       setMethodOfSale(add.methodOfSale || "");
@@ -92,8 +94,6 @@ const UpdateAds = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    handleConvertAdressNumber();
-
     const formData = new FormData();
     formData.append("id", id);
     formData.append("title", title);
@@ -103,6 +103,7 @@ const UpdateAds = () => {
     formData.append("zipCode", zipCode);
     formData.append("address", address);
     formData.append("addressNumber", addressNumber);
+    formData.append("complement", complement);
     formData.append("district", district);
     formData.append("city", city);
     formData.append("methodOfSale", methodOfSale);
@@ -150,14 +151,6 @@ const UpdateAds = () => {
     const [removedImage] = reorderedImages.splice(result.source.index, 1);
     reorderedImages.splice(result.destination.index, 0, removedImage);
     setNewImages(reorderedImages);
-  };
-
-  // Converter o numero de endereço pra Number
-  const handleConvertAdressNumber = () => {
-    const string = addressNumber;
-    if (string) {
-      setAddressNumber(parseFloat(addressNumber));
-    }
   };
 
   // Api CEP
@@ -326,13 +319,23 @@ const UpdateAds = () => {
           />
         </label>
         <label>
-          <span>Número de Endereço:</span>
-          <NumericFormat
-            allowNegative={false}
+          <span>Número de endereço:</span>
+          <input
             maxLength={10}
+            type="text"
             placeholder="Número"
             onChange={(e) => setAddressNumber(e.target.value)}
             value={addressNumber || ""}
+            required
+          />
+        </label>
+        <label>
+          <span>Complemento:</span>
+          <input
+            type="text"
+            placeholder="Complemento"
+            onChange={(e) => setComplement(e.target.value)}
+            value={complement || ""}
             required
           />
         </label>

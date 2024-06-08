@@ -16,8 +16,6 @@ const insertDepoiment = async (req, res) => {
 
     const admin = await Admin.findById(reqAdmin._id);
 
-    // throw new Error("Este é um erro gerado de propósito!");
-
     // Criar anúncio
     const newDepoiment = await Depoiment.create({
       title,
