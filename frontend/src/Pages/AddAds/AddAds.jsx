@@ -42,6 +42,7 @@ const AddAds = () => {
   const [zipCode, setZipCode] = useState("");
   const [address, setAddress] = useState("");
   const [addressNumber, setAddressNumber] = useState("");
+  const [complement, setComplement] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
@@ -67,8 +68,6 @@ const AddAds = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    handleConvertAdressNumber();
-
     const adsData = {
       title,
       typeOfRealty,
@@ -77,6 +76,7 @@ const AddAds = () => {
       zipCode,
       address,
       addressNumber,
+      complement,
       district,
       city,
       methodOfSale,
@@ -129,14 +129,6 @@ const AddAds = () => {
         }
       };
       reader.readAsDataURL(file);
-    }
-  };
-
-  // Converter o numero de endereço pra Number
-  const handleConvertAdressNumber = () => {
-    const string = addressNumber;
-    if (string) {
-      setAddressNumber(parseFloat(addressNumber));
     }
   };
 
@@ -305,13 +297,23 @@ const AddAds = () => {
           />
         </label>
         <label>
-          <span>Número de Endereço:</span>
-          <NumericFormat
-            allowNegative={false}
+          <span>Número de endereço:</span>
+          <input
             maxLength={10}
+            type="text"
             placeholder="Número"
             onChange={(e) => setAddressNumber(e.target.value)}
             value={addressNumber || ""}
+            required
+          />
+        </label>
+        <label>
+          <span>Complemento:</span>
+          <input
+            type="text"
+            placeholder="Complemento"
+            onChange={(e) => setComplement(e.target.value)}
+            value={complement || ""}
             required
           />
         </label>
