@@ -95,7 +95,7 @@ const AdsPage = () => {
         </Swiper>
         <div className="addDetails-container">
           <a
-            href={`https://www.google.com/maps?q=${add.address},${add.district},${add.city}`}
+            href={`https://www.google.com/maps?q=${add.address}, ${add.addressNumber},${add.district},${add.city}`}
             target="_blank"
           >
             <div className="addMaps">
