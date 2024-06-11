@@ -35,6 +35,8 @@ const UpdateAds = () => {
 
   // Modal
   const [isOpen, setIsOpen] = useState(false);
+  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
+  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -54,6 +56,15 @@ const UpdateAds = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [newImages, setNewImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+
+  useEffect(() => {
+    if (error) {
+      setIsErrorMessageOpen(true);
+    }
+    if (message) {
+      setIsSuccessMessageOpen(true);
+    }
+  }, [error, message]);
 
   useEffect(() => {
     dispatch(getAdsDetails(id));
@@ -181,6 +192,14 @@ const UpdateAds = () => {
     setIsOpen(false);
   };
 
+  const closeErrorMessage = () => {
+    setIsErrorMessageOpen(false);
+  };
+
+  const closeSuccessMessage = () => {
+    setIsSuccessMessageOpen(false);
+  };
+
   // Converte String em Number
   const parseStringToNumber = (priceStr) => {
     if (!priceStr) return null;
@@ -224,6 +243,21 @@ const UpdateAds = () => {
 
         <button onClick={closeModal}>Fechar</button>
       </Modal>
+
+      <Message
+        msg={error}
+        type="error"
+        isOpen={isErrorMessageOpen}
+        onRequestClose={closeErrorMessage}
+      />
+
+      <Message
+        msg={message}
+        type="success"
+        isOpen={isSuccessMessageOpen}
+        onRequestClose={closeSuccessMessage}
+      />
+
       <h1>
         <span>Atualizar</span> anúncio de imóvel
       </h1>

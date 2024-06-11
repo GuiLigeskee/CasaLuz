@@ -1,30 +1,33 @@
-/* Basic styles for the message */
+/* Estilos básicos para a mensagem */
 .message {
   border-radius: 10px;
   padding: 1em;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 3px solid #000;
   width: auto;
   position: relative;
+  background-color: white;
 }
 
-/* Overlay styles */
+/* Estilos da sobreposição */
 .message-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(10px); /* Adiciona desfoque ao fundo */
+  -webkit-backdrop-filter: blur(10px); /* Compatibilidade com Safari */
 }
 
-/* Modal container styles */
+/* Estilos do contêiner do modal */
 .message-modal {
   display: flex;
   justify-content: center;
@@ -32,27 +35,16 @@
   outline: none;
 }
 
-/* Error message styles */
+/* Estilos da mensagem de erro */
 .message.error {
   color: #721c24;
   background-color: #f8d7da;
-  border-color: #f5c6cb;
+  border-color: #721c24;
 }
 
-/* Success message styles */
+/* Estilos da mensagem de sucesso */
 .message.success {
   color: #155724;
   background-color: #d4edda;
-  border-color: #c3e6cb;
-}
-
-/* Close button styles */
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 1.2em;
-  cursor: pointer;
+  border-color: #155724;
 }

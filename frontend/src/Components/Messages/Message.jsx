@@ -14,7 +14,7 @@ const Message = ({ msg, type, isOpen, onRequestClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(onRequestClose, 3000); // Auto close after 3 seconds
+      const timer = setTimeout(onRequestClose, 3000); // Fecha automaticamente após 3 segundos
       return () => clearTimeout(timer);
     }
   }, [isOpen, onRequestClose]);
@@ -27,10 +27,8 @@ const Message = ({ msg, type, isOpen, onRequestClose }) => {
       overlayClassName="message-overlay"
     >
       <animated.div style={animation} className={`message ${type}`}>
+        <h2>{type}</h2>
         <p>{msg}</p>
-        <button onClick={onRequestClose} className="close-button">
-          Close
-        </button>
       </animated.div>
     </Modal>
   );

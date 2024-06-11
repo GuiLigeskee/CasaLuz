@@ -2,12 +2,12 @@ import "./AddAds.css";
 
 // Components
 import Message from "../../Components/Messages/Message";
+
+// Hooks
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-
-// Hooks
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 
@@ -24,15 +24,11 @@ Modal.setAppElement("#root");
 
 const AddAds = () => {
   const dispatch = useDispatch();
-
   const { loading, error, message } = useSelector((state) => state.ads);
-
-  // ZipCode da Api
   const zipCodeApi = useSelector(selectZipCodeApi);
   const zipCodeError = useSelector(selectZipCodeError);
   const [messageZipCode, setMessageZipCode] = useState("");
 
-  // Modal
   const [isOpen, setIsOpen] = useState(false);
   const [isMessageOpen, setIsMessageOpen] = useState(false);
   const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
@@ -58,6 +54,15 @@ const AddAds = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
+    if (error) {
+      setIsErrorMessageOpen(true);
+    }
+    if (message) {
+      setIsSuccessMessageOpen(true);
+    }
+  }, [error, message]);
+
+  useEffect(() => {
     if (zipCodeError) {
       setMessageZipCode("CEP não encontrado ou não existe.");
     } else if (zipCodeApi) {
@@ -70,7 +75,6 @@ const AddAds = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const priceNumber = parseStringToNumber(price);
 
     const adsData = {
@@ -93,38 +97,30 @@ const AddAds = () => {
     };
 
     const formData = new FormData();
-
     for (const key in adsData) {
       formData.append(key, adsData[key]);
     }
-
     for (let i = 0; i < adsImages.length; i++) {
       formData.append("images", adsImages[i]);
     }
-
     dispatch(publishAds(formData));
   };
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-
     const items = Array.from(imagePreviews);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-
     setImagePreviews(items);
   };
 
   const handleFile = (e) => {
     const files = e.target.files;
-
     const imagePreviewsArray = [];
     const adsImagesArray = [];
-
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       adsImagesArray.push(file);
-
       const reader = new FileReader();
       reader.onload = () => {
         imagePreviewsArray.push(reader.result);
@@ -137,17 +133,13 @@ const AddAds = () => {
     }
   };
 
-  // Api CEP
   const handleZipCode = async () => {
     const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
-
     if (cleanedZipCode.length !== 8) {
-      console.log(cleanedZipCode);
       setMessageZipCode("Por favor, insira um CEP válido.");
       setIsOpen(true);
       return;
     }
-
     await dispatch(getZipCode(cleanedZipCode));
     setIsOpen(true);
   };
@@ -170,16 +162,14 @@ const AddAds = () => {
   const closeSuccessMessage = () => {
     setIsSuccessMessageOpen(false);
   };
-  // Converte String em Number
+
   const parseStringToNumber = (priceStr) => {
     if (!priceStr) return null;
     const cleanedString = priceStr
       .replace("R$ ", "")
       .replace(/\./g, "")
       .replace(",", ".");
-
     const priceNumber = parseFloat(cleanedString);
-
     return priceNumber;
   };
 
@@ -210,27 +200,23 @@ const AddAds = () => {
             </p>
           </div>
         )}
-
         <button onClick={closeModal}>Fechar</button>
       </Modal>
 
-      {error && (
-        <Message
-          msg={error}
-          type="error"
-          isOpen={isErrorMessageOpen}
-          onRequestClose={closeErrorMessage}
-        />
-      )}
+      <Message
+        msg={error}
+        type="error"
+        isOpen={isErrorMessageOpen}
+        onRequestClose={closeErrorMessage}
+      />
 
-      {message && (
-        <Message
-          msg={message}
-          type="success"
-          isOpen={isSuccessMessageOpen}
-          onRequestClose={closeSuccessMessage}
-        />
-      )}
+      <Message
+        msg={message}
+        type="success"
+        isOpen={isSuccessMessageOpen}
+        onRequestClose={closeSuccessMessage}
+      />
+
       <h1>
         <span>Adicionar</span> anúncio de imóvel
       </h1>

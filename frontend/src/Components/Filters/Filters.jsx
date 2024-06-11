@@ -3,7 +3,6 @@ import "./Filters.css"; // Importando o arquivo CSS
 // Hooks
 import React from "react";
 import { useState } from "react";
-import "./Filters.css";
 
 // Components
 import { NumericFormat } from "react-number-format";
