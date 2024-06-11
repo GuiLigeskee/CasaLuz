@@ -24,7 +24,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 // Hooks
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -37,6 +37,7 @@ const AdsPage = () => {
   const dispatch = useDispatch();
 
   const { add } = useSelector((state) => state.ads);
+  const [newPrice, setNewPrice] = useState();
 
   const cleanedNumberWhatsapp =
     add.whatsapp && add.whatsapp.replace(/[()\s-]/g, "");
@@ -46,6 +47,22 @@ const AdsPage = () => {
   useEffect(() => {
     dispatch(getAdsDetails(id));
   }, [dispatch, id]);
+
+  const parseNumberToString = (priceNumber) => {
+    if (priceNumber === null || priceNumber === undefined) return "";
+
+    const priceStr = priceNumber.toFixed(2);
+    const parts = priceStr.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    return `R$ ${parts.join(",")}`;
+  };
+
+  useEffect(() => {
+    if (add.price) {
+      setNewPrice(parseNumberToString(add.price));
+    }
+  }, [add.price]);
 
   return (
     <div className="adsPage">
@@ -136,7 +153,7 @@ const AdsPage = () => {
           {add.price && (
             <label>
               <span>Preço:</span>
-              <p>{add.price}</p>
+              <p>{newPrice}</p>
             </label>
           )}
           {add.typeOfRealty && (
@@ -157,10 +174,15 @@ const AdsPage = () => {
               <p>{add.landMeasurement}m2</p>
             </label>
           )}
-          {add.address && (
+          {add.address && add.addressNumber && add.complement ? (
             <label>
               <span>Endereço:</span>
-              <p>{add.address}</p>
+              <p>{`${add.address}, ${add.addressNumber}, ${add.complement}`}</p>
+            </label>
+          ) : (
+            <label>
+              <span>Endereço:</span>
+              <p>{`${add.address}, ${add.addressNumber}`}</p>
             </label>
           )}
           {add.district && (

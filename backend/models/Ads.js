@@ -11,7 +11,7 @@ const adsSchema = new Schema(
     title: String,
     typeOfRealty: String,
     description: String,
-    price: String,
+    price: Number,
     zipCode: String,
     address: String,
     addressNumber: String,

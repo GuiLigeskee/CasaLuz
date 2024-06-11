@@ -94,12 +94,14 @@ const UpdateAds = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const priceNumber = parseStringToNumber(price);
+
     const formData = new FormData();
     formData.append("id", id);
     formData.append("title", title);
     formData.append("typeOfRealty", typeOfRealty);
     formData.append("description", description);
-    formData.append("price", price);
+    formData.append("price", priceNumber);
     formData.append("zipCode", zipCode);
     formData.append("address", address);
     formData.append("addressNumber", addressNumber);
@@ -177,6 +179,19 @@ const UpdateAds = () => {
     dispatch(resetZipCode());
     setMessageZipCode("");
     setIsOpen(false);
+  };
+
+  // Converte String em Number
+  const parseStringToNumber = (priceStr) => {
+    if (!priceStr) return null;
+    const cleanedString = priceStr
+      .replace("R$ ", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+
+    const priceNumber = parseFloat(cleanedString);
+
+    return priceNumber;
   };
 
   return (
@@ -336,7 +351,6 @@ const UpdateAds = () => {
             placeholder="Complemento"
             onChange={(e) => setComplement(e.target.value)}
             value={complement || ""}
-            required
           />
         </label>
         <label>

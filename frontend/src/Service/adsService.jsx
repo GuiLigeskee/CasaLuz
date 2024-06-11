@@ -123,7 +123,7 @@ const searchAds = async (params) => {
   try {
     const queryString = new URLSearchParams(params).toString();
     const response = await fetch(`${api}/ads/filter/search?${queryString}`);
-    const data = await response.json(); // Certifique-se de que a resposta é convertida para JSON
+    const data = await response.json();
     return data;
   } catch (error) {
     throw new Error(error.message || "Erro ao buscar anúncios");
