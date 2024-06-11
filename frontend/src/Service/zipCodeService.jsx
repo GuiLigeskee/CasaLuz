@@ -5,13 +5,18 @@ const searchZipCode = async (zipCode) => {
   const config = requestConfig("GET", null);
 
   try {
-    const res = await fetch(apiOpenCep + zipCode, config)
-      .then((res) => res.json())
-      .catch((err) => err);
-
-    return res;
+    const response = await fetch(apiOpenCep + zipCode, config);
+    if (!response.ok) {
+      throw new Error("Failed to fetch ZIP code");
+    }
+    const data = await response.json();
+    if (data.error) {
+      throw new Error("Invalid ZIP code");
+    }
+    return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    throw error;
   }
 };
 

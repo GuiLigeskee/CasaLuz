@@ -18,7 +18,6 @@ export const publishAds = createAsyncThunk(
 
     const data = await adsService.publishAds(ads, token);
 
-    console.log(data.errors);
     // Check for errors
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);

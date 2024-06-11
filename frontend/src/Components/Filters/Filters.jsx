@@ -1,12 +1,14 @@
+import "./Filters.css"; // Importando o arquivo CSS
+
+// Hooks
 import React from "react";
 import { useState } from "react";
 import "./Filters.css";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
-
 // Components
 import { NumericFormat } from "react-number-format";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const Filters = ({ filters, onFilterChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);
@@ -118,7 +120,16 @@ const Filters = ({ filters, onFilterChange }) => {
               value={localFilters.minPrice}
               placeholder="Preço Mínimo"
               className="filter-input"
+              name="minPrice"
             />
+            {/* <input
+              type="number"
+              name="maxPrice"
+              value={localFilters.maxPrice}
+              onChange={handleChange}
+              placeholder="Preço Máximo"
+              className="filter-input"
+            /> */}
             <NumericFormat
               thousandSeparator="."
               decimalSeparator=","
@@ -130,6 +141,7 @@ const Filters = ({ filters, onFilterChange }) => {
               value={localFilters.maxPrice}
               placeholder="Preço Máximo"
               className="filter-input"
+              name="maxPrice"
             />
           </label>
           <label className="span-double">

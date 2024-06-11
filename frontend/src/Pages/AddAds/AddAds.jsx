@@ -1,15 +1,15 @@
 import "./AddAds.css";
-import Modal from "react-modal";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 // Components
 import Message from "../../Components/Messages/Message";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
+import Modal from "react-modal";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Redux
 import { publishAds } from "../../Slice/adsSlice";
@@ -44,6 +44,8 @@ const AddAds = () => {
   const [whatsapp, setWhatsapp] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [address, setAddress] = useState("");
+  const [addressNumber, setAddressNumber] = useState("");
+  const [complement, setComplement] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
@@ -55,16 +57,31 @@ const AddAds = () => {
   const [adsImages, setAdsImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
+  useEffect(() => {
+    if (zipCodeError) {
+      setMessageZipCode("CEP não encontrado ou não existe.");
+    } else if (zipCodeApi) {
+      setMessageZipCode("CEP encontrado com sucesso!");
+      setAddress(zipCodeApi.logradouro || "");
+      setDistrict(zipCodeApi.bairro || "");
+      setCity(zipCodeApi.localidade || "");
+    }
+  }, [zipCodeApi, zipCodeError]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const priceNumber = parseStringToNumber(price);
 
     const adsData = {
       title,
       typeOfRealty,
       description,
-      price,
+      price: priceNumber,
       zipCode,
       address,
+      addressNumber,
+      complement,
       district,
       city,
       methodOfSale,
@@ -89,7 +106,7 @@ const AddAds = () => {
   };
 
   const handleDragEnd = (result) => {
-    if (!result.destination) return; // Se não houver destino, não fazer nada
+    if (!result.destination) return;
 
     const items = Array.from(imagePreviews);
     const [reorderedItem] = items.splice(result.source.index, 1);
@@ -121,33 +138,26 @@ const AddAds = () => {
   };
 
   // Api CEP
-  const handleZipCode = () => {
-    const cleanedZipCode = zipCode && zipCode.replace("-", "");
-    dispatch(getZipCode(cleanedZipCode));
+  const handleZipCode = async () => {
+    const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
 
-    if (zipCodeError) {
-      setMessageZipCode("CEP não encontrado ou não existe.");
-    } else {
-      console.log(zipCodeError);
-      setMessageZipCode("CEP encontrado com sucesso!");
+    if (cleanedZipCode.length !== 8) {
+      console.log(cleanedZipCode);
+      setMessageZipCode("Por favor, insira um CEP válido.");
+      setIsOpen(true);
+      return;
     }
+
+    await dispatch(getZipCode(cleanedZipCode));
+    setIsOpen(true);
   };
 
   const openModal = (e) => {
     e.preventDefault();
-    if (zipCode) {
-      handleZipCode();
-    }
-    setIsOpen(true);
+    handleZipCode();
   };
 
   const closeModal = () => {
-    if (zipCodeApi) {
-      setAddress(zipCodeApi.logradouro || "");
-      setDistrict(zipCodeApi.bairro || "");
-      setCity(zipCodeApi.localidade || "");
-    }
-    console.log(zipCodeError);
     dispatch(resetZipCode());
     setMessageZipCode("");
     setIsOpen(false);
@@ -160,18 +170,46 @@ const AddAds = () => {
   const closeSuccessMessage = () => {
     setIsSuccessMessageOpen(false);
   };
+  // Converte String em Number
+  const parseStringToNumber = (priceStr) => {
+    if (!priceStr) return null;
+    const cleanedString = priceStr
+      .replace("R$ ", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+
+    const priceNumber = parseFloat(cleanedString);
+
+    return priceNumber;
+  };
 
   return (
     <div className="createAds">
       <Modal
         isOpen={isOpen}
         onRequestClose={closeModal}
-        contentLabel="Example Modal"
+        contentLabel="Verificação de CEP"
         overlayClassName="modal-overlay"
         className="modal-content"
       >
-        <h1>Pesquisando CEP</h1>
+        <h1>Resultado da Pesquisa</h1>
         {messageZipCode && <p>{messageZipCode}</p>}
+        {zipCodeApi && (
+          <div>
+            <p>
+              <strong>Rua:</strong> {zipCodeApi.logradouro}
+            </p>
+            <p>
+              <strong>Cidade:</strong> {zipCodeApi.localidade}
+            </p>
+            <p>
+              <strong>Estado:</strong> {zipCodeApi.uf}
+            </p>
+            <p>
+              <strong>Bairro:</strong> {zipCodeApi.bairro}
+            </p>
+          </div>
+        )}
 
         <button onClick={closeModal}>Fechar</button>
       </Modal>
@@ -288,7 +326,7 @@ const AddAds = () => {
               value={zipCode || ""}
               required
             />
-            <button onClick={openModal}>Verificar CEP</button>
+            <button onClick={openModal}>Pesquisar CEP</button>
           </div>
         </label>
         <label>
@@ -299,6 +337,26 @@ const AddAds = () => {
             onChange={(e) => setAddress(e.target.value)}
             value={address || ""}
             required
+          />
+        </label>
+        <label>
+          <span>Número de endereço:</span>
+          <input
+            maxLength={10}
+            type="text"
+            placeholder="Número"
+            onChange={(e) => setAddressNumber(e.target.value)}
+            value={addressNumber || ""}
+            required
+          />
+        </label>
+        <label>
+          <span>Complemento:</span>
+          <input
+            type="text"
+            placeholder="Complemento"
+            onChange={(e) => setComplement(e.target.value)}
+            value={complement || ""}
           />
         </label>
         <label>

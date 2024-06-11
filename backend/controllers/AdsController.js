@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 
 // Utils
 // const { deleteImages } = require("../utils/deleteImages");
-const { parsePrice } = require("../utils/parcePrice");
 
 // Inserir um anúncio
 const insertAds = async (req, res) => {
@@ -15,6 +14,8 @@ const insertAds = async (req, res) => {
     price,
     zipCode,
     address,
+    addressNumber,
+    complement,
     district,
     city,
     methodOfSale,
@@ -39,6 +40,8 @@ const insertAds = async (req, res) => {
       price,
       zipCode,
       address,
+      addressNumber,
+      complement,
       district,
       city,
       methodOfSale,
@@ -143,6 +146,8 @@ const updateAds = async (req, res) => {
     price,
     zipCode,
     address,
+    addressNumber,
+    complement,
     district,
     city,
     methodOfSale,
@@ -189,6 +194,14 @@ const updateAds = async (req, res) => {
 
   if (address) {
     add.address = address;
+  }
+
+  if (addressNumber) {
+    add.addressNumber = addressNumber;
+  }
+
+  if (complement) {
+    add.complement = complement;
   }
 
   if (district) {
@@ -276,12 +289,10 @@ const searchAds = async (req, res) => {
     if (minPrice || maxPrice) {
       let priceFilter = {};
       if (minPrice) {
-        priceFilter.$gte = parsePrice(minPrice);
-        // console.log(minPrice);
+        priceFilter.$gte = parseFloat(minPrice);
       }
       if (maxPrice) {
-        priceFilter.$lte = parsePrice(maxPrice);
-        // console.log(maxPrice);
+        priceFilter.$lte = parseFloat(maxPrice);
       }
       filter.price = priceFilter;
     }
