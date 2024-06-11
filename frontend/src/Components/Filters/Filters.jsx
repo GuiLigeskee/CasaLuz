@@ -1,12 +1,13 @@
-import React from "react";
-import { useState } from "react";
 import "./Filters.css"; // Importando o arquivo CSS
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
+// Hooks
+import React from "react";
+import { useState } from "react";
 
 // Components
 import { NumericFormat } from "react-number-format";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const Filters = ({ filters, onFilterChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);
@@ -26,8 +27,31 @@ const Filters = ({ filters, onFilterChange }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onFilterChange(localFilters);
-    setFormOpen(false); // Fecha o formulário após aplicar os filtros
+
+    const filtersToSend = {
+      ...localFilters,
+      minPrice: localFilters.minPrice
+        ? parseFloat(
+            localFilters.minPrice
+              .replace(/[^\d.,]/g, "")
+              .replace("R$ ", "")
+              .replace(/\./g, "")
+              .replace(",", ".")
+          )
+        : "",
+      maxPrice: localFilters.maxPrice
+        ? parseFloat(
+            localFilters.maxPrice
+              .replace(/[^\d.,]/g, "")
+              .replace("R$ ", "")
+              .replace(/\./g, "")
+              .replace(",", ".")
+          )
+        : "",
+    };
+
+    onFilterChange(filtersToSend);
+    setFormOpen(false);
   };
 
   return (
@@ -118,7 +142,16 @@ const Filters = ({ filters, onFilterChange }) => {
               value={localFilters.minPrice}
               placeholder="Preço Mínimo"
               className="filter-input"
+              name="minPrice"
             />
+            {/* <input
+              type="number"
+              name="maxPrice"
+              value={localFilters.maxPrice}
+              onChange={handleChange}
+              placeholder="Preço Máximo"
+              className="filter-input"
+            /> */}
             <NumericFormat
               thousandSeparator="."
               decimalSeparator=","
@@ -130,6 +163,7 @@ const Filters = ({ filters, onFilterChange }) => {
               value={localFilters.maxPrice}
               placeholder="Preço Máximo"
               className="filter-input"
+              name="maxPrice"
             />
           </label>
           <label className="span-double">

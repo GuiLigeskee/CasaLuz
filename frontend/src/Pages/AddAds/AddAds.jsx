@@ -68,11 +68,13 @@ const AddAds = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const priceNumber = parseStringToNumber(price);
+
     const adsData = {
       title,
       typeOfRealty,
       description,
-      price,
+      price: priceNumber,
       zipCode,
       address,
       addressNumber,
@@ -101,7 +103,7 @@ const AddAds = () => {
   };
 
   const handleDragEnd = (result) => {
-    if (!result.destination) return; // Se não houver destino, não fazer nada
+    if (!result.destination) return;
 
     const items = Array.from(imagePreviews);
     const [reorderedItem] = items.splice(result.source.index, 1);
@@ -156,6 +158,19 @@ const AddAds = () => {
     dispatch(resetZipCode());
     setMessageZipCode("");
     setIsOpen(false);
+  };
+
+  // Converte String em Number
+  const parseStringToNumber = (priceStr) => {
+    if (!priceStr) return null;
+    const cleanedString = priceStr
+      .replace("R$ ", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+
+    const priceNumber = parseFloat(cleanedString);
+
+    return priceNumber;
   };
 
   return (
@@ -314,7 +329,6 @@ const AddAds = () => {
             placeholder="Complemento"
             onChange={(e) => setComplement(e.target.value)}
             value={complement || ""}
-            required
           />
         </label>
         <label>
