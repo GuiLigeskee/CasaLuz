@@ -1,3 +1,4 @@
+/* Basic styles for the message */
 .message {
   border-radius: 10px;
   padding: 1em;
@@ -7,16 +8,51 @@
   align-items: center;
   border: 3px solid #000;
   width: auto;
+  position: relative;
 }
 
+/* Overlay styles */
+.message-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal container styles */
+.message-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+}
+
+/* Error message styles */
 .message.error {
   color: #721c24;
   background-color: #f8d7da;
   border-color: #f5c6cb;
 }
 
+/* Success message styles */
 .message.success {
   color: #155724;
   background-color: #d4edda;
   border-color: #c3e6cb;
+}
+
+/* Close button styles */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
 }

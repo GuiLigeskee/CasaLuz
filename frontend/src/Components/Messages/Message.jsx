@@ -1,24 +1,39 @@
+import React, { useEffect } from "react";
+import Modal from "react-modal";
+import { useSpring, animated } from "react-spring";
 import "./Message.css";
-import { useState, useEffect } from "react";
 
-const Message = ({ msg, type }) => {
-  const [visible, setVisible] = useState(true);
+Modal.setAppElement("#root");
+
+const Message = ({ msg, type, isOpen, onRequestClose }) => {
+  const animation = useSpring({
+    opacity: isOpen ? 1 : 0,
+    transform: isOpen ? "translateY(0%)" : "translateY(-100%)",
+    config: { tension: 300, friction: 30 },
+  });
 
   useEffect(() => {
-    // using setTimeOut to hide the message for 2 seconds
-    const timeout = setTimeout(() => {
-      setVisible(false);
-    }, 2000);
+    if (isOpen) {
+      const timer = setTimeout(onRequestClose, 3000); // Auto close after 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, onRequestClose]);
 
-    // clear the timeOut when the component is open
-    return () => clearTimeout(timeout);
-  }, []);
-
-  return visible ? (
-    <div className={`message ${type}`}>
-      <p>{msg}</p>
-    </div>
-  ) : null;
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      className="message-modal"
+      overlayClassName="message-overlay"
+    >
+      <animated.div style={animation} className={`message ${type}`}>
+        <p>{msg}</p>
+        <button onClick={onRequestClose} className="close-button">
+          Close
+        </button>
+      </animated.div>
+    </Modal>
+  );
 };
 
 export default Message;

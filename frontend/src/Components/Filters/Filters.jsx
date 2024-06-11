@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import "./Filters.css"; // Importando o arquivo CSS
+import "./Filters.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -27,7 +27,7 @@ const Filters = ({ filters, onFilterChange }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onFilterChange(localFilters);
-    setFormOpen(false); // Fecha o formulário após aplicar os filtros
+    setFormOpen(false);
   };
 
   return (

@@ -34,6 +34,9 @@ const AddAds = () => {
 
   // Modal
   const [isOpen, setIsOpen] = useState(false);
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
+  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -150,6 +153,14 @@ const AddAds = () => {
     setIsOpen(false);
   };
 
+  const closeErrorMessage = () => {
+    setIsErrorMessageOpen(false);
+  };
+
+  const closeSuccessMessage = () => {
+    setIsSuccessMessageOpen(false);
+  };
+
   return (
     <div className="createAds">
       <Modal
@@ -164,6 +175,24 @@ const AddAds = () => {
 
         <button onClick={closeModal}>Fechar</button>
       </Modal>
+
+      {error && (
+        <Message
+          msg={error}
+          type="error"
+          isOpen={isErrorMessageOpen}
+          onRequestClose={closeErrorMessage}
+        />
+      )}
+
+      {message && (
+        <Message
+          msg={message}
+          type="success"
+          isOpen={isSuccessMessageOpen}
+          onRequestClose={closeSuccessMessage}
+        />
+      )}
       <h1>
         <span>Adicionar</span> anúncio de imóvel
       </h1>
@@ -408,8 +437,6 @@ const AddAds = () => {
         </label>
         {!loading && <input type="submit" value="Criar anúncio" />}
         {loading && <input type="submit" disabled value="Aguarde..." />}
-        {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />}
       </form>
     </div>
   );
