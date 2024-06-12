@@ -15,6 +15,8 @@ import Message from "../../Components/Messages/Message";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
+  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -51,8 +53,38 @@ const Login = () => {
     };
   }, [admin, dispatch, navigate]);
 
+  useEffect(() => {
+    if (error) {
+      setIsErrorMessageOpen(true);
+    }
+    if (message) {
+      setIsSuccessMessageOpen(true);
+    }
+  }, [error, message]);
+
+  const closeErrorMessage = () => {
+    setIsErrorMessageOpen(false);
+  };
+
+  const closeSuccessMessage = () => {
+    setIsSuccessMessageOpen(false);
+  };
+
   return (
     <div id="login">
+      <Message
+        msg={error}
+        type="error"
+        isOpen={isErrorMessageOpen}
+        onRequestClose={closeErrorMessage}
+      />
+
+      <Message
+        msg={message}
+        type="success"
+        isOpen={isSuccessMessageOpen}
+        onRequestClose={closeSuccessMessage}
+      />
       <h2 id="title">Casa Luz</h2>
       <p id="subtitle">Entre para ter acesso a área de administrador</p>
       <form onSubmit={handleSubmit}>
@@ -76,8 +108,6 @@ const Login = () => {
         </label>
         {!loading && <input type="submit" value="Entrar" />}
         {loading && <input type="submit" disabled value="Aguarde..." />}
-        {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />}
       </form>
     </div>
   );

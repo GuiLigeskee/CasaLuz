@@ -7,7 +7,7 @@ import Message from "../../Components/Messages/Message";
 import { register } from "../../Slice/authSlice";
 
 // Hooks
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
@@ -23,18 +23,15 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
+  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Validar se os campos estão preenchidos
     if (!name || !email || !password || !confirmPassword) {
       alert("Por favor, preencha todos os campos.");
-      return;
-    }
-
-    // Validar se a senha e a confirmação de senha correspondem
-    if (password !== confirmPassword) {
-      alert("A senha e a confirmação de senha não correspondem.");
       return;
     }
 
@@ -49,8 +46,38 @@ const Register = () => {
     resetMessage();
   };
 
+  useEffect(() => {
+    if (error) {
+      setIsErrorMessageOpen(true);
+    }
+    if (message) {
+      setIsSuccessMessageOpen(true);
+    }
+  }, [error, message]);
+
+  const closeErrorMessage = () => {
+    setIsErrorMessageOpen(false);
+  };
+
+  const closeSuccessMessage = () => {
+    setIsSuccessMessageOpen(false);
+  };
+
   return (
     <div id="register">
+      <Message
+        msg={error}
+        type="error"
+        isOpen={isErrorMessageOpen}
+        onRequestClose={closeErrorMessage}
+      />
+
+      <Message
+        msg={message}
+        type="success"
+        isOpen={isSuccessMessageOpen}
+        onRequestClose={closeSuccessMessage}
+      />
       <h1 id="title">
         <span>Registrar</span> novo Administrador
       </h1>

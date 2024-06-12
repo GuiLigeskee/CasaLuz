@@ -27,30 +27,7 @@ const Filters = ({ filters, onFilterChange }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const filtersToSend = {
-      ...localFilters,
-      minPrice: localFilters.minPrice
-        ? parseFloat(
-            localFilters.minPrice
-              .replace(/[^\d.,]/g, "")
-              .replace("R$ ", "")
-              .replace(/\./g, "")
-              .replace(",", ".")
-          )
-        : "",
-      maxPrice: localFilters.maxPrice
-        ? parseFloat(
-            localFilters.maxPrice
-              .replace(/[^\d.,]/g, "")
-              .replace("R$ ", "")
-              .replace(/\./g, "")
-              .replace(",", ".")
-          )
-        : "",
-    };
-
-    onFilterChange(filtersToSend);
+    onFilterChange(localFilters);
     setFormOpen(false);
   };
 

@@ -5,7 +5,7 @@ import Message from "../../Components/Messages/Message";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Redux
 import { publishDepoiment } from "../../Slice/depoimentSlice";
@@ -21,6 +21,18 @@ const AddDepoiment = () => {
   const [description, setDescription] = useState("");
   const [depoimentImages, setDepoimentImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+
+  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
+  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      setIsErrorMessageOpen(true);
+    }
+    if (message) {
+      setIsSuccessMessageOpen(true);
+    }
+  }, [error, message]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,8 +77,29 @@ const AddDepoiment = () => {
     }
   };
 
+  const closeErrorMessage = () => {
+    setIsErrorMessageOpen(false);
+  };
+
+  const closeSuccessMessage = () => {
+    setIsSuccessMessageOpen(false);
+  };
+
   return (
     <div className="AddDepoiment">
+      <Message
+        msg={error}
+        type="error"
+        isOpen={isErrorMessageOpen}
+        onRequestClose={closeErrorMessage}
+      />
+
+      <Message
+        msg={message}
+        type="success"
+        isOpen={isSuccessMessageOpen}
+        onRequestClose={closeSuccessMessage}
+      />
       <h1>Adicionar depoimento de cliente</h1>
       <h3>Preencha o formulário para adicionar um novo depoimento</h3>
       <form onSubmit={handleSubmit}>
@@ -106,8 +139,6 @@ const AddDepoiment = () => {
 
         {!loading && <input type="submit" value="Adicionar depoimento" />}
         {loading && <input type="submit" disabled value="Aguarde..." />}
-        {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />}
       </form>
     </div>
   );
