@@ -25,8 +25,10 @@ const SearchResultsPage = () => {
   }, [dispatch, query.toString()]);
 
   return (
-    <div className="">
-      <h1 className="title">Resultados da Pesquisa</h1>
+    <div>
+      <h1 id="title">
+        Resultados da <span>Pesquisa</span>
+      </h1>
       {loading && <p>Carregando anúncios...</p>}
       {error && <p>{error}</p>}
       {ads && ads.length > 0 ? (

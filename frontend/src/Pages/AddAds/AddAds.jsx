@@ -1,17 +1,13 @@
-import "./AddAds.css";
+// src/Pages/AddAds/AddAds.js
 
-// Components
-import Message from "../../Components/Messages/Message";
-
-// Hooks
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Modal from "react-modal";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
-import Modal from "react-modal";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
-
-// Redux
+import Message from "../../Components/Messages/Message";
+import Spinner from "../../Components/Spinner/Spinner";
 import { publishAds } from "../../Slice/adsSlice";
 import {
   getZipCode,
@@ -19,6 +15,7 @@ import {
   selectZipCodeApi,
   selectZipCodeError,
 } from "../../Slice/zipCodeSlice";
+import "./AddAds.css";
 
 Modal.setAppElement("#root");
 
@@ -480,7 +477,12 @@ const AddAds = () => {
           />
         </label>
         {!loading && <input type="submit" value="Criar anúncio" />}
-        {loading && <input type="submit" disabled value="Aguarde..." />}
+        {loading && (
+          <div className="loading-container">
+            <Spinner />
+            <input type="submit" disabled value="Aguarde..." />
+          </div>
+        )}
       </form>
     </div>
   );

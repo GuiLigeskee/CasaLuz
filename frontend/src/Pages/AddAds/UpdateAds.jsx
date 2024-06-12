@@ -6,6 +6,7 @@ import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import Spinner from "../../Components/Spinner/Spinner";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -524,7 +525,10 @@ const UpdateAds = () => {
         {!loading ? (
           <input type="submit" value="Atualizar anúncio" />
         ) : (
-          <input type="submit" disabled value="Aguarde..." />
+          <>
+            <Spinner />
+            <input type="submit" disabled value="Aguarde..." />
+          </>
         )}
         {error && <Message msg={error} type="error" />}
         {message && <Message msg={message} type="success" />}

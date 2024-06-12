@@ -42,9 +42,17 @@
   border-color: #721c24;
 }
 
+.message.error h2 {
+  color: #721c24;
+}
+
 /* Estilos da mensagem de sucesso */
 .message.success {
   color: #155724;
   background-color: #d4edda;
   border-color: #155724;
+}
+
+.message.success h2 {
+  color: #155724;
 }

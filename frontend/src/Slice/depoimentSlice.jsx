@@ -81,7 +81,7 @@ export const depoimentSlice = createSlice({
         state.error = null;
         state.depoiment = action.payload;
         state.depoiments.unshift(state.depoiments);
-        state.message = "Anúncio publicado com sucesso!";
+        state.message = "Depoimento publicado com sucesso!";
       })
       .addCase(publishDepoiment.rejected, (state, action) => {
         state.loading = false;

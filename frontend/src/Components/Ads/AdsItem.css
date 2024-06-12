@@ -6,8 +6,8 @@
 .ads-item img {
   display: block;
   max-height: 300px;
-  width: 100%; /* Ensure the image scales with the container */
-  object-fit: cover; /* Ensure the image covers the area without distortion */
+  width: 100%;
+  object-fit: cover;
 }
 
 .ads-item .price {
@@ -21,6 +21,7 @@
 
 .ads-item .title {
   position: absolute;
+  font-size: 1.2em;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -55,4 +56,14 @@
 
 .admin-options button:hover {
   background-color: #0f486e;
+}
+
+@media screen and (max-width: 767px) {
+  .price {
+    font-size: 1em;
+  }
+
+  .ads-item p {
+    font-size: 1.2em;
+  }
 }

@@ -108,6 +108,7 @@ h4 {
   border: solid 3px #08273c;
   border-radius: 15px;
   margin: 0.5em;
+  width: auto; /* Adicionado para responsividade */
 }
 
 .addMaps .icon {
@@ -148,5 +149,43 @@ h4 {
 
   .details-container {
     padding: 0;
+  }
+
+  .addMaps {
+    width: 100%;
+    justify-content: space-evenly;
+    margin: 0 auto;
+  }
+
+  .addDetails-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .addDetails {
+    padding: 0.5em 1em;
+    justify-content: space-evenly;
+    background-color: #fafafa;
+    border: solid 3px #08273c;
+    border-radius: 15px;
+    margin: 0.5em 0;
+  }
+
+  .addDetails .icon {
+    font-size: 2em;
+    margin-right: 10px;
+    color: #08273c;
+  }
+
+  .addDetails span {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #08273c;
+  }
+
+  .addDetails p {
+    font-size: 1.5em;
+    color: #08273c;
+    margin: 0;
   }
 }
