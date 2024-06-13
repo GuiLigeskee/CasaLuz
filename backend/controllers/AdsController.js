@@ -18,12 +18,14 @@ const insertAds = async (req, res) => {
     complement,
     district,
     city,
+    stateAddress,
     methodOfSale,
     landMeasurement,
     tell,
     whatsapp,
     bedrooms,
     bathrooms,
+    carVacancies,
   } = req.body;
 
   try {
@@ -44,12 +46,14 @@ const insertAds = async (req, res) => {
       complement,
       district,
       city,
+      stateAddress,
       methodOfSale,
       landMeasurement,
       tell,
       whatsapp,
       bedrooms,
       bathrooms,
+      carVacancies,
       images,
       adminId: admin._id,
       adminName: admin.name,
@@ -150,12 +154,14 @@ const updateAds = async (req, res) => {
     complement,
     district,
     city,
+    stateAddress,
     methodOfSale,
     landMeasurement,
     tell,
     whatsapp,
     bedrooms,
     bathrooms,
+    carVacancies,
   } = req.body;
 
   const add = await Ads.findById(id);
@@ -212,6 +218,10 @@ const updateAds = async (req, res) => {
     add.city = city;
   }
 
+  if (stateAddress) {
+    add.stateAddress = stateAddress;
+  }
+
   if (methodOfSale) {
     add.methodOfSale = methodOfSale;
   }
@@ -238,6 +248,10 @@ const updateAds = async (req, res) => {
 
   if (bathrooms) {
     add.bathrooms = bathrooms;
+  }
+
+  if (carVacancies) {
+    add.carVacancies = carVacancies;
   }
 
   await add.save();

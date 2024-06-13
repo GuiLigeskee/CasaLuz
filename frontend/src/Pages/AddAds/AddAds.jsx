@@ -44,12 +44,14 @@ const AddAds = () => {
   const [complement, setComplement] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
+  const [stateAddress, setStateAddress] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
   const [methodOfSale, setMethodOfSale] = useState("");
   const [landMeasurement, setLandMeasurement] = useState("");
   const [price, setPrice] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+  const [carVacancies, setCarVacancies] = useState("");
   const [adsImages, setAdsImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -70,6 +72,7 @@ const AddAds = () => {
       setAddress(zipCodeApi.logradouro || "");
       setDistrict(zipCodeApi.bairro || "");
       setCity(zipCodeApi.localidade || "");
+      setStateAddress(zipCodeApi.uf || "");
     }
   }, [zipCodeApi, zipCodeError]);
 
@@ -88,12 +91,14 @@ const AddAds = () => {
       complement,
       district,
       city,
+      stateAddress,
       methodOfSale,
       landMeasurement,
       tell,
       whatsapp,
       bedrooms,
       bathrooms,
+      carVacancies,
     };
 
     const formData = new FormData();
@@ -190,13 +195,13 @@ const AddAds = () => {
               <strong>Rua:</strong> {zipCodeApi.logradouro}
             </p>
             <p>
+              <strong>Bairro:</strong> {zipCodeApi.bairro}
+            </p>
+            <p>
               <strong>Cidade:</strong> {zipCodeApi.localidade}
             </p>
             <p>
               <strong>Estado:</strong> {zipCodeApi.uf}
-            </p>
-            <p>
-              <strong>Bairro:</strong> {zipCodeApi.bairro}
             </p>
           </div>
         )}
@@ -366,6 +371,16 @@ const AddAds = () => {
           />
         </label>
         <label>
+          <span>Estado</span>
+          <input
+            type="text"
+            placeholder="Estado"
+            onChange={(e) => setStateAddress(e.target.value)}
+            value={stateAddress || ""}
+            required
+          />
+        </label>
+        <label>
           <span>Tamanho do imóvel (m2)</span>
           <input
             type="number"
@@ -394,6 +409,17 @@ const AddAds = () => {
             placeholder="Banheiros"
             onChange={(e) => setBathrooms(e.target.value)}
             value={bathrooms || ""}
+            required
+          />
+        </label>
+        <label>
+          <span>Vagas de Carro</span>
+          <input
+            type="number"
+            min={0}
+            placeholder="Vagas de Carro"
+            onChange={(e) => setCarVacancies(e.target.value)}
+            value={carVacancies || ""}
             required
           />
         </label>

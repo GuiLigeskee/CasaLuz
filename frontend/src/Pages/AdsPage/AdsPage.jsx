@@ -21,6 +21,7 @@ import {
   faBed,
   faBath,
   faMapMarkerAlt,
+  faCar,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Hooks
@@ -115,6 +116,13 @@ const AdsPage = () => {
               <FontAwesomeIcon icon={faBath} className="icon" />
               <span>Banheiros:</span>
               <p>{add.bathrooms}</p>
+            </div>
+          )}
+          {add.carVacancies !== undefined && (
+            <div className="addDetails">
+              <FontAwesomeIcon icon={faCar} className="icon" />
+              <span>Banheiros:</span>
+              <p>{add.carVacancies}</p>
             </div>
           )}
         </div>
