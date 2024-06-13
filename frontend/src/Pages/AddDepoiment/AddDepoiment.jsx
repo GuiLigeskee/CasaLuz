@@ -2,6 +2,7 @@ import "./AddDepoiment.css";
 
 // Components
 import Message from "../../Components/Messages/Message";
+import Spinner from "../../Components/Spinner/Spinner";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -138,7 +139,12 @@ const AddDepoiment = () => {
         </label>
 
         {!loading && <input type="submit" value="Adicionar depoimento" />}
-        {loading && <input type="submit" disabled value="Aguarde..." />}
+        {loading && (
+          <>
+            <Spinner />
+            <input type="submit" disabled value="Aguarde..." />
+          </>
+        )}
       </form>
     </div>
   );

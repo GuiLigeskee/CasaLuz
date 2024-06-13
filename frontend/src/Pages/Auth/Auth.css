@@ -1,11 +1,20 @@
 #login,
 #register {
-  border: 1px solid #08273c;
+  /* border: 1px solid #08273c;
   background-color: #fafafa;
   padding: 1em 2em;
   max-width: 50%;
   margin: 3em auto;
+  border-radius: 10px; */
+  border: 1px solid #08273c;
+  background-color: #fafafa;
+  padding: 1em 2em;
+  max-width: 50%;
   border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #title {

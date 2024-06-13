@@ -28,6 +28,10 @@ const Home = () => {
   const [slidePerView, setSlidePerView] = useState(4);
   const [slidePerViewDepoiments, setSlidePerViewDepoiments] = useState(4);
 
+  // Arrays to store filtered ads
+  const [adsForSale, setAdsForSale] = useState([]);
+  const [adsForRent, setAdsForRent] = useState([]);
+
   useEffect(() => {
     dispatch(getAds());
     dispatch(getDepoiments());
@@ -59,6 +63,13 @@ const Home = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (ads) {
+      setAdsForSale(ads.filter((add) => add.methodOfSale === "Venda"));
+      setAdsForRent(ads.filter((add) => add.methodOfSale === "Aluguel"));
+    }
+  }, [ads]);
+
   // const adsForSale = ads.filter((add) => add.methodOfSale === "Venda");
   // const adsForRent = ads.filter((add) => add.methodOfSale === "Aluguel");
 
@@ -74,7 +85,7 @@ const Home = () => {
         <SearchBar />
       </div>
 
-      {ads && ads.length > 0 && (
+      {adsForSale.length > 0 && (
         <div className="carroussel-ads">
           <h2 id="carroussel-title">
             Conheça nossos imóveis à <span>venda</span>
@@ -83,30 +94,24 @@ const Home = () => {
             <Swiper
               slidesPerView={slidePerView}
               loop={true}
-              pagination={{
-                clickable: true,
-              }}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
+              pagination={{ clickable: true }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
               navigation={true}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {Array.isArray(ads) &&
-                ads.map((add) => (
-                  <SwiperSlide key={add._id}>
-                    <div key={add._id}>
-                      <AdsItem add={add} />
-                    </div>
-                  </SwiperSlide>
-                ))}
+              {adsForSale.map((add) => (
+                <SwiperSlide key={add._id}>
+                  <div key={add._id}>
+                    <AdsItem add={add} />
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
         </div>
       )}
 
-      {ads && ads.length > 0 && (
+      {adsForRent.length > 0 && (
         <div className="carroussel-ads">
           <h2 id="carroussel-title">
             Conheça nossos imóveis para <span>alugar</span>
@@ -115,24 +120,18 @@ const Home = () => {
             <Swiper
               slidesPerView={slidePerView}
               loop={true}
-              pagination={{
-                clickable: true,
-              }}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
+              pagination={{ clickable: true }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
               navigation={true}
               modules={[Pagination, Navigation, Autoplay]}
             >
-              {Array.isArray(ads) &&
-                ads.map((add) => (
-                  <SwiperSlide key={add._id}>
-                    <div key={add._id}>
-                      <AdsItem add={add} />
-                    </div>
-                  </SwiperSlide>
-                ))}
+              {adsForRent.map((add) => (
+                <SwiperSlide key={add._id}>
+                  <div key={add._id}>
+                    <AdsItem add={add} />
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
         </div>

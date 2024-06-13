@@ -118,7 +118,7 @@ const getDepoimentById = async (req, res) => {
 
   // Verificar se o anúncio existe
   if (!depoiment) {
-    res.status(404).json({ errors: ["Anúncio não encontrado!"] });
+    res.status(404).json({ errors: ["Depoimento não encontrado!"] });
     return;
   }
 
@@ -140,7 +140,7 @@ const updateDepoiment = async (req, res) => {
 
   // Verificar se o anúncio existe
   if (!depoiment) {
-    res.status(404).json({ errors: ["Anúncio não encontrado!"] });
+    res.status(404).json({ errors: ["Depoimento não encontrado!"] });
     return;
   }
 
@@ -160,7 +160,7 @@ const updateDepoiment = async (req, res) => {
 
   res
     .status(200)
-    .json({ depoiment, message: "Anúncio atualizado com sucesso!" });
+    .json({ depoiment, message: "Depoimento atualizado com sucesso!" });
 };
 
 // Pesquisar um anúncio pelo título

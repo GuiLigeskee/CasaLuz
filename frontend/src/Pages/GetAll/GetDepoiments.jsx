@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Components
 import DepoimentItem from "../../Components/Depoiment/DepoimentItem";
-import Message from "../../Components/Messages/Message";
 
 // redux
 import { getDepoiments } from "../../Slice/depoimentSlice";
@@ -14,9 +13,7 @@ import { getDepoiments } from "../../Slice/depoimentSlice";
 const GetDepoiments = () => {
   const dispatch = useDispatch();
 
-  const { depoiments, loading, message } = useSelector(
-    (state) => state.depoiments
-  );
+  const { depoiments, loading } = useSelector((state) => state.depoiments);
 
   useEffect(() => {
     dispatch(getDepoiments());
