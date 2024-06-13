@@ -42,6 +42,10 @@ const adsInsertValidation = () => {
       .not()
       .equals("undefined")
       .withMessage("A cidade é obrigatória"),
+    body("stateAddress")
+      .not()
+      .equals("undefined")
+      .withMessage("O estado é obrigatório"),
     body("methodOfSale")
       .not()
       .equals("undefined")
@@ -64,6 +68,10 @@ const adsInsertValidation = () => {
       .not()
       .equals("undefined")
       .withMessage("A quantidade de banheiros é obrigatória"),
+    body("carVacancies")
+      .not()
+      .equals("undefined")
+      .withMessage("A quantidade de vagas de carro é obrigatória"),
     body("images").custom((value, { req }) => {
       if (!req.files || req.files.length === 0) {
         throw new Error("Pelo menos uma foto é obrigatória");

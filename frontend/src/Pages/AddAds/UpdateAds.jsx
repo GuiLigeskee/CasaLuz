@@ -49,12 +49,14 @@ const UpdateAds = () => {
   const [complement, setComplement] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
+  const [stateAddress, setStateAddress] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("");
   const [methodOfSale, setMethodOfSale] = useState("");
   const [landMeasurement, setLandMeasurement] = useState("");
   const [price, setPrice] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+  const [carVacancies, setCarVacancies] = useState("");
   const [newImages, setNewImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -79,6 +81,7 @@ const UpdateAds = () => {
       setAddress(zipCodeApi.logradouro || "");
       setDistrict(zipCodeApi.bairro || "");
       setCity(zipCodeApi.localidade || "");
+      setStateAddress(zipCodeApi.uf || "");
     }
   }, [zipCodeApi, zipCodeError]);
 
@@ -94,12 +97,14 @@ const UpdateAds = () => {
       setComplement(add.complement || "");
       setDistrict(add.district || "");
       setCity(add.city || "");
+      setStateAddress(add.stateAddress || "");
       setMethodOfSale(add.methodOfSale || "");
       setLandMeasurement(add.landMeasurement || "");
       setTell(add.tell || "");
       setWhatsapp(add.whatsapp || "");
       setBathrooms(add.bathrooms || "");
       setBedrooms(add.bedrooms || "");
+      setCarVacancies(add.carVacancies || "");
     }
   }, [add]);
 
@@ -120,12 +125,14 @@ const UpdateAds = () => {
     formData.append("complement", complement);
     formData.append("district", district);
     formData.append("city", city);
+    formData.append("stateAddress", stateAddress);
     formData.append("methodOfSale", methodOfSale);
     formData.append("landMeasurement", landMeasurement);
     formData.append("tell", tell);
     formData.append("whatsapp", whatsapp);
     formData.append("bedrooms", bedrooms);
     formData.append("bathrooms", bathrooms);
+    formData.append("carVacancies", carVacancies);
 
     if (newImages.length > 0) {
       newImages.forEach((image) => {
@@ -231,13 +238,13 @@ const UpdateAds = () => {
               <strong>Rua:</strong> {zipCodeApi.logradouro}
             </p>
             <p>
+              <strong>Bairro:</strong> {zipCodeApi.bairro}
+            </p>
+            <p>
               <strong>Cidade:</strong> {zipCodeApi.localidade}
             </p>
             <p>
               <strong>Estado:</strong> {zipCodeApi.uf}
-            </p>
-            <p>
-              <strong>Bairro:</strong> {zipCodeApi.bairro}
             </p>
           </div>
         )}
@@ -409,6 +416,16 @@ const UpdateAds = () => {
           />
         </label>
         <label>
+          <span>Estado</span>
+          <input
+            type="text"
+            placeholder="Estado"
+            onChange={(e) => setStateAddress(e.target.value)}
+            value={stateAddress || ""}
+            required
+          />
+        </label>
+        <label>
           <span>Tamanho do imóvel (m2)</span>
           <input
             type="number"
@@ -437,6 +454,17 @@ const UpdateAds = () => {
             placeholder="banheiros"
             onChange={(e) => setBathrooms(e.target.value)}
             value={bathrooms || ""}
+            required
+          />
+        </label>
+        <label>
+          <span>Vagas de Carro</span>
+          <input
+            type="number"
+            min={0}
+            placeholder="Vagas de Carro"
+            onChange={(e) => setCarVacancies(e.target.value)}
+            value={carVacancies || ""}
             required
           />
         </label>
