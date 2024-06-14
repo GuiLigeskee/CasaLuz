@@ -111,7 +111,11 @@ const UpdateAds = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const priceNumber = parseStringToNumber(price);
+    let priceNumber = parseStringToNumber(price);
+
+    if (typeof priceNumber !== "string") {
+      priceNumber = String(priceNumber);
+    }
 
     const formData = new FormData();
     formData.append("id", id);
@@ -208,7 +212,7 @@ const UpdateAds = () => {
     setIsSuccessMessageOpen(false);
   };
 
-  // Converte String em Number
+  // Função para converter String em Number
   const parseStringToNumber = (priceStr) => {
     if (!priceStr) return null;
     const cleanedString = priceStr

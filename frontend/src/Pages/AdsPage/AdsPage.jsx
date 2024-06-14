@@ -121,7 +121,7 @@ const AdsPage = () => {
           {add.carVacancies !== undefined && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faCar} className="icon" />
-              <span>Banheiros:</span>
+              <span>Vagas de carro:</span>
               <p>{add.carVacancies}</p>
             </div>
           )}
