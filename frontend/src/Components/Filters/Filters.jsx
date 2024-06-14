@@ -2,7 +2,7 @@ import "./Filters.css"; // Importando o arquivo CSS
 
 // Hooks
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Components
 import { NumericFormat } from "react-number-format";
@@ -12,6 +12,10 @@ import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 const Filters = ({ filters, onFilterChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);
   const [formOpen, setFormOpen] = useState(false);
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
 
   const toggleForm = () => {
     setFormOpen(!formOpen);
@@ -53,7 +57,7 @@ const Filters = ({ filters, onFilterChange }) => {
             <input
               type="text"
               name="keyword"
-              value={localFilters.keyword}
+              value={localFilters.keyword || ""}
               onChange={handleChange}
               placeholder="Palavra-chave"
               className="filter-input"
@@ -64,7 +68,7 @@ const Filters = ({ filters, onFilterChange }) => {
             <input
               type="text"
               name="typeOfRealty"
-              value={localFilters.typeOfRealty}
+              value={localFilters.typeOfRealty || ""}
               onChange={handleChange}
               placeholder="Tipo de Imóvel"
               className="filter-input"
@@ -74,7 +78,7 @@ const Filters = ({ filters, onFilterChange }) => {
             <span>Método de compra</span>
             <select
               name="methodOfSale"
-              value={localFilters.methodOfSale}
+              value={localFilters.methodOfSale || ""}
               onChange={handleChange}
               className="filter-input"
             >
@@ -89,7 +93,7 @@ const Filters = ({ filters, onFilterChange }) => {
             <input
               type="text"
               name="city"
-              value={localFilters.city}
+              value={localFilters.city || ""}
               onChange={handleChange}
               placeholder="Cidade"
               className="filter-input"
@@ -100,7 +104,7 @@ const Filters = ({ filters, onFilterChange }) => {
             <input
               type="text"
               name="district"
-              value={localFilters.district}
+              value={localFilters.district || ""}
               onChange={handleChange}
               placeholder="Bairro"
               className="filter-input"
@@ -116,19 +120,11 @@ const Filters = ({ filters, onFilterChange }) => {
               decimalScale={2}
               fixedDecimalScale
               onChange={handleChange}
-              value={localFilters.minPrice}
+              value={localFilters.minPrice || ""}
               placeholder="Preço Mínimo"
               className="filter-input"
               name="minPrice"
             />
-            {/* <input
-              type="number"
-              name="maxPrice"
-              value={localFilters.maxPrice}
-              onChange={handleChange}
-              placeholder="Preço Máximo"
-              className="filter-input"
-            /> */}
             <NumericFormat
               thousandSeparator="."
               decimalSeparator=","
@@ -137,7 +133,7 @@ const Filters = ({ filters, onFilterChange }) => {
               decimalScale={2}
               fixedDecimalScale
               onChange={handleChange}
-              value={localFilters.maxPrice}
+              value={localFilters.maxPrice || ""}
               placeholder="Preço Máximo"
               className="filter-input"
               name="maxPrice"
@@ -148,7 +144,7 @@ const Filters = ({ filters, onFilterChange }) => {
             <input
               type="number"
               name="minSpace"
-              value={localFilters.minSpace}
+              value={localFilters.minSpace || ""}
               onChange={handleChange}
               placeholder="Espaço Mínimo"
               className="filter-input"
@@ -156,7 +152,7 @@ const Filters = ({ filters, onFilterChange }) => {
             <input
               type="number"
               name="maxSpace"
-              value={localFilters.maxSpace}
+              value={localFilters.maxSpace || ""}
               onChange={handleChange}
               placeholder="Espaço Máximo"
               className="filter-input"
