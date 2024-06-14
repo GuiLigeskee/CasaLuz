@@ -107,11 +107,23 @@ const deleteAds = async (req, res) => {
 
 // Obter todos os anúncios
 const getAllAds = async (req, res) => {
-  const ads = await Ads.find({})
-    .sort([["createdAt", -1]])
-    .exec();
+  try {
+    const ads = await Ads.find({})
+      .sort([["createdAt", -1]])
+      .exec();
 
-  return res.status(200).json(ads);
+    const transformedAds = ads.map((add) => {
+      const firstImage = add.images.length > 0 ? add.images[0] : null;
+      return {
+        ...add.toObject(),
+        images: firstImage ? [firstImage] : [],
+      };
+    });
+
+    return res.status(200).json(ads);
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching ads", error });
+  }
 };
 
 // Obter anúncios do admin
