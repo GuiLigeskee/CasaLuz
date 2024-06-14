@@ -108,19 +108,31 @@ const deleteAds = async (req, res) => {
 // Obter todos os anúncios
 const getAllAds = async (req, res) => {
   try {
-    const ads = await Ads.find({})
-      .sort([["createdAt", -1]])
-      .exec();
+    // Buscar 20 anúncios aleatórios com methodOfSale igual a "Venda"
+    const saleAds = await Ads.aggregate([
+      { $match: { methodOfSale: "Venda" } },
+      { $sample: { size: 20 } },
+    ]);
 
-    const transformedAds = ads.map((add) => {
+    // Buscar 20 anúncios aleatórios com methodOfSale igual a "Aluguel"
+    const rentAds = await Ads.aggregate([
+      { $match: { methodOfSale: "Aluguel" } },
+      { $sample: { size: 20 } },
+    ]);
+
+    // Combinar os dois conjuntos de anúncios
+    const combinedAds = [...saleAds, ...rentAds];
+
+    // Transform the ads to include only the first image
+    const transformedAds = combinedAds.map((add) => {
       const firstImage = add.images.length > 0 ? add.images[0] : null;
       return {
-        ...add.toObject(),
+        ...add, // Os resultados do aggregate já são objetos JavaScript
         images: firstImage ? [firstImage] : [],
       };
     });
 
-    return res.status(200).json(ads);
+    return res.status(200).json(transformedAds);
   } catch (error) {
     return res.status(500).json({ message: "Error fetching ads", error });
   }
