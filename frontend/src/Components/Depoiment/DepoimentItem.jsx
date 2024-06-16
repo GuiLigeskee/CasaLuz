@@ -37,7 +37,7 @@ const DepoimentItem = ({ depoiment }) => {
           <div>
             {renderAdminOptions()}
             <img
-              src={`${uploads}/depoiment/${depoiment.images[0]}`}
+              src={`${uploads}/depoiment/${depoiment.images}`}
               alt={depoiment.title}
             />
             <p className="title">{depoiment.title}</p>

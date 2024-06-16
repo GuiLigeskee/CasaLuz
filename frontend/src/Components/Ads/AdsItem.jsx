@@ -71,8 +71,8 @@ const AdsItem = ({ add }) => {
             <p className="price">
               {add.methodOfSale === "Venda" ? newPrice : `${newPrice}/mês`}
             </p>
-            {add.images && add.images.length > 0 && (
-              <img src={`${uploads}/ads/${add.images[0]}`} alt={add.title} />
+            {add.images && (
+              <img src={`${uploads}/ads/${add.images}`} alt={add.title} />
             )}
             <p className="title">
               {add.typeOfRealty}
