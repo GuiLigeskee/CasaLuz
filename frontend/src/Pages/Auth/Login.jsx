@@ -85,7 +85,13 @@ const Login = () => {
         isOpen={isSuccessMessageOpen}
         onRequestClose={closeSuccessMessage}
       />
-      <h2 id="title">Casa Luz</h2>
+      <div className="logo">
+        <img
+          src="../../../public/LOGO CASA LUZ AZUL.png"
+          alt="Casa Luz"
+          className="logo"
+        />
+      </div>
       <p id="subtitle">Entre para ter acesso a área de administrador</p>
       <form onSubmit={handleSubmit}>
         <label>

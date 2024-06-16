@@ -28,8 +28,19 @@ ul {
   margin: 1em;
 }
 
-.title span {
+#title span {
   color: #fdb303;
+}
+
+.logo {
+  margin: 1em auto 1em auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  height: 4em;
 }
 
 form {
