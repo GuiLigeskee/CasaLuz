@@ -4,6 +4,7 @@ import "./Auth.css";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Logo from "../../assets/logo-casa-luz.png";
 // import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 // Redux
@@ -86,11 +87,7 @@ const Login = () => {
         onRequestClose={closeSuccessMessage}
       />
       <div className="logo">
-        <img
-          src="../../../public/LOGO CASA LUZ AZUL.png"
-          alt="Casa Luz"
-          className="logo"
-        />
+        <img src={Logo} alt="Casa Luz" className="logo" />
       </div>
       <p id="subtitle">Entre para ter acesso a área de administrador</p>
       <form onSubmit={handleSubmit}>
