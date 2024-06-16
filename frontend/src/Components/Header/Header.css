@@ -9,13 +9,9 @@
   z-index: 999;
 }
 
-.logo {
-  color: #08273c;
-  margin: 0.5em auto;
-}
-
-.logo span {
-  color: #fdb303;
+.logo-header img {
+  margin: 0.3em auto 0 auto;
+  height: 2em;
 }
 
 @media (max-width: 768px) {
