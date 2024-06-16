@@ -6,7 +6,7 @@ const Header = () => {
     <div className="header">
       <h1 className="logo-header">
         <NavLink to="/">
-          <img src="../../../public/LOGO CASA LUZ AZUL.png" alt="Casa Luz" />
+          <img src="/public/logo-casa-luz.png" alt="Casa Luz" />
         </NavLink>
       </h1>
     </div>

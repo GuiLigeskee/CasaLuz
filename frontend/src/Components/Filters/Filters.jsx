@@ -85,7 +85,7 @@ const Filters = ({ filters, onFilterChange }) => {
               <option value="">Selecione um método</option>
               <option value="Venda">Venda</option>
               <option value="Aluguel">Aluguel</option>
-              <option value="Aluguel e venda">Aluguel e venda</option>
+              <option value="">Ambos</option>
             </select>
           </label>
           <label>

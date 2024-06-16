@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const [keyword, setKeyword] = useState("");
-  const [methodOfSale, setMethodOfSale] = useState("Aluguel");
+  const [methodOfSale, setMethodOfSale] = useState("");
   const [typeOfRealty, setTypeOfRealty] = useState("Casa");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,6 +59,7 @@ const SearchBar = () => {
             value={methodOfSale}
             onChange={(e) => setMethodOfSale(e.target.value)}
           >
+            <option value="">Ambos</option>
             <option value="Aluguel">Aluguel</option>
             <option value="Venda">Venda</option>
           </select>
