@@ -5,17 +5,9 @@ const router = express.Router();
 const {
   insertAds,
   deleteAds,
-  getAllAds,
-  getAdminAds,
+  getHomeAds,
   getAdsById,
   updateAds,
-  getByTitle,
-  getByTypeOfRealty,
-  getByMethodOfSale,
-  getByPrice,
-  getByLandMeasurement,
-  getByDistrict,
-  getByCity,
   searchAds,
 } = require("../controllers/AdsController");
 
@@ -49,18 +41,8 @@ router.put(
   updateAds
 );
 router.delete("/:id", authGuard, deleteAds);
-router.get("/", getAllAds);
-router.get("/admin/:id", getAdminAds);
+router.get("/", getHomeAds);
 router.get("/:id", getAdsById);
-
-// Filtros de pesquisa:
-// router.get("/filter/title", getByTitle);
-// router.get("/filter/district", getByDistrict);
-// router.get("filter/city", getByCity);
-// router.get("/filter/type", getByTypeOfRealty);
-// router.get("/filter/method", getByMethodOfSale);
-// router.get("/filter/price", getByPrice);
-// router.get("/filter/space", getByLandMeasurement);
 router.get("/filter/search", searchAds);
 
 module.exports = router;

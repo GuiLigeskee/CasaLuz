@@ -5,10 +5,9 @@ const router = express.Router();
 const {
   insertDepoiment,
   deleteDepoiment,
-  updateDepoiment,
-  getDepoimentById,
-  getAllDepoiments,
-  getAdminDepoiments,
+  // updateDepoiment,
+  // getDepoimentById,
+  getHomeDepoiments,
 } = require("../controllers/DepoimentController");
 
 // Middlewares
@@ -17,7 +16,7 @@ const { imagesUpload } = require("../middlewares/imagesUpload");
 const { convertFiles } = require("../middlewares/convertFiles");
 const {
   depoimentInsertValidation,
-  depoimentUpdateValidation,
+  // depoimentUpdateValidation,
 } = require("../middlewares/depoimentValidation");
 const validate = require("../middlewares/handleValidation");
 
@@ -31,18 +30,17 @@ router.post(
   validate,
   insertDepoiment
 );
-router.put(
-  "/:id",
-  authGuard,
-  imagesUpload.array("images"),
-  convertFiles,
-  depoimentUpdateValidation(),
-  validate,
-  updateDepoiment
-);
+// router.put(
+//   "/:id",
+//   authGuard,
+//   imagesUpload.array("images"),
+//   convertFiles,
+//   depoimentUpdateValidation(),
+//   validate,
+//   updateDepoiment
+// );
 router.delete("/:id", authGuard, deleteDepoiment);
-router.get("/", getAllDepoiments);
-router.get("/getDepoiment/:id", getDepoimentById);
-router.get("/getAdminDepoiments/:id", getAdminDepoiments);
+router.get("/", getHomeDepoiments);
+// router.get("/getDepoiment/:id", getDepoimentById);
 
 module.exports = router;
