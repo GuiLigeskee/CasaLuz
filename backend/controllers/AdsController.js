@@ -1,40 +1,34 @@
 const Ads = require("../models/Ads");
-const Admin = require("../models/Admin");
-const mongoose = require("mongoose");
 
 // Utils
-// const { deleteImages } = require("../utils/deleteImages");
+const { deleteImages } = require("../utils/deleteImages");
 
 // Inserir um anúncio
 const insertAds = async (req, res) => {
-  const {
-    title,
-    typeOfRealty,
-    description,
-    price,
-    zipCode,
-    address,
-    addressNumber,
-    complement,
-    district,
-    city,
-    stateAddress,
-    methodOfSale,
-    landMeasurement,
-    tell,
-    whatsapp,
-    bedrooms,
-    bathrooms,
-    carVacancies,
-  } = req.body;
-
   try {
+    const {
+      title,
+      typeOfRealty,
+      description,
+      price,
+      zipCode,
+      address,
+      addressNumber,
+      complement,
+      district,
+      city,
+      stateAddress,
+      methodOfSale,
+      landMeasurement,
+      tell,
+      whatsapp,
+      bedrooms,
+      bathrooms,
+      carVacancies,
+    } = req.body;
+
     const images = req.files.map((file) => file.filename);
 
-    const reqAdmin = req.admin;
-    const admin = await Admin.findById(reqAdmin._id);
-
-    // Criar anúncio no seu site
     const newAds = await Ads.create({
       title,
       typeOfRealty,
@@ -55,11 +49,8 @@ const insertAds = async (req, res) => {
       bathrooms,
       carVacancies,
       images,
-      adminId: admin._id,
-      adminName: admin.name,
     });
 
-    // Se o anúncio foi criado com sucesso no seu site
     if (!newAds) {
       res.status(422).json({
         errors: ["Houve um erro, por favor tente novamente mais tarde."],
@@ -69,6 +60,12 @@ const insertAds = async (req, res) => {
 
     res.status(201).json(newAds);
   } catch (error) {
+    if (req.files && req.files.length > 0) {
+      req.files.forEach((file) => {
+        deleteImages("ads", file.filename);
+      });
+    }
+
     console.log(error);
     res
       .status(500)
@@ -76,61 +73,75 @@ const insertAds = async (req, res) => {
   }
 };
 
-// Remover um anúncio do banco de dados
+// Remover um anúncio
 const deleteAds = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  const reqAdmin = req.admin;
+    const ads = await Ads.findById(id);
 
-  const ads = await Ads.findById(new mongoose.Types.ObjectId(id));
+    if (!ads) {
+      return res.status(404).json({ errors: ["Anúncio não encontrado!"] });
+    }
 
-  // Verificar se o anúncio existe
-  if (!ads) {
-    res.status(404).json({ errors: ["Anúncio não encontrado!"] });
-    return;
+    await Ads.findByIdAndDelete(id);
+
+    if (ads.images && ads.images.length > 0) {
+      ads.images.forEach((image) => {
+        deleteImages("ads", image);
+      });
+    }
+
+    return res.status(200).json({
+      id: ads._id,
+      message: "Anúncio excluído com sucesso.",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Erro ao excluir anúncio", error });
   }
-
-  // Verificar se o anúncio pertence ao usuário
-  // if (!ads.adminId.equals(reqAdmin._id)) {
-  //   res
-  //     .status(422)
-  //     .json({ errors: ["Ocorreu um erro, tente novamente mais tarde"] });
-  //   return;
-  // }
-
-  await Ads.findByIdAndDelete(ads._id);
-
-  res
-    .status(200)
-    .json({ id: ads._id, message: "Anúncio excluído com sucesso." });
 };
 
-// Obter todos os anúncios
-const getAllAds = async (req, res) => {
+// Obter os anúncios da homepage
+const getHomeAds = async (req, res) => {
   try {
-    // Buscar 20 anúncios aleatórios com methodOfSale igual a "Venda"
     const saleAds = await Ads.aggregate([
       { $match: { methodOfSale: "Venda" } },
-      { $sample: { size: 20 } },
+      { $sample: { size: 10 } },
+      {
+        $project: {
+          _id: 1,
+          images: { $arrayElemAt: ["$images", 0] },
+          typeOfRealty: 1,
+          price: 1,
+          district: 1,
+          city: 1,
+          methodOfSale: 1,
+        },
+      },
     ]);
 
-    // Buscar 20 anúncios aleatórios com methodOfSale igual a "Aluguel"
     const rentAds = await Ads.aggregate([
       { $match: { methodOfSale: "Aluguel" } },
-      { $sample: { size: 20 } },
+      { $sample: { size: 10 } },
+      {
+        $project: {
+          _id: 1,
+          images: { $arrayElemAt: ["$images", 0] },
+          typeOfRealty: 1,
+          price: 1,
+          district: 1,
+          city: 1,
+          methodOfSale: 1,
+        },
+      },
     ]);
 
-    // Combinar os dois conjuntos de anúncios
     const combinedAds = [...saleAds, ...rentAds];
 
-    // Transform the ads to include only the first image
-    const transformedAds = combinedAds.map((add) => {
-      const firstImage = add.images.length > 0 ? add.images[0] : null;
-      return {
-        ...add, // Os resultados do aggregate já são objetos JavaScript
-        images: firstImage ? [firstImage] : [],
-      };
-    });
+    const transformedAds = combinedAds.map((add) => ({
+      ...add,
+      images: add.images ? [add.images] : [],
+    }));
 
     return res.status(200).json(transformedAds);
   } catch (error) {
@@ -138,30 +149,24 @@ const getAllAds = async (req, res) => {
   }
 };
 
-// Obter anúncios do admin
-const getAdminAds = async (req, res) => {
-  const { id } = req.params;
-
-  const ads = await Ads.find({ adminId: id })
-    .sort([["createdAt", -1]])
-    .exec();
-
-  return res.status(200).json(ads);
-};
-
 // Obter anúncio por ID
 const getAdsById = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  const ads = await Ads.findById(new mongoose.Types.ObjectId(id));
+    const add = await Ads.findById(id).select(`
+      -createdAt
+      -updatedAt
+    `);
 
-  // Verificar se o anúncio existe
-  if (!ads) {
-    res.status(404).json({ errors: ["Anúncio não encontrado!"] });
-    return;
+    if (!add) {
+      return res.status(404).json({ errors: ["Anúncio não encontrado!"] });
+    }
+
+    return res.status(200).json(add);
+  } catch (error) {
+    return res.status(500).json({ message: "Erro ao buscar anúncio", error });
   }
-
-  res.status(200).json(ads);
 };
 
 // Atualizar um anúncio
@@ -196,7 +201,6 @@ const updateAds = async (req, res) => {
     images = req.files.map((file) => file.filename);
   }
 
-  // Verificar se o anúncio existe
   if (!add) {
     res.status(404).json({ errors: ["Anúncio não encontrado!"] });
     return;
@@ -361,8 +365,7 @@ const searchAds = async (req, res) => {
 module.exports = {
   insertAds,
   deleteAds,
-  getAllAds,
-  getAdminAds,
+  getHomeAds,
   getAdsById,
   updateAds,
   searchAds,

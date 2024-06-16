@@ -4,7 +4,6 @@ const router = express.Router();
 // Controller
 const {
   register,
-  getCurrentAdmin,
   login,
   update,
   getAdminById,
@@ -27,7 +26,6 @@ router.post(
   validate,
   register
 );
-router.get("/profile", authGuard, validate, getCurrentAdmin);
 router.post("/login", loginValidation(), validate, login);
 router.put("/", authGuard, adminUpdateValidation(), validate, update);
 router.get("/:id", authGuard, getAdminById);

@@ -16,10 +16,9 @@ const deleteImages = async (imageType, oldImageNames) => {
         throw new Error("Tipo de imagem inválido.");
       }
 
-      // Excluir a imagem usando fs.promises.unlink
       await fs.unlink(imagePath);
 
-      // console.log(`Imagem ${imagePath} excluída com sucesso.`);
+      console.log(`Imagem excluída com sucesso.`);
     }
   } catch (error) {
     console.error("Erro ao excluir as imagens:", error);
