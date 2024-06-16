@@ -56,22 +56,9 @@ const adsInsertValidation = () => {
       .withMessage("O tamanho do imovel é obrigatório")
       .isNumeric()
       .withMessage("O tamanho do imovel precisa ser um número"),
-    body("tell").isString().withMessage("O telefone precisa ser uma string"),
     body("whatsapp")
       .isString()
       .withMessage("O número do WhatsApp precisa ser um texto"),
-    body("bedrooms")
-      .not()
-      .equals("undefined")
-      .withMessage("A quantidade de dormitórios é obrigatória"),
-    body("bathrooms")
-      .not()
-      .equals("undefined")
-      .withMessage("A quantidade de banheiros é obrigatória"),
-    body("carVacancies")
-      .not()
-      .equals("undefined")
-      .withMessage("A quantidade de vagas de carro é obrigatória"),
     body("images").custom((value, { req }) => {
       if (!req.files || req.files.length === 0) {
         throw new Error("Pelo menos uma foto é obrigatória");
@@ -105,10 +92,6 @@ const adsUpdateValidation = () => {
       .optional()
       .isString()
       .withMessage("A descrição precisa ser uma string"),
-    body("tell")
-      .optional()
-      .isString()
-      .withMessage("O telefone precisa ser uma string"),
     body("whatsapp")
       .optional()
       .isString()
@@ -117,14 +100,6 @@ const adsUpdateValidation = () => {
       .optional()
       .isNumeric()
       .withMessage("O tamanho do terreno precisa ser um número"),
-    body("bedrooms")
-      .not()
-      .equals("undefined")
-      .withMessage("A quantidade de dormitórios é obrigatória"),
-    body("bathrooms")
-      .not()
-      .equals("undefined")
-      .withMessage("A quantidade de banheiros é obrigatória"),
   ];
 };
 
