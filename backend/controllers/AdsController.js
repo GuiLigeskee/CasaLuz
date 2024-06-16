@@ -138,12 +138,7 @@ const getHomeAds = async (req, res) => {
 
     const combinedAds = [...saleAds, ...rentAds];
 
-    const transformedAds = combinedAds.map((add) => ({
-      ...add,
-      images: add.images ? [add.images] : [],
-    }));
-
-    return res.status(200).json(transformedAds);
+    return res.status(200).json(combinedAds);
   } catch (error) {
     return res.status(500).json({ message: "Error fetching ads", error });
   }
