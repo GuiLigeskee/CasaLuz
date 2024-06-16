@@ -64,7 +64,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (ads) {
+    if (Array.isArray(ads)) {
       setAdsForSale(ads.filter((add) => add.methodOfSale === "Venda"));
       setAdsForRent(ads.filter((add) => add.methodOfSale === "Aluguel"));
     }
