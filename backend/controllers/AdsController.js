@@ -293,6 +293,8 @@ const searchAds = async (req, res) => {
     maxPrice,
     minSpace,
     maxSpace,
+    page = 1,
+    limit = 5,
   } = req.query;
 
   try {
@@ -345,7 +347,19 @@ const searchAds = async (req, res) => {
       filter.landMeasurement = spaceFilter;
     }
 
-    const results = await Ads.find(filter);
+    const results = await Ads.find(filter)
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .select({
+        title: 1,
+        typeOfRealty: 1,
+        methodOfSale: 1,
+        city: 1,
+        district: 1,
+        price: 1,
+        landMeasurement: 1,
+        images: { $slice: 1 },
+      }); // Projeção para incluir apenas a primeira imagem
 
     if (results.length === 0) {
       return res.status(404).json({ error: "Anúncio não encontrado." });

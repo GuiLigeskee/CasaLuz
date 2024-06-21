@@ -65,13 +65,22 @@ const Home = () => {
 
   useEffect(() => {
     if (Array.isArray(ads)) {
-      setAdsForSale(ads.filter((add) => add.methodOfSale === "Venda"));
-      setAdsForRent(ads.filter((add) => add.methodOfSale === "Aluguel"));
+      setAdsForSale(
+        ads.filter(
+          (add) =>
+            add.methodOfSale === "Venda" ||
+            add.methodOfSale == "Aluguel e venda"
+        )
+      );
+      setAdsForRent(
+        ads.filter(
+          (add) =>
+            add.methodOfSale === "Aluguel" ||
+            add.methodOfSale == "Aluguel e venda"
+        )
+      );
     }
   }, [ads]);
-
-  // const adsForSale = ads.filter((add) => add.methodOfSale === "Venda");
-  // const adsForRent = ads.filter((add) => add.methodOfSale === "Aluguel");
 
   return (
     <div>
