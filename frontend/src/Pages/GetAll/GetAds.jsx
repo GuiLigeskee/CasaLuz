@@ -1,13 +1,15 @@
 import "./GetAll.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AdsItem from "../../Components/Ads/AdsItem";
 import Filter from "../../Components/Filters/Filters";
-import { getAdsFilters } from "../../Slice/adsSlice";
+import { getAdsFilters, setPage, resetAds } from "../../Slice/adsSlice";
 
 const GetAds = () => {
   const dispatch = useDispatch();
-  const { ads, loading, error } = useSelector((state) => state.ads);
+  const { ads, loading, error, page, hasMore } = useSelector(
+    (state) => state.ads
+  );
 
   const [filters, setFilters] = useState({
     keyword: "",
@@ -22,17 +24,28 @@ const GetAds = () => {
   });
 
   useEffect(() => {
-    const hasFilters = Object.values(filters).some(Boolean);
-    if (!hasFilters) {
-      dispatch(getAdsFilters({}));
-    } else {
-      dispatch(getAdsFilters(filters));
-    }
-  }, [dispatch, filters]);
+    dispatch(getAdsFilters({ filters, page, limit: 5 }));
+  }, [dispatch, filters, page]);
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
+    dispatch(resetAds()); // Reseta os anúncios e a página ao aplicar novos filtros
   };
+
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+      hasMore &&
+      !loading
+    ) {
+      dispatch(setPage(page + 1));
+    }
+  }, [dispatch, page, hasMore, loading]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   return (
     <div className="getAds">
@@ -53,6 +66,7 @@ const GetAds = () => {
       ) : (
         <p>Não foi possível mostrar todos os nossos anúncios :(</p>
       )}
+      {!hasMore && <p>Todos os anúncios foram carregados.</p>}
     </div>
   );
 };

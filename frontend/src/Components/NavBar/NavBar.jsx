@@ -60,8 +60,12 @@ const NavBar = () => {
                 <li>
                   <NavLink to="/depoiments">Ver depoimentos</NavLink>
                 </li>
-                <li>Contato</li>
-                <li>Sobre</li>
+                <li>
+                  <NavLink to="/contact">Entre em contato</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/about-us">Sobre nós</NavLink>
+                </li>
                 <li>
                   <NavLink to="/login">Sou admin</NavLink>
                 </li>

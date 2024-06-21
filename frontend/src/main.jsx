@@ -21,6 +21,8 @@ import GetAds from "./Pages/GetAll/GetAds.jsx";
 import GetDepoiments from "./Pages/GetAll/GetDepoiments.jsx";
 import UpdateAds from "./Pages/AddAds/UpdateAds.jsx";
 import SearchResultsPage from "./Pages/GetAll/SearchResultsPage.jsx";
+import About from "./Pages/About/About.jsx";
+import Contact from "./Pages/Contact/Contact.jsx";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +68,14 @@ const router = createBrowserRouter([
       {
         path: "/search",
         element: <SearchResultsPage />,
+      },
+      {
+        path: "/about-us",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
     ],
   },
