@@ -3,20 +3,17 @@ const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const fse = require("fs-extra");
 
-// Função para criar os diretórios necessários de forma assíncrona
+// Função para criar os diretórios necessários
 const ensureUploadsFolder = async () => {
   const uploadsPath = path.join(__dirname, "..", "uploads");
   const adsPath = path.join(uploadsPath, "ads");
   const depoimentPath = path.join(uploadsPath, "depoiment");
 
   try {
-    // Verifica e cria a pasta uploads
     await fse.ensureDir(uploadsPath);
 
-    // Verifica e cria a pasta ads
     await fse.ensureDir(adsPath);
 
-    // Verifica e cria a pasta depoiment
     await fse.ensureDir(depoimentPath);
 
     console.log(
@@ -54,7 +51,6 @@ const imagesUpload = multer({
   storage: imagesStorage,
   fileFilter(req, file, cb) {
     if (!file.originalname.match(/\.(png|jpg|jpeg|heif|hevc)$/i)) {
-      // upload only png, jpg, jpeg, heif, hevc format
       return cb(
         new Error(
           "Por favor, envie apenas imagens PNG, JPG, HEIF, HEVC ou JPEG"

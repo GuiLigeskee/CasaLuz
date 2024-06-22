@@ -29,7 +29,7 @@ const GetAds = () => {
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
-    dispatch(resetAds()); // Reseta os anúncios e a página ao aplicar novos filtros
+    dispatch(resetAds());
   };
 
   const handleScroll = useCallback(() => {
