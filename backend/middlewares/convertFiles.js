@@ -2,7 +2,7 @@ const sharp = require("sharp");
 const fse = require("fs-extra");
 const path = require("path");
 
-// Middleware para converter imagens e atualizar nomes em req.files
+// Middleware para converter imagens e atualizar nomes
 const convertFiles = async (req, res, next) => {
   try {
     if (!req.files && !req.file) {
@@ -21,11 +21,10 @@ const convertFiles = async (req, res, next) => {
       const inputPath = file.path;
       const outputPath = inputPath.replace(/\.[^.]+$/, "") + ".webp";
 
-      // Usando o Sharp para converter a imagem para WebP
       await sharp(inputPath).webp().toFile(outputPath);
 
       // Excluir o arquivo original
-      await fse.move(inputPath, outputPath, { overwrite: true });
+      await fse.remove(inputPath);
 
       file.filename = path.basename(outputPath);
     });
