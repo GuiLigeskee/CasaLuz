@@ -359,7 +359,7 @@ const searchAds = async (req, res) => {
         price: 1,
         landMeasurement: 1,
         images: { $slice: 1 },
-      }); // Projeção para incluir apenas a primeira imagem
+      });
 
     if (results.length === 0) {
       return res.status(404).json({ error: "Anúncio não encontrado." });

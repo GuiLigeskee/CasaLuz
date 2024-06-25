@@ -23,7 +23,6 @@ const convertFiles = async (req, res, next) => {
 
       await sharp(inputPath).webp().toFile(outputPath);
 
-      // Excluir o arquivo original
       await fse.remove(inputPath);
 
       file.filename = path.basename(outputPath);

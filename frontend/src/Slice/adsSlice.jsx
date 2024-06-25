@@ -20,7 +20,6 @@ export const publishAds = createAsyncThunk(
 
     const data = await adsService.publishAds(ads, token);
 
-    // Check for errors
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);
     }
@@ -50,7 +49,6 @@ export const updateAds = createAsyncThunk(
 
     const data = await adsService.updateAds(formData, id, token);
 
-    // Check for errors
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);
     }
@@ -66,8 +64,6 @@ export const deleteAdd = createAsyncThunk(
 
     const data = await adsService.deleteAdd(id, token);
 
-    console.log(data.errors);
-    // Check for errors
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);
     }
@@ -82,6 +78,7 @@ export const getAdsFilters = createAsyncThunk(
     try {
       const params = { ...filters, page, limit };
       const data = await adsService.searchAds(params);
+
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
