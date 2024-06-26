@@ -1,5 +1,3 @@
-// src/Pages/AddAds/AddAds.js
-
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
@@ -110,29 +108,41 @@ const AddAds = () => {
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-    const items = Array.from(imagePreviews);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setImagePreviews(items);
+    const updatedImagePreviews = Array.from(imagePreviews);
+    const [reorderedPreview] = updatedImagePreviews.splice(
+      result.source.index,
+      1
+    );
+    updatedImagePreviews.splice(result.destination.index, 0, reorderedPreview);
+
+    const updatedAdsImages = Array.from(adsImages);
+    const [reorderedImage] = updatedAdsImages.splice(result.source.index, 1);
+    updatedAdsImages.splice(result.destination.index, 0, reorderedImage);
+
+    setImagePreviews(updatedImagePreviews);
+    setAdsImages(updatedAdsImages);
   };
 
   const handleFile = (e) => {
-    const files = e.target.files;
+    const files = Array.from(e.target.files);
     const imagePreviewsArray = [];
     const adsImagesArray = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+
+    files.forEach((file) => {
       adsImagesArray.push(file);
       const reader = new FileReader();
-      reader.onload = () => {
-        imagePreviewsArray.push(reader.result);
+      reader.onload = (event) => {
+        imagePreviewsArray.push(event.target.result);
         if (imagePreviewsArray.length === files.length) {
-          setImagePreviews(imagePreviewsArray);
-          setAdsImages(adsImagesArray);
+          setImagePreviews((prevPreviews) => [
+            ...prevPreviews,
+            ...imagePreviewsArray,
+          ]);
+          setAdsImages((prevImages) => [...prevImages, ...adsImagesArray]);
         }
       };
       reader.readAsDataURL(file);
-    }
+    });
   };
 
   const handleZipCode = async () => {
@@ -253,13 +263,9 @@ const AddAds = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="imagePreviewContainer"
+                        className="imagePreview"
                       >
-                        <img
-                          src={preview}
-                          alt={`Preview ${index + 1}`}
-                          className="imagePreview"
-                        />
+                        <img src={preview} alt={`Imagem ${index + 1}`} />
                       </div>
                     )}
                   </Draggable>
