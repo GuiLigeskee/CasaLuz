@@ -105,13 +105,12 @@ const AddDepoiment = () => {
       <h3>Preencha o formulário para adicionar um novo depoimento</h3>
       <form onSubmit={handleSubmit}>
         <label htmlFor="arquivo" className="foto-perfil">
-          <span id="buttonFile">Carregar imagens do imóvel</span>
+          <span id="buttonFile">Carregar imagem do depoimento</span>
           <input
             type="file"
             onChange={handleFile}
             name="arquivo"
             id="arquivo"
-            multiple
           />
         </label>
         <div className="imagePreviews">
