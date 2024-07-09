@@ -119,18 +119,21 @@ const AddDepoiment = () => {
           ))}
         </div>
         <label>
-          <span>Titulo</span>
+          <span>Título:</span>
           <input
             type="text"
-            placeholder="Titulo do depoimento"
+            name="title"
+            placeholder="Título do depoimento"
+            value={title || ""}
             onChange={(e) => setTitle(e.target.value)}
-            value={title}
+            required
           />
         </label>
         <label>
-          <span>Depoimento</span>
+          <span>Depoimento:</span>
           <textarea
-            placeholder="Escreva o depoimento"
+            name="description"
+            placeholder="Descreva o depoimento"
             rows={4}
             onChange={(e) => setDescription(e.target.value)}
             value={description}
