@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Modal from "react-modal";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import "./AddAds.css";
+
+// Components
+import Message from "../../Components/Messages/Message";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
-import Message from "../../Components/Messages/Message";
+import Modal from "react-modal";
 import Spinner from "../../Components/Spinner/Spinner";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
+// Hooks
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+
+// Redux
 import { publishAds } from "../../Slice/adsSlice";
 import {
   getZipCode,
@@ -13,19 +20,20 @@ import {
   selectZipCodeApi,
   selectZipCodeError,
 } from "../../Slice/zipCodeSlice";
-import "./AddAds.css";
 
 Modal.setAppElement("#root");
 
 const AddAds = () => {
   const dispatch = useDispatch();
   const { loading, error, message } = useSelector((state) => state.ads);
+
+  // ZipCode da Api
   const zipCodeApi = useSelector(selectZipCodeApi);
   const zipCodeError = useSelector(selectZipCodeError);
   const [messageZipCode, setMessageZipCode] = useState("");
 
+  // Modal
   const [isOpen, setIsOpen] = useState(false);
-  const [isMessageOpen, setIsMessageOpen] = useState(false);
   const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
   const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
@@ -277,26 +285,18 @@ const AddAds = () => {
         </DragDropContext>
 
         <label>
-          <span>Título do anúncio</span>
+          <span>Título:</span>
           <input
             type="text"
-            placeholder="Título"
+            name="title"
+            placeholder="Título do anúncio"
             onChange={(e) => setTitle(e.target.value)}
             value={title || ""}
             required
           />
         </label>
         <label>
-          <span>Descrição do imóvel</span>
-          <textarea
-            placeholder="Escreva a descrição"
-            rows={4}
-            onChange={(e) => setDescription(e.target.value)}
-            value={description || ""}
-          ></textarea>
-        </label>
-        <label>
-          <span>Categoria do imóvel</span>
+          <span>Tipo de imóvel:</span>
           <select
             onChange={(e) => setTypeOfRealty(e.target.value)}
             value={typeOfRealty || ""}
@@ -310,37 +310,73 @@ const AddAds = () => {
           </select>
         </label>
         <label>
-          <span>CEP</span>
+          <span>Descrição do imóvel:</span>
+          <textarea
+            name="description"
+            placeholder="Descreva o imóvel"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={4}
+          ></textarea>
+        </label>
+        <label>
+          <span>Valor do imóvel:</span>
+          <NumericFormat
+            prefix="R$ "
+            decimalSeparator=","
+            thousandSeparator="."
+            decimalScale={2}
+            fixedDecimalScale={true}
+            allowNegative={false}
+            value={price || ""}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder="Digite o valor do imóvel"
+            required
+          />
+        </label>
+        <label>
+          <span>CEP:</span>
           <div className="label-input-button">
             <MaskedInput
-              mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
-              type="text"
-              placeholder="CEP"
-              onChange={(e) => setZipCode(e.target.value)}
+              mask={[
+                /[0-9]/,
+                /[0-9]/,
+                /[0-9]/,
+                /[0-9]/,
+                /[0-9]/,
+                "-",
+                /[0-9]/,
+                /[0-9]/,
+                /[0-9]/,
+              ]}
+              placeholder="Digite o CEP"
               value={zipCode || ""}
+              onChange={(e) => setZipCode(e.target.value)}
               required
             />
             <button onClick={openModal}>Pesquisar CEP</button>
           </div>
         </label>
         <label>
-          <span>Endereço</span>
+          <span>Endereço:</span>
           <input
             type="text"
-            placeholder="Endereço"
-            onChange={(e) => setAddress(e.target.value)}
+            name="address"
+            placeholder="Digite o endereço"
             value={address || ""}
+            onChange={(e) => setAddress(e.target.value)}
             required
           />
         </label>
         <label>
           <span>Número de endereço:</span>
           <input
-            maxLength={10}
             type="text"
-            placeholder="Número"
-            onChange={(e) => setAddressNumber(e.target.value)}
+            name="addressNumber"
+            maxLength={10}
+            placeholder="Digite o número"
             value={addressNumber || ""}
+            onChange={(e) => setAddressNumber(e.target.value)}
             required
           />
         </label>
@@ -348,101 +384,94 @@ const AddAds = () => {
           <span>Complemento:</span>
           <input
             type="text"
-            placeholder="Complemento"
-            onChange={(e) => setComplement(e.target.value)}
+            name="complement"
+            placeholder="Digite o complemento"
             value={complement || ""}
+            onChange={(e) => setComplement(e.target.value)}
           />
         </label>
         <label>
-          <span>Bairro</span>
+          <span>Bairro:</span>
           <input
             type="text"
-            placeholder="Bairro"
-            onChange={(e) => setDistrict(e.target.value)}
+            name="district"
+            placeholder="Digite o bairro"
             value={district || ""}
+            onChange={(e) => setDistrict(e.target.value)}
             required
           />
         </label>
         <label>
-          <span>Cidade</span>
+          <span>Cidade:</span>
           <input
             type="text"
-            placeholder="Cidade"
-            onChange={(e) => setCity(e.target.value)}
+            name="city"
+            placeholder="Digite a cidade"
             value={city || ""}
+            onChange={(e) => setCity(e.target.value)}
             required
           />
         </label>
         <label>
-          <span>Estado</span>
+          <span>Estado:</span>
           <input
             type="text"
-            placeholder="Estado"
-            onChange={(e) => setStateAddress(e.target.value)}
+            name="stateAddress"
+            placeholder="Digite o estado"
             value={stateAddress || ""}
+            onChange={(e) => setStateAddress(e.target.value)}
             required
           />
         </label>
         <label>
-          <span>Tamanho do imóvel (m2)</span>
+          <span>Área do imóvel (m²):</span>
           <input
             type="number"
-            placeholder="Tamanho"
-            onChange={(e) => setLandMeasurement(e.target.value)}
+            name="landMeasurement"
+            placeholder="Digite a área do imóvel em metros quadrados"
             value={landMeasurement || ""}
+            onChange={(e) => setLandMeasurement(e.target.value)}
             required
           />
         </label>
         <label>
-          <span>Quartos</span>
+          <span>Quantidade de quartos:</span>
           <input
             type="number"
+            name="bedrooms"
+            placeholder="Digite a quantidade de quartos"
             min={0}
-            placeholder="Quartos"
-            onChange={(e) => setBedrooms(e.target.value)}
             value={bedrooms || ""}
+            onChange={(e) => setBedrooms(e.target.value)}
             required
           />
         </label>
         <label>
-          <span>Banheiros</span>
+          <span>Quantidade de banheiros:</span>
           <input
             type="number"
+            name="bathrooms"
+            placeholder="Digite a quantidade de banheiros"
             min={0}
-            placeholder="Banheiros"
-            onChange={(e) => setBathrooms(e.target.value)}
             value={bathrooms || ""}
+            onChange={(e) => setBathrooms(e.target.value)}
             required
           />
         </label>
         <label>
-          <span>Vagas de Carro</span>
+          <span>Vagas de garagem:</span>
           <input
             type="number"
+            name="carVacancies"
+            placeholder="Digite a quantidade de vagas de garagem"
             min={0}
-            placeholder="Vagas de Carro"
-            onChange={(e) => setCarVacancies(e.target.value)}
             value={carVacancies || ""}
+            onChange={(e) => setCarVacancies(e.target.value)}
             required
           />
         </label>
         <label>
-          <span>Preço do imóvel</span>
-          <NumericFormat
-            thousandSeparator="."
-            decimalSeparator=","
-            prefix="R$ "
-            allowNegative={false}
-            decimalScale={2}
-            fixedDecimalScale
-            onChange={(e) => setPrice(e.target.value)}
-            value={price || ""}
-            placeholder="Preço"
-            required
-          />
-        </label>
-        <label>
-          <span>Método de negócio</span>
+          <span>Método de negócio:</span>
           <select
             onChange={(e) => setMethodOfSale(e.target.value)}
             value={methodOfSale || ""}
@@ -455,7 +484,7 @@ const AddAds = () => {
           </select>
         </label>
         <label>
-          <span>Telefone do vendedor</span>
+          <span>Telefone do vendedor:</span>
           <MaskedInput
             mask={[
               "(",
@@ -474,15 +503,14 @@ const AddAds = () => {
               /\d/,
               /\d/,
             ]}
-            type="text"
-            placeholder="Telefone"
+            placeholder="(00) 00000-0000"
             onChange={(e) => setTell(e.target.value)}
             value={tell || ""}
             required
           />
         </label>
         <label>
-          <span>Whatsapp do vendedor</span>
+          <span>Whatsapp do vendedor:</span>
           <MaskedInput
             mask={[
               "(",
@@ -501,13 +529,13 @@ const AddAds = () => {
               /\d/,
               /\d/,
             ]}
-            type="text"
-            placeholder="Whatsapp"
+            placeholder="(00) 00000-0000"
             onChange={(e) => setWhatsapp(e.target.value)}
             value={whatsapp || ""}
             required
           />
         </label>
+
         {!loading && <input type="submit" value="Criar anúncio" />}
         {loading && (
           <div className="loading-container">

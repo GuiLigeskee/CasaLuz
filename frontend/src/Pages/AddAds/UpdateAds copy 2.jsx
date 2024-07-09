@@ -7,6 +7,7 @@ import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Spinner from "../../Components/Spinner/Spinner";
+import ImageUploading from "react-images-uploading";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -57,8 +58,7 @@ const UpdateAds = () => {
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [carVacancies, setCarVacancies] = useState("");
-  const [newImages, setNewImages] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (error) {
@@ -105,6 +105,7 @@ const UpdateAds = () => {
       setBathrooms(add.bathrooms || "");
       setBedrooms(add.bedrooms || "");
       setCarVacancies(add.carVacancies || "");
+      setImages(add.images.map((img) => ({ data_url: img.url }))); // Supondo que add.images seja um array de URLs de imagens
     }
   }, [add]);
 
@@ -138,9 +139,11 @@ const UpdateAds = () => {
     formData.append("bathrooms", bathrooms);
     formData.append("carVacancies", carVacancies);
 
-    if (newImages.length > 0) {
-      newImages.forEach((image) => {
-        formData.append("images", image);
+    if (images.length > 0) {
+      images.forEach((image) => {
+        if (image.file) {
+          formData.append("images", image.file);
+        }
       });
     }
 
@@ -148,34 +151,17 @@ const UpdateAds = () => {
     navigate(`/ads/${id}`);
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const previews = [];
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        previews.push(e.target.result);
-        if (previews.length === files.length) {
-          setImagePreviews(previews);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-    setNewImages(files);
-  };
-
   const handleDragEnd = (result) => {
     if (!result.destination) return;
 
-    const reorderedPreviews = Array.from(imagePreviews);
-    const [removed] = reorderedPreviews.splice(result.source.index, 1);
-    reorderedPreviews.splice(result.destination.index, 0, removed);
-    setImagePreviews(reorderedPreviews);
+    const reorderedImages = Array.from(images);
+    const [removed] = reorderedImages.splice(result.source.index, 1);
+    reorderedImages.splice(result.destination.index, 0, removed);
+    setImages(reorderedImages);
+  };
 
-    const reorderedImages = Array.from(newImages);
-    const [removedImage] = reorderedImages.splice(result.source.index, 1);
-    reorderedImages.splice(result.destination.index, 0, removedImage);
-    setNewImages(reorderedImages);
+  const onImageChange = (imageList) => {
+    setImages(imageList);
   };
 
   // Api CEP
@@ -273,89 +259,39 @@ const UpdateAds = () => {
       <h1>
         <span>Atualizar</span> anúncio de imóvel
       </h1>
-      <h3>Altere os campos abaixo para atualizar o anúncio</h3>
-      <form onSubmit={handleSubmit}>
-        <p className="alert">
-          Caso for atualizar o anúncio, adicione novamente as imagens do imóvel.
-        </p>
-        <label>
-          <span id="buttonFile">Carregar imagens do imóvel</span>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFileChange}
-          />
-        </label>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="imagePreviews" direction="horizontal">
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="imagePreviews"
-              >
-                {imagePreviews.map((preview, index) => (
-                  <Draggable
-                    key={index}
-                    draggableId={`preview-${index}`}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="imagePreviewContainer"
-                      >
-                        <img
-                          src={preview}
-                          alt={`Preview ${index + 1}`}
-                          className="imagePreview"
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+      <h3>Altere o que deseja no anúncio</h3>
 
+      <form onSubmit={handleSubmit} className="formContainer">
         <label>
           <span>Título:</span>
           <input
             type="text"
             name="title"
-            placeholder="Título do anúncio"
-            value={title || ""}
-            onChange={(e) => setTitle(e.target.value)}
             required
+            placeholder="Título do anúncio"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </label>
         <label>
-          <span>Tipo de imóvel:</span>
-          <select
-            onChange={(e) => setTypeOfRealty(e.target.value)}
-            value={typeOfRealty || ""}
+          <span>Tipo de Imóvel:</span>
+          <input
+            type="text"
+            name="typeOfRealty"
             required
-          >
-            <option value="">Selecione uma categoria</option>
-            <option value="Casa">Casa</option>
-            <option value="Apartamento">Apartamento</option>
-            <option value="Terreno">Terreno</option>
-            <option value="Comercial">Comercial</option>
-          </select>
+            placeholder="Casa, apartamento, terreno, etc..."
+            value={typeOfRealty}
+            onChange={(e) => setTypeOfRealty(e.target.value)}
+          />
         </label>
         <label>
           <span>Descrição do imóvel:</span>
           <textarea
             name="description"
+            required
             placeholder="Descreva o imóvel"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            rows={4}
           ></textarea>
         </label>
         <label>
@@ -367,34 +303,32 @@ const UpdateAds = () => {
             decimalScale={2}
             fixedDecimalScale={true}
             allowNegative={false}
-            value={price || ""}
-            onChange={(e) => setPrice(e.target.value)}
+            value={price}
             placeholder="Digite o valor do imóvel"
-            required
+            onValueChange={(values) => setPrice(values.value)}
           />
         </label>
         <label>
           <span>CEP:</span>
-          <div className="label-input-button">
-            <MaskedInput
-              mask={[
-                /[0-9]/,
-                /[0-9]/,
-                /[0-9]/,
-                /[0-9]/,
-                /[0-9]/,
-                "-",
-                /[0-9]/,
-                /[0-9]/,
-                /[0-9]/,
-              ]}
-              placeholder="Digite o CEP"
-              value={zipCode || ""}
-              onChange={(e) => setZipCode(e.target.value)}
-              required
-            />
-            <button onClick={openModal}>Pesquisar CEP</button>
-          </div>
+          <MaskedInput
+            mask={[
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              "-",
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+            ]}
+            placeholder="Digite o CEP"
+            value={zipCode}
+            onChange={(e) => setZipCode(e.target.value)}
+          />
+          <button onClick={openModal} className="buttonZipCode">
+            Pesquisar CEP
+          </button>
         </label>
         <label>
           <span>Endereço:</span>
@@ -402,21 +336,18 @@ const UpdateAds = () => {
             type="text"
             name="address"
             placeholder="Digite o endereço"
-            value={address || ""}
+            value={address}
             onChange={(e) => setAddress(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Número de endereço:</span>
+          <span>Número:</span>
           <input
             type="text"
             name="addressNumber"
-            maxLength={10}
             placeholder="Digite o número"
-            value={addressNumber || ""}
+            value={addressNumber}
             onChange={(e) => setAddressNumber(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -425,7 +356,7 @@ const UpdateAds = () => {
             type="text"
             name="complement"
             placeholder="Digite o complemento"
-            value={complement || ""}
+            value={complement}
             onChange={(e) => setComplement(e.target.value)}
           />
         </label>
@@ -435,9 +366,8 @@ const UpdateAds = () => {
             type="text"
             name="district"
             placeholder="Digite o bairro"
-            value={district || ""}
+            value={district}
             onChange={(e) => setDistrict(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -446,9 +376,8 @@ const UpdateAds = () => {
             type="text"
             name="city"
             placeholder="Digite a cidade"
-            value={city || ""}
+            value={city}
             onChange={(e) => setCity(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -457,9 +386,8 @@ const UpdateAds = () => {
             type="text"
             name="stateAddress"
             placeholder="Digite o estado"
-            value={stateAddress || ""}
+            value={stateAddress}
             onChange={(e) => setStateAddress(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -468,9 +396,8 @@ const UpdateAds = () => {
             type="number"
             name="landMeasurement"
             placeholder="Digite a área do imóvel em metros quadrados"
-            value={landMeasurement || ""}
+            value={landMeasurement}
             onChange={(e) => setLandMeasurement(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -479,10 +406,8 @@ const UpdateAds = () => {
             type="number"
             name="bedrooms"
             placeholder="Digite a quantidade de quartos"
-            min={0}
-            value={bedrooms || ""}
+            value={bedrooms}
             onChange={(e) => setBedrooms(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -491,10 +416,8 @@ const UpdateAds = () => {
             type="number"
             name="bathrooms"
             placeholder="Digite a quantidade de banheiros"
-            min={0}
-            value={bathrooms || ""}
+            value={bathrooms}
             onChange={(e) => setBathrooms(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -503,88 +426,147 @@ const UpdateAds = () => {
             type="number"
             name="carVacancies"
             placeholder="Digite a quantidade de vagas de garagem"
-            min={0}
-            value={carVacancies || ""}
+            value={carVacancies}
             onChange={(e) => setCarVacancies(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Método de negócio:</span>
-          <select
+          <span>Forma de venda:</span>
+          <input
+            type="text"
+            name="methodOfSale"
+            placeholder="Ex: Venda, Aluguel, etc..."
+            value={methodOfSale}
             onChange={(e) => setMethodOfSale(e.target.value)}
-            value={methodOfSale || ""}
-            required
-          >
-            <option value="">Selecione um método</option>
-            <option value="Venda">Venda</option>
-            <option value="Aluguel">Aluguel</option>
-            <option value="Aluguel e venda">Aluguel e venda</option>
-          </select>
-        </label>
-        <label>
-          <span>Telefone do vendedor:</span>
-          <MaskedInput
-            mask={[
-              "(",
-              /[1-9]/,
-              /\d/,
-              ")",
-              " ",
-              /\d/,
-              /\d/,
-              /\d/,
-              /\d/,
-              /\d/,
-              "-",
-              /\d/,
-              /\d/,
-              /\d/,
-              /\d/,
-            ]}
-            placeholder="(00) 00000-0000"
-            onChange={(e) => setTell(e.target.value)}
-            value={tell || ""}
-            required
           />
         </label>
         <label>
-          <span>Whatsapp do vendedor:</span>
+          <span>Telefone para contato:</span>
           <MaskedInput
             mask={[
               "(",
               /[1-9]/,
-              /\d/,
+              /[1-9]/,
               ")",
               " ",
-              /\d/,
-              /\d/,
-              /\d/,
-              /\d/,
-              /\d/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
               "-",
-              /\d/,
-              /\d/,
-              /\d/,
-              /\d/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
             ]}
             placeholder="(00) 00000-0000"
+            value={tell}
+            onChange={(e) => setTell(e.target.value)}
+          />
+        </label>
+        <label>
+          <span>Whatsapp:</span>
+          <MaskedInput
+            mask={[
+              "(",
+              /[1-9]/,
+              /[1-9]/,
+              ")",
+              " ",
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              "-",
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+              /[0-9]/,
+            ]}
+            placeholder="(00) 00000-0000"
+            value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
-            value={whatsapp || ""}
-            required
           />
         </label>
 
-        {!loading ? (
-          <input type="submit" value="Atualizar anúncio" />
-        ) : (
-          <>
-            <Spinner />
-            <input type="submit" disabled value="Aguarde..." />
-          </>
-        )}
-        {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />}
+        <div className="image-upload-section">
+          <span>Imagens:</span>
+          <ImageUploading
+            multiple
+            value={images}
+            onChange={onImageChange}
+            maxNumber={10}
+            dataURLKey="data_url"
+          >
+            {({
+              imageList,
+              onImageUpload,
+              onImageRemoveAll,
+              onImageUpdate,
+              onImageRemove,
+              isDragging,
+              dragProps,
+            }) => (
+              <div className="upload__image-wrapper">
+                <button
+                  style={isDragging ? { color: "red" } : undefined}
+                  onClick={onImageUpload}
+                  {...dragProps}
+                >
+                  Adicionar Imagens
+                </button>
+                <button onClick={onImageRemoveAll}>Remover Todas</button>
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <Droppable droppableId="images">
+                    {(provided) => (
+                      <div
+                        className="image-preview"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {imageList.map((image, index) => (
+                          <Draggable
+                            key={index}
+                            draggableId={index.toString()}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                className="image-item"
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <img src={image.data_url} alt="" width="100" />
+                                <div className="image-item__btn-wrapper">
+                                  <button onClick={() => onImageUpdate(index)}>
+                                    Atualizar
+                                  </button>
+                                  <button onClick={() => onImageRemove(index)}>
+                                    Remover
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </div>
+            )}
+          </ImageUploading>
+        </div>
+
+        <input
+          type="submit"
+          value={loading ? "Aguarde..." : "Atualizar"}
+          disabled={loading}
+        />
       </form>
     </div>
   );
