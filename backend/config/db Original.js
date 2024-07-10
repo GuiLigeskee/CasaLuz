@@ -6,6 +6,7 @@ const dbPassword = process.env.DB_PASS;
 const dbName = process.env.DB_NAME;
 const dbHost = process.env.DB_HOST;
 
+const conn = async () => {
   try {
     const dbConn = await mongoose.connect(
       `mongodb://${dbUser}:${dbPassword}@${dbHost}:27017/${dbName}?authSource=admin`
