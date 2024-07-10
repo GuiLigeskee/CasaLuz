@@ -5,8 +5,6 @@ const router = express.Router();
 const {
   insertDepoiment,
   deleteDepoiment,
-  // updateDepoiment,
-  // getDepoimentById,
   getHomeDepoiments,
 } = require("../controllers/DepoimentController");
 
@@ -30,17 +28,7 @@ router.post(
   validate,
   insertDepoiment
 );
-// router.put(
-//   "/:id",
-//   authGuard,
-//   imagesUpload.array("images"),
-//   convertFiles,
-//   depoimentUpdateValidation(),
-//   validate,
-//   updateDepoiment
-// );
 router.delete("/:id", authGuard, deleteDepoiment);
 router.get("/", getHomeDepoiments);
-// router.get("/getDepoiment/:id", getDepoimentById);
 
 module.exports = router;
