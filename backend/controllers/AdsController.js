@@ -1,4 +1,5 @@
 const Ads = require("../models/Ads");
+const { v4: uuidv4 } = require("uuid");
 
 // Utils
 const { deleteImages } = require("../utils/deleteImages");
@@ -29,7 +30,11 @@ const insertAds = async (req, res) => {
 
     const images = req.files.map((file) => file.filename);
 
+    const reference =
+      typeOfRealty.substring(0, 2).toUpperCase() + uuidv4().substring(0, 10);
+
     const newAds = await Ads.create({
+      referenceAds: reference,
       title,
       typeOfRealty,
       description,
@@ -110,6 +115,7 @@ const getHomeAds = async (req, res) => {
       {
         $project: {
           _id: 1,
+          referenceAds: 1,
           images: { $arrayElemAt: ["$images", 0] },
           typeOfRealty: 1,
           price: 1,
@@ -126,6 +132,7 @@ const getHomeAds = async (req, res) => {
       {
         $project: {
           _id: 1,
+          referenceAds: 1,
           images: { $arrayElemAt: ["$images", 0] },
           typeOfRealty: 1,
           price: 1,
@@ -147,9 +154,9 @@ const getHomeAds = async (req, res) => {
 // Obter anúncio por ID
 const getAdsById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { referenceAds } = req.params;
 
-    const add = await Ads.findById(id).select(`
+    const add = await Ads.findById(referenceAds).select(`
       -createdAt
       -updatedAt
     `);
@@ -284,6 +291,7 @@ const updateAds = async (req, res) => {
 
 const searchAds = async (req, res) => {
   const {
+    referenceAds,
     keyword,
     typeOfRealty,
     methodOfSale,
@@ -299,6 +307,11 @@ const searchAds = async (req, res) => {
 
   try {
     let filter = {};
+
+    if (referenceAds) {
+      const regex = new RegExp(referenceAds, "i");
+      filter.referenceAds = { $regex: regex };
+    }
 
     if (keyword) {
       const regex = new RegExp(keyword, "i");
@@ -351,6 +364,7 @@ const searchAds = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(parseInt(limit))
       .select({
+        referenceAds: 1,
         title: 1,
         typeOfRealty: 1,
         methodOfSale: 1,

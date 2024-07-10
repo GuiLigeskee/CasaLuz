@@ -8,6 +8,7 @@ const adsSchema = new Schema(
         type: String,
       },
     ],
+    referenceAds: String,
     title: String,
     typeOfRealty: String,
     description: String,
