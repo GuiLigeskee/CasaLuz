@@ -67,7 +67,7 @@ const AdsItem = ({ add }) => {
       {add && (
         <div>
           {renderAdminOptions()}
-          <Link to={`/ads/${add._id}`}>
+          <Link to={`/anuncio/${add._id}`}>
             <p className="price">
               {add.methodOfSale === "Venda" ? newPrice : `${newPrice}/mês`}
             </p>

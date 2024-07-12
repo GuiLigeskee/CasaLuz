@@ -31,7 +31,7 @@ const SearchBar = () => {
       dispatch(fetchAdsSuccess(data));
 
       const query = new URLSearchParams(params).toString();
-      navigate(`/search?${query}`);
+      navigate(`/procurar?${query}`);
     } catch (error) {
       dispatch(fetchAdsFailure(error.message));
     }
