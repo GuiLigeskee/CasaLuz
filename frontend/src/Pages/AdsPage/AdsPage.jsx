@@ -33,7 +33,7 @@ import { useParams } from "react-router-dom";
 import { getAdsDetailsByReference } from "../../Slice/adsSlice";
 
 const AdsPage = () => {
-  const { reference } = useParams();
+  const { referenceAds } = useParams();
 
   const dispatch = useDispatch();
 
@@ -46,8 +46,8 @@ const AdsPage = () => {
 
   // Load ads data
   useEffect(() => {
-    dispatch(getAdsDetailsByReference(reference));
-  }, [dispatch, reference]);
+    dispatch(getAdsDetailsByReference(referenceAds));
+  }, [dispatch, referenceAds]);
 
   const parseNumberToString = (priceNumber) => {
     if (priceNumber === null || priceNumber === undefined) return "";

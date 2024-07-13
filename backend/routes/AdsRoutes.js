@@ -43,7 +43,7 @@ router.put(
 );
 router.delete("/:id", authGuard, deleteAds);
 router.get("/", getHomeAds);
-router.get("/:reference", getAdsByReference);
+router.get("/:referenceAds", getAdsByReference);
 router.get("/update/:id", getAdsById);
 router.get("/filter/search", searchAds);
 

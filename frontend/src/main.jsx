@@ -46,7 +46,7 @@ const router = createBrowserRouter([
         element: <AddAds />,
       },
       {
-        path: "/anuncio/:reference",
+        path: "/anuncio/:referenceAds",
         element: <AdsPage />,
       },
       {

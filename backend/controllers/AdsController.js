@@ -177,7 +177,7 @@ const getAdsByReference = async (req, res) => {
   try {
     const { referenceAds } = req.params;
 
-    const add = await Ads.findOne(referenceAds).select(`
+    const add = await Ads.findOne({ referenceAds }).select(`
       -createdAt
       -updatedAt
       -__v
