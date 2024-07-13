@@ -154,11 +154,33 @@ const getHomeAds = async (req, res) => {
 // Obter anúncio por ID
 const getAdsById = async (req, res) => {
   try {
-    const { referenceAds } = req.params;
+    const { id } = req.params;
 
-    const add = await Ads.findById(referenceAds).select(`
+    const add = await Ads.findById(id).select(`
       -createdAt
       -updatedAt
+      -__v
+    `);
+
+    if (!add) {
+      return res.status(404).json({ errors: ["Anúncio não encontrado!"] });
+    }
+
+    return res.status(200).json(add);
+  } catch (error) {
+    return res.status(500).json({ message: "Erro ao buscar anúncio", error });
+  }
+};
+
+// Obter anúncio por ID
+const getAdsByReference = async (req, res) => {
+  try {
+    const { referenceAds } = req.params;
+
+    const add = await Ads.findOne(referenceAds).select(`
+      -createdAt
+      -updatedAt
+      -__v
     `);
 
     if (!add) {
@@ -408,6 +430,7 @@ module.exports = {
   deleteAds,
   getHomeAds,
   getAdsById,
+  getAdsByReference,
   updateAds,
   searchAds,
 };

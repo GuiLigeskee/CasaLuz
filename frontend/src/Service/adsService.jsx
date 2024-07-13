@@ -30,12 +30,27 @@ const getAds = async () => {
   }
 };
 
-// Get ads details
+// Get ads details for update
 const getAdsDetails = async (id) => {
   const config = requestConfig("GET");
 
   try {
-    const res = await fetch(api + "/ads/" + id, config)
+    const res = await fetch(api + "/ads/update/" + id, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Get ads details by reference
+const getAdsDetailsByReference = async (reference) => {
+  const config = requestConfig("GET");
+
+  try {
+    const res = await fetch(api + "/ads/" + reference, config)
       .then((res) => res.json())
       .catch((err) => err);
 
@@ -134,6 +149,7 @@ const adsService = {
   publishAds,
   getAds,
   getAdsDetails,
+  getAdsDetailsByReference,
   updateAds,
   deleteAdd,
   searchAdsByKeyword,

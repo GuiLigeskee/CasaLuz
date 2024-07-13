@@ -7,6 +7,7 @@ const {
   deleteAds,
   getHomeAds,
   getAdsById,
+  getAdsByReference,
   updateAds,
   searchAds,
 } = require("../controllers/AdsController");
@@ -42,7 +43,8 @@ router.put(
 );
 router.delete("/:id", authGuard, deleteAds);
 router.get("/", getHomeAds);
-router.get("/:id", getAdsById);
+router.get("/:reference", getAdsByReference);
+router.get("/update/:id", getAdsById);
 router.get("/filter/search", searchAds);
 
 module.exports = router;

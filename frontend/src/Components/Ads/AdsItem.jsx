@@ -30,7 +30,7 @@ const AdsItem = ({ add }) => {
         <div className="admin-options">
           <button
             id="admin-option-update"
-            onClick={() => navigate(`/updateAds/${add._id}`)}
+            onClick={() => navigate(`/atualizar-anuncio/${add._id}`)}
           >
             Editar
           </button>
@@ -67,7 +67,7 @@ const AdsItem = ({ add }) => {
       {add && (
         <div>
           {renderAdminOptions()}
-          <Link to={`/anuncio/${add._id}`}>
+          <Link to={`/anuncio/${add.referenceAds}`}>
             <p className="price">
               {add.methodOfSale === "Venda" ? newPrice : `${newPrice}/mês`}
             </p>

@@ -30,10 +30,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Redux
-import { getAdsDetails } from "../../Slice/adsSlice";
+import { getAdsDetailsByReference } from "../../Slice/adsSlice";
 
 const AdsPage = () => {
-  const { id } = useParams();
+  const { reference } = useParams();
 
   const dispatch = useDispatch();
 
@@ -46,8 +46,8 @@ const AdsPage = () => {
 
   // Load ads data
   useEffect(() => {
-    dispatch(getAdsDetails(id));
-  }, [dispatch, id]);
+    dispatch(getAdsDetailsByReference(reference));
+  }, [dispatch, reference]);
 
   const parseNumberToString = (priceNumber) => {
     if (priceNumber === null || priceNumber === undefined) return "";
