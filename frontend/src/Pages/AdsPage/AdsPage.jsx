@@ -151,6 +151,12 @@ const AdsPage = () => {
       </div>
       <div className="details-container">
         <h2 className="details-title">{add.title}</h2>
+        {add.referenceAds && (
+          <label>
+            <span>Referencia do anúncio:</span>
+            <p>{add.referenceAds}</p>
+          </label>
+        )}
         {add.description && (
           <label>
             <span>Descrição:</span>

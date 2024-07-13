@@ -39,6 +39,7 @@ const UpdateAds = () => {
   const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
   const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
+  const [referenceAds, setReferenceAds] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tell, setTell] = useState("");
@@ -87,6 +88,7 @@ const UpdateAds = () => {
 
   useEffect(() => {
     if (add) {
+      setReferenceAds(add.referenceAds || "");
       setTitle(add.title || "");
       setTypeOfRealty(add.typeOfRealty || "");
       setDescription(add.description || "");
@@ -323,6 +325,15 @@ const UpdateAds = () => {
           </Droppable>
         </DragDropContext>
 
+        <label>
+          <span>Referencia do anúncio:</span>
+          <input
+            type="text"
+            name="referenceAds"
+            value={referenceAds || ""}
+            disabled
+          />
+        </label>
         <label>
           <span>Título:</span>
           <input

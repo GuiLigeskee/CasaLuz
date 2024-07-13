@@ -252,6 +252,7 @@ const AddAds = () => {
             multiple
           />
         </label>
+
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="imagePreviews" direction="horizontal">
             {(provided) => (
