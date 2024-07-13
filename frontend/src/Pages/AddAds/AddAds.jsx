@@ -10,7 +10,7 @@ import ImageUploader from "../../Components/ImageUploader/ImageUploader";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // Redux
 import { publishAds } from "../../Slice/adsSlice";
@@ -56,11 +56,15 @@ const AddAds = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [carVacancies, setCarVacancies] = useState("");
   const [adsImages, setAdsImages] = useState([]);
+  const imageUrls = useRef([]);
 
   const handleImageChange = (imageList) => {
     setAdsImages(imageList.map((image) => image.file));
+    imageUrls.current = imageList.map((image) => ({
+      data_url: image.data_url,
+      file: image.file,
+    }));
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const priceNumber = parseStringToNumber(price);
@@ -209,10 +213,7 @@ const AddAds = () => {
       <h3>Preencha os campos abaixo para criar um anúncio</h3>
       <form onSubmit={handleSubmit}>
         <ImageUploader
-          initialImages={adsImages.map((file) => ({
-            data_url: URL.createObjectURL(file),
-            file,
-          }))}
+          initialImages={imageUrls.current}
           onChange={handleImageChange}
         />
 

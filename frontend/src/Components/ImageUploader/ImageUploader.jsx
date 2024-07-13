@@ -20,6 +20,7 @@ const ImageUploader = ({ initialImages = [], onChange }) => {
     const [movedImage] = reorderedImages.splice(result.source.index, 1);
     reorderedImages.splice(result.destination.index, 0, movedImage);
     setImages(reorderedImages);
+    onChange(reorderedImages); // Call onChange with reordered images
   };
 
   return (
