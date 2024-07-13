@@ -1,0 +1,38 @@
+.upload__image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.image-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.image-item__btn-wrapper {
+  display: flex;
+  justify-content: space-around;
+  width: 100px;
+  margin-top: 5px;
+}
+
+.image-item {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+}
