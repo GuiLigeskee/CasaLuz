@@ -5,8 +5,8 @@ import Message from "../../Components/Messages/Message";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Spinner from "../../Components/Spinner/Spinner";
+import ImageUploader from "../../Components/ImageUploader/ImageUploader";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -59,7 +59,6 @@ const UpdateAds = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [carVacancies, setCarVacancies] = useState("");
   const [newImages, setNewImages] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
     if (error) {
@@ -148,36 +147,6 @@ const UpdateAds = () => {
 
     dispatch(updateAds(formData));
     navigate(`/ads/${id}`);
-  };
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const previews = [];
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        previews.push(e.target.result);
-        if (previews.length === files.length) {
-          setImagePreviews(previews);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-    setNewImages(files);
-  };
-
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const reorderedPreviews = Array.from(imagePreviews);
-    const [removed] = reorderedPreviews.splice(result.source.index, 1);
-    reorderedPreviews.splice(result.destination.index, 0, removed);
-    setImagePreviews(reorderedPreviews);
-
-    const reorderedImages = Array.from(newImages);
-    const [removedImage] = reorderedImages.splice(result.source.index, 1);
-    reorderedImages.splice(result.destination.index, 0, removedImage);
-    setNewImages(reorderedImages);
   };
 
   // Api CEP
@@ -277,53 +246,7 @@ const UpdateAds = () => {
       </h1>
       <h3>Altere os campos abaixo para atualizar o anúncio</h3>
       <form onSubmit={handleSubmit}>
-        <p className="alert">
-          Caso for atualizar o anúncio, adicione novamente as imagens do imóvel.
-        </p>
-        <label>
-          <span id="buttonFile">Carregar imagens do imóvel</span>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFileChange}
-          />
-        </label>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="imagePreviews" direction="horizontal">
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="imagePreviews"
-              >
-                {imagePreviews.map((preview, index) => (
-                  <Draggable
-                    key={index}
-                    draggableId={`preview-${index}`}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="imagePreviewContainer"
-                      >
-                        <img
-                          src={preview}
-                          alt={`Preview ${index + 1}`}
-                          className="imagePreview"
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <ImageUploader initialImages={initialImages} />
 
         <label>
           <span>Referencia do anúncio:</span>
