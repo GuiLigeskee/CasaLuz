@@ -58,6 +58,7 @@ const UpdateAds = () => {
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [carVacancies, setCarVacancies] = useState("");
+  const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
 
   useEffect(() => {
@@ -106,8 +107,13 @@ const UpdateAds = () => {
       setBathrooms(add.bathrooms || "");
       setBedrooms(add.bedrooms || "");
       setCarVacancies(add.carVacancies || "");
+      setImages(add.images || []);
     }
   }, [add]);
+
+  const handleImageChange = (updatedImages) => {
+    setNewImages(updatedImages);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -246,7 +252,10 @@ const UpdateAds = () => {
       </h1>
       <h3>Altere os campos abaixo para atualizar o anúncio</h3>
       <form onSubmit={handleSubmit}>
-        <ImageUploader initialImages={initialImages} />
+        <ImageUploader
+          initialImages={images}
+          onImagesChange={handleImageChange}
+        />
 
         <label>
           <span>Referencia do anúncio:</span>
