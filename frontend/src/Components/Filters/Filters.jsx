@@ -3,6 +3,7 @@ import "./Filters.css"; // Importando o arquivo CSS
 // Hooks
 import React from "react";
 import { useState, useEffect } from "react";
+import { CSSTransition } from "react-transition-group";
 
 // Components
 import { NumericFormat } from "react-number-format";
@@ -39,18 +40,23 @@ const Filters = ({ filters, onFilterChange }) => {
     <div className="filters-container">
       <button onClick={toggleForm} className="toggle-button">
         {formOpen ? (
-          <React.Fragment>
+          <>
             <FontAwesomeIcon icon={faTimes} />
             <span> Fechar Filtros</span>
-          </React.Fragment>
+          </>
         ) : (
-          <React.Fragment>
+          <>
             <FontAwesomeIcon icon={faPlus} />
-            <span> Abrir Filtros</span>
-          </React.Fragment>
+            <span> Filtrar resultados</span>
+          </>
         )}
       </button>
-      {formOpen && (
+      <CSSTransition
+        in={formOpen}
+        timeout={300}
+        classNames="filters-transition"
+        unmountOnExit
+      >
         <form onSubmit={handleSubmit} className="filters">
           <label>
             <span>Título</span>
@@ -110,6 +116,39 @@ const Filters = ({ filters, onFilterChange }) => {
               className="filter-input"
             />
           </label>
+          <label>
+            <span>Quartos</span>
+            <input
+              type="number"
+              name="bedrooms"
+              value={localFilters.bedrooms || ""}
+              onChange={handleChange}
+              placeholder="Quartos"
+              className="filter-input"
+            />
+          </label>
+          <label>
+            <span>Banheiros</span>
+            <input
+              type="number"
+              name="bathrooms"
+              value={localFilters.bathrooms || ""}
+              onChange={handleChange}
+              placeholder="Banheiros"
+              className="filter-input"
+            />
+          </label>
+          <label>
+            <span>Vagas de carro</span>
+            <input
+              type="number"
+              name="carVacancies"
+              value={localFilters.carVacancies || ""}
+              onChange={handleChange}
+              placeholder="Vagas de carro"
+              className="filter-input"
+            />
+          </label>
           <label className="span-double">
             <span>Preço</span>
             <NumericFormat
@@ -158,11 +197,12 @@ const Filters = ({ filters, onFilterChange }) => {
               className="filter-input"
             />
           </label>
+
           <button type="submit" className="filter-button">
             Aplicar Filtros
           </button>
         </form>
-      )}
+      </CSSTransition>
     </div>
   );
 };

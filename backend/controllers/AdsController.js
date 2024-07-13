@@ -301,6 +301,9 @@ const searchAds = async (req, res) => {
     maxPrice,
     minSpace,
     maxSpace,
+    bedrooms,
+    bathrooms,
+    carVacancies,
     page = 1,
     limit = 5,
   } = req.query;
@@ -360,6 +363,18 @@ const searchAds = async (req, res) => {
       filter.landMeasurement = spaceFilter;
     }
 
+    if (bedrooms) {
+      filter.bedrooms = bedrooms;
+    }
+
+    if (bathrooms) {
+      filter.bathrooms = bathrooms;
+    }
+
+    if (carVacancies) {
+      filter.carVacancies = carVacancies;
+    }
+
     const results = await Ads.find(filter)
       .skip((page - 1) * limit)
       .limit(parseInt(limit))
@@ -372,6 +387,9 @@ const searchAds = async (req, res) => {
         district: 1,
         price: 1,
         landMeasurement: 1,
+        bedrooms: 1,
+        bathrooms: 1,
+        carVacancies: 1,
         images: { $slice: 1 },
       });
 

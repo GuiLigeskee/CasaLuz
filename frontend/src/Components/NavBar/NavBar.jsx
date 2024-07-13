@@ -32,19 +32,19 @@ const NavBar = () => {
             {auth ? (
               <>
                 <li>
-                  <NavLink to="/Ads">Ver anúncios</NavLink>
+                  <NavLink to="/anuncios">Ver anúncios</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/createAds">Novo anúncio</NavLink>
+                  <NavLink to="/criar-anuncio">Novo anúncio</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/depoiments">Ver depoimentos</NavLink>
+                  <NavLink to="/depoimentos">Ver depoimentos</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/createDepoiment">Novo depoimento</NavLink>
+                  <NavLink to="/criar-depoimento">Novo depoimento</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/register">Novo admin</NavLink>
+                  <NavLink to="/registrar">Novo admin</NavLink>
                 </li>
                 <li>
                   <span id="exit" onClick={handleLogout}>
@@ -55,16 +55,16 @@ const NavBar = () => {
             ) : (
               <>
                 <li>
-                  <NavLink to="/Ads">Ver anúncios</NavLink>
+                  <NavLink to="/anuncios">Ver anúncios</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/depoiments">Ver depoimentos</NavLink>
+                  <NavLink to="/depoimentos">Ver depoimentos</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/contact">Entre em contato</NavLink>
+                  <NavLink to="/contato">Entre em contato</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/about-us">Sobre nós</NavLink>
+                  <NavLink to="/sobre-nos">Sobre nós</NavLink>
                 </li>
                 <li>
                   <NavLink to="/login">Sou admin</NavLink>

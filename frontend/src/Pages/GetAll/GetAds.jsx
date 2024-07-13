@@ -21,6 +21,9 @@ const GetAds = () => {
     maxPrice: "",
     minSpace: "",
     maxSpace: "",
+    bedrooms: "",
+    bathrooms: "",
+    carVacancies: "",
   });
 
   useEffect(() => {
@@ -64,9 +67,9 @@ const GetAds = () => {
           ))}
         </div>
       ) : (
-        <p>Não foi possível mostrar todos os nossos anúncios :(</p>
+        <h3>Não foi possível mostrar todos os nossos anúncios :(</h3>
       )}
-      {!hasMore && <p>Todos os anúncios foram carregados.</p>}
+      {!hasMore && <p>todos anuncios carregados</p>}
     </div>
   );
 };

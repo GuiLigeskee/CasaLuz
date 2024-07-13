@@ -38,43 +38,43 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/register",
+        path: "/registrar",
         element: <Register />,
       },
       {
-        path: "/createAds",
+        path: "/criar-anuncio",
         element: <AddAds />,
       },
       {
-        path: "/ads/:id",
+        path: "/anuncio/:id",
         element: <AdsPage />,
       },
       {
-        path: "/createDepoiment",
+        path: "/criar-depoimento",
         element: <AddDepoiment />,
       },
       {
-        path: "/Ads",
+        path: "/anuncios",
         element: <GetAds />,
       },
       {
-        path: "/depoiments",
+        path: "/depoimentos",
         element: <GetDepoiments />,
       },
       {
-        path: "/updateAds/:id",
+        path: "/atualizar-anuncio/:id",
         element: <UpdateAds />,
       },
       {
-        path: "/search",
+        path: "/procurar",
         element: <SearchResultsPage />,
       },
       {
-        path: "/about-us",
+        path: "/sobre-nos",
         element: <About />,
       },
       {
-        path: "/contact",
+        path: "/contato",
         element: <Contact />,
       },
     ],
