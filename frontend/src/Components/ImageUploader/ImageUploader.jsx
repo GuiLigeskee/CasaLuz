@@ -20,7 +20,7 @@ const ImageUploader = ({ initialImages = [], onChange }) => {
     const [movedImage] = reorderedImages.splice(result.source.index, 1);
     reorderedImages.splice(result.destination.index, 0, movedImage);
     setImages(reorderedImages);
-    onChange(reorderedImages); // Call onChange with reordered images
+    onChange(reorderedImages);
   };
 
   return (
@@ -40,9 +40,9 @@ const ImageUploader = ({ initialImages = [], onChange }) => {
           onImageRemove,
         }) => (
           <div className="upload__image-wrapper">
-            <button onClick={onImageUpload}>Click or Drop here</button>
+            <button onClick={onImageUpload}>Carregar imagens do imóvel</button>
             &nbsp;
-            <button onClick={onImageRemoveAll}>Remove all images</button>
+            <button onClick={onImageRemoveAll}>Remover todas as imagens</button>
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="images">
                 {(provided) => (
@@ -68,10 +68,10 @@ const ImageUploader = ({ initialImages = [], onChange }) => {
                             <img src={image.data_url} alt="" width="100" />
                             <div className="image-item__btn-wrapper">
                               <button onClick={() => onImageUpdate(index)}>
-                                Update
+                                Alterar
                               </button>
                               <button onClick={() => onImageRemove(index)}>
-                                Remove
+                                Remover
                               </button>
                             </div>
                           </div>
