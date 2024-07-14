@@ -30,10 +30,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Redux
-import { getAdsDetails } from "../../Slice/adsSlice";
+import { getAdsDetailsByReference } from "../../Slice/adsSlice";
 
 const AdsPage = () => {
-  const { id } = useParams();
+  const { referenceAds } = useParams();
 
   const dispatch = useDispatch();
 
@@ -46,8 +46,8 @@ const AdsPage = () => {
 
   // Load ads data
   useEffect(() => {
-    dispatch(getAdsDetails(id));
-  }, [dispatch, id]);
+    dispatch(getAdsDetailsByReference(referenceAds));
+  }, [dispatch, referenceAds]);
 
   const parseNumberToString = (priceNumber) => {
     if (priceNumber === null || priceNumber === undefined) return "";
@@ -151,6 +151,12 @@ const AdsPage = () => {
       </div>
       <div className="details-container">
         <h2 className="details-title">{add.title}</h2>
+        {add.referenceAds && (
+          <label>
+            <span>Referencia do anúncio:</span>
+            <p>{add.referenceAds}</p>
+          </label>
+        )}
         {add.description && (
           <label>
             <span>Descrição:</span>

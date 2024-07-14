@@ -5,8 +5,8 @@ import Message from "../../Components/Messages/Message";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Spinner from "../../Components/Spinner/Spinner";
+import ImageUploader from "../../Components/ImageUploader/ImageUploader";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -39,6 +39,7 @@ const UpdateAds = () => {
   const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
   const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
+  const [referenceAds, setReferenceAds] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tell, setTell] = useState("");
@@ -57,8 +58,8 @@ const UpdateAds = () => {
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [carVacancies, setCarVacancies] = useState("");
+  const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
     if (error) {
@@ -87,6 +88,7 @@ const UpdateAds = () => {
 
   useEffect(() => {
     if (add) {
+      setReferenceAds(add.referenceAds || "");
       setTitle(add.title || "");
       setTypeOfRealty(add.typeOfRealty || "");
       setDescription(add.description || "");
@@ -105,8 +107,13 @@ const UpdateAds = () => {
       setBathrooms(add.bathrooms || "");
       setBedrooms(add.bedrooms || "");
       setCarVacancies(add.carVacancies || "");
+      setImages(add.images || []);
     }
   }, [add]);
+
+  const handleImageChange = (updatedImages) => {
+    setNewImages(updatedImages);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -146,36 +153,6 @@ const UpdateAds = () => {
 
     dispatch(updateAds(formData));
     navigate(`/ads/${id}`);
-  };
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const previews = [];
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        previews.push(e.target.result);
-        if (previews.length === files.length) {
-          setImagePreviews(previews);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-    setNewImages(files);
-  };
-
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const reorderedPreviews = Array.from(imagePreviews);
-    const [removed] = reorderedPreviews.splice(result.source.index, 1);
-    reorderedPreviews.splice(result.destination.index, 0, removed);
-    setImagePreviews(reorderedPreviews);
-
-    const reorderedImages = Array.from(newImages);
-    const [removedImage] = reorderedImages.splice(result.source.index, 1);
-    reorderedImages.splice(result.destination.index, 0, removedImage);
-    setNewImages(reorderedImages);
   };
 
   // Api CEP
@@ -275,54 +252,20 @@ const UpdateAds = () => {
       </h1>
       <h3>Altere os campos abaixo para atualizar o anúncio</h3>
       <form onSubmit={handleSubmit}>
-        <p className="alert">
-          Caso for atualizar o anúncio, adicione novamente as imagens do imóvel.
-        </p>
+        <ImageUploader
+          initialImages={images}
+          onImagesChange={handleImageChange}
+        />
+
         <label>
-          <span id="buttonFile">Carregar imagens do imóvel</span>
+          <span>Referencia do anúncio:</span>
           <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFileChange}
+            type="text"
+            name="referenceAds"
+            value={referenceAds || ""}
+            disabled
           />
         </label>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="imagePreviews" direction="horizontal">
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="imagePreviews"
-              >
-                {imagePreviews.map((preview, index) => (
-                  <Draggable
-                    key={index}
-                    draggableId={`preview-${index}`}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="imagePreviewContainer"
-                      >
-                        <img
-                          src={preview}
-                          alt={`Preview ${index + 1}`}
-                          className="imagePreview"
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-
         <label>
           <span>Título:</span>
           <input

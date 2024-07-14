@@ -35,11 +35,20 @@ export const getAds = createAsyncThunk("ads/getall", async () => {
   return data;
 });
 
-// Get ads details
+// Get ads details by id
 export const getAdsDetails = createAsyncThunk("ads/get", async (id) => {
   const data = await adsService.getAdsDetails(id);
   return data;
 });
+
+// Get ads details by reference
+export const getAdsDetailsByReference = createAsyncThunk(
+  "ads/getByReference",
+  async (reference) => {
+    const data = await adsService.getAdsDetailsByReference(reference);
+    return data;
+  }
+);
 
 export const updateAds = createAsyncThunk(
   "ads/update",
@@ -152,6 +161,26 @@ export const adsSlice = createSlice({
         state.success = true;
         state.error = null;
         state.add = action.payload;
+      })
+      .addCase(getAdsDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.add = null;
+      })
+      .addCase(getAdsDetailsByReference.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAdsDetailsByReference.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.add = action.payload;
+      })
+      .addCase(getAdsDetailsByReference.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.add = null;
       })
       .addCase(updateAds.pending, (state) => {
         state.loading = true;

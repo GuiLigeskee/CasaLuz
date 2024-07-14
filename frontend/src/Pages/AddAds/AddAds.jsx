@@ -6,11 +6,11 @@ import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
 import Spinner from "../../Components/Spinner/Spinner";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import ImageUploader from "../../Components/ImageUploader/ImageUploader";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // Redux
 import { publishAds } from "../../Slice/adsSlice";
@@ -56,29 +56,15 @@ const AddAds = () => {
   const [bathrooms, setBathrooms] = useState("");
   const [carVacancies, setCarVacancies] = useState("");
   const [adsImages, setAdsImages] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
+  const imageUrls = useRef([]);
 
-  useEffect(() => {
-    if (error) {
-      setIsErrorMessageOpen(true);
-    }
-    if (message) {
-      setIsSuccessMessageOpen(true);
-    }
-  }, [error, message]);
-
-  useEffect(() => {
-    if (zipCodeError) {
-      setMessageZipCode("CEP não encontrado ou não existe.");
-    } else if (zipCodeApi) {
-      setMessageZipCode("CEP encontrado com sucesso!");
-      setAddress(zipCodeApi.logradouro || "");
-      setDistrict(zipCodeApi.bairro || "");
-      setCity(zipCodeApi.localidade || "");
-      setStateAddress(zipCodeApi.uf || "");
-    }
-  }, [zipCodeApi, zipCodeError]);
-
+  const handleImageChange = (imageList) => {
+    setAdsImages(imageList.map((image) => image.file));
+    imageUrls.current = imageList.map((image) => ({
+      data_url: image.data_url,
+      file: image.file,
+    }));
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     const priceNumber = parseStringToNumber(price);
@@ -108,50 +94,34 @@ const AddAds = () => {
     for (const key in adsData) {
       formData.append(key, adsData[key]);
     }
+
     for (let i = 0; i < adsImages.length; i++) {
       formData.append("images", adsImages[i]);
     }
+
     dispatch(publishAds(formData));
   };
 
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-    const updatedImagePreviews = Array.from(imagePreviews);
-    const [reorderedPreview] = updatedImagePreviews.splice(
-      result.source.index,
-      1
-    );
-    updatedImagePreviews.splice(result.destination.index, 0, reorderedPreview);
+  useEffect(() => {
+    if (error) {
+      setIsErrorMessageOpen(true);
+    }
+    if (message) {
+      setIsSuccessMessageOpen(true);
+    }
+  }, [error, message]);
 
-    const updatedAdsImages = Array.from(adsImages);
-    const [reorderedImage] = updatedAdsImages.splice(result.source.index, 1);
-    updatedAdsImages.splice(result.destination.index, 0, reorderedImage);
-
-    setImagePreviews(updatedImagePreviews);
-    setAdsImages(updatedAdsImages);
-  };
-
-  const handleFile = (e) => {
-    const files = Array.from(e.target.files);
-    const imagePreviewsArray = [];
-    const adsImagesArray = [];
-
-    files.forEach((file) => {
-      adsImagesArray.push(file);
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        imagePreviewsArray.push(event.target.result);
-        if (imagePreviewsArray.length === files.length) {
-          setImagePreviews((prevPreviews) => [
-            ...prevPreviews,
-            ...imagePreviewsArray,
-          ]);
-          setAdsImages((prevImages) => [...prevImages, ...adsImagesArray]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
+  useEffect(() => {
+    if (zipCodeError) {
+      setMessageZipCode("CEP não encontrado ou não existe.");
+    } else if (zipCodeApi) {
+      setMessageZipCode("CEP encontrado com sucesso!");
+      setAddress(zipCodeApi.logradouro || "");
+      setDistrict(zipCodeApi.bairro || "");
+      setCity(zipCodeApi.localidade || "");
+      setStateAddress(zipCodeApi.uf || "");
+    }
+  }, [zipCodeApi, zipCodeError]);
 
   const handleZipCode = async () => {
     const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
@@ -242,47 +212,10 @@ const AddAds = () => {
       </h1>
       <h3>Preencha os campos abaixo para criar um anúncio</h3>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="arquivo" className="foto-perfil">
-          <span id="buttonFile">Carregar imagens do imóvel</span>
-          <input
-            type="file"
-            onChange={handleFile}
-            name="arquivo"
-            id="arquivo"
-            multiple
-          />
-        </label>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="imagePreviews" direction="horizontal">
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="imagePreviews"
-              >
-                {imagePreviews.map((preview, index) => (
-                  <Draggable
-                    key={index}
-                    draggableId={`preview-${index}`}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="imagePreview"
-                      >
-                        <img src={preview} alt={`Imagem ${index + 1}`} />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <ImageUploader
+          initialImages={imageUrls.current}
+          onChange={handleImageChange}
+        />
 
         <label>
           <span>Título:</span>
