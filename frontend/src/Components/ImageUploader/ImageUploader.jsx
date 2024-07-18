@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ImageUploading from "react-images-uploading";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
 const ImageUploader = ({ initialImages = [], onChange }) => {
   const [images, setImages] = useState([]);
@@ -44,7 +45,7 @@ const ImageUploader = ({ initialImages = [], onChange }) => {
             &nbsp;
             <button onClick={onImageRemoveAll}>Remover todas as imagens</button>
             <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="images">
+              <Droppable droppableId="images" direction="horizontal">
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
@@ -65,13 +66,13 @@ const ImageUploader = ({ initialImages = [], onChange }) => {
                             className="image-item"
                           >
                             <span>{index + 1}. </span>
-                            <img src={image.data_url} alt="" width="100" />
+                            <img src={image.data_url} alt="" width="250" />
                             <div className="image-item__btn-wrapper">
                               <button onClick={() => onImageUpdate(index)}>
-                                Alterar
+                                <FaEdit />
                               </button>
                               <button onClick={() => onImageRemove(index)}>
-                                Remover
+                                <FaTrashAlt />
                               </button>
                             </div>
                           </div>

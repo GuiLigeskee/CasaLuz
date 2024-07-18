@@ -6,33 +6,35 @@
 
 .image-list {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+  flex-direction: row; /* Assegura que os itens fiquem em uma linha */
+  gap: 10px;
+  overflow-x: auto; /* Permite rolagem horizontal se necessário */
+  padding: 10px;
 }
 
 .image-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 4px;
+  position: relative;
 }
 
 .image-item__btn-wrapper {
   display: flex;
-  justify-content: space-around;
-  width: 100px;
-  margin-top: 5px;
+  gap: 5px;
+  position: absolute;
+  bottom: 5px;
 }
 
-.image-item {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 4px;
+.image-item__btn-wrapper button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  font-size: 1.2em;
+  transition: color 0.3s;
+}
+
+.image-item__btn-wrapper button:hover {
+  color: #f00;
 }
