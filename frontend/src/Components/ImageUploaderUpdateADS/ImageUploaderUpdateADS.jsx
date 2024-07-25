@@ -2,6 +2,7 @@ import "./ImageUploaderUpdateADS.css";
 
 import { uploads } from "../../utils/config";
 
+// Hooks
 import { useState, useEffect } from "react";
 import ImageUploading from "react-images-uploading";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
@@ -14,8 +15,9 @@ const ImageUploaderUpdateADS = ({ initialImages = [], onChange }) => {
     if (initialImages) {
       setImages(
         initialImages.map((img) => ({
-          ...img,
           data_url: `${uploads}/ads/${img}`,
+          file: null,
+          name: img,
         }))
       );
     }

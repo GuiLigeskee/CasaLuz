@@ -62,15 +62,7 @@ const UpdateAds = () => {
   const [carVacancies, setCarVacancies] = useState("");
   const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
-  // const imageUrls = useRef([]);
-
-  // const handleImageChange = (imageList) => {
-  //   setNewImages(imageList.map((image) => image.file));
-  //   imageUrls.current = imageList.map((image) => ({
-  //     data_url: image.data_url,
-  //     file: image.file,
-  //   }));
-  // };
+  const [existingImages, setExistingImages] = useState([]);
 
   useEffect(() => {
     if (error) {
@@ -152,13 +144,32 @@ const UpdateAds = () => {
     formData.append("bathrooms", bathrooms);
     formData.append("carVacancies", carVacancies);
 
-    // Envia apenas novas imagens
-    newImages.forEach((image) => {
-      formData.append("images", image);
-    });
+    if (existingImages) {
+      // existingImages.forEach((image) => {
+      //   formData.append("existingImages", image);
+      // });
+      // console.log(existingImages);
+
+      formData.append("existingImages", existingImages);
+    }
+
+    if (newImages) {
+      newImages.forEach((image) => {
+        formData.append("newImages", image);
+      });
+    }
 
     dispatch(updateAds(formData));
-    navigate(`/ads/${id}`);
+    // navigate(`/atualizar-anuncio/${id}`);
+    // navigate(`/anuncio/${add.referenceAds}`);
+  };
+
+  const handleImageChange = (imageList) => {
+    const updatedExistingImages = imageList.filter((image) => !image.file);
+    const updatedNewImages = imageList.filter((image) => image.file);
+
+    setExistingImages(updatedExistingImages);
+    setNewImages(updatedNewImages);
   };
 
   // Api CEP
@@ -260,7 +271,7 @@ const UpdateAds = () => {
 
       <ImageUploaderUpdateADS
         initialImages={images}
-        // onChange={handleImageChange}
+        onChange={handleImageChange}
       />
 
       <form onSubmit={handleSubmit}>
