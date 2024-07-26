@@ -209,12 +209,12 @@ const UpdateAds = () => {
   // Função para converter String em Number
   const parseStringToNumber = (priceStr) => {
     if (!priceStr) return null;
-    // const cleanedString = priceStr
-    //   .replace("R$ ", "")
-    //   .replace(/\./g, "")
-    //   .replace(",", ".");
+    const cleanedString = priceStr
+      .replace("R$ ", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
 
-    const priceNumber = parseFloat(priceStr);
+    const priceNumber = parseFloat(cleanedString);
 
     return priceNumber;
   };
