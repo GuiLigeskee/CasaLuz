@@ -1,7 +1,5 @@
 import "./AddAds.css";
 
-import { uploads } from "../../utils/config";
-
 // Components
 import Message from "../../Components/Messages/Message";
 import MaskedInput from "react-text-mask";
@@ -144,18 +142,17 @@ const UpdateAds = () => {
     formData.append("bathrooms", bathrooms);
     formData.append("carVacancies", carVacancies);
 
-    if (existingImages) {
-      // existingImages.forEach((image) => {
-      //   formData.append("existingImages", image);
-      // });
-      // console.log(existingImages);
-
-      formData.append("existingImages", existingImages);
+    if (existingImages.length > 0) {
+      console.log(existingImages);
+      existingImages.forEach((image) => {
+        formData.append("existingImages", image);
+      });
     }
 
-    if (newImages) {
+    if (newImages.length > 0) {
+      console.log(newImages);
       newImages.forEach((image) => {
-        formData.append("newImages", image);
+        formData.append("images", image);
       });
     }
 
@@ -165,8 +162,13 @@ const UpdateAds = () => {
   };
 
   const handleImageChange = (imageList) => {
-    const updatedExistingImages = imageList.filter((image) => !image.file);
-    const updatedNewImages = imageList.filter((image) => image.file);
+    const updatedExistingImages = imageList
+      .filter((image) => !image.file)
+      .map((image) => image.name);
+
+    const updatedNewImages = imageList
+      .filter((image) => image.file)
+      .map((image) => image.file);
 
     setExistingImages(updatedExistingImages);
     setNewImages(updatedNewImages);

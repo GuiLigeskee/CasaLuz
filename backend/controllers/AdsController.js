@@ -304,27 +304,24 @@ const updateAds = async (req, res) => {
   }
 
   let deletedImages = [];
-  // let currentImages = [];
   let currentImages = [];
 
-  if (existingImages.length > 0) {
-    console.log(existingImages.name);
-    // existingImages.forEach((img) => {
-    //   if (!add.images.includes(img)) {
-    //     deletedImages.push(img);
-    //   } else {
-    //     currentImages.push(img);
-    //     console.log(img);
-    //   }
-    // });
+  if (existingImages && existingImages.length > 0) {
+    add.images.forEach((imgName) => {
+      if (!existingImages.includes(imgName)) {
+        deletedImages.push(imgName);
+      } else {
+        currentImages.push(imgName);
+      }
+    });
   }
 
-  // if (deletedImages.length > 0) {
-  //   add.images = currentImages;
-  //   deletedImages.forEach((img) => {
-  //     console.log(`Delete a seguinte imagem ${img}`);
-  //   });
-  // }
+  if (deletedImages.length > 0) {
+    add.images = currentImages;
+    deletedImages.forEach((imgName) => {
+      deleteImages("ads", imgName);
+    });
+  }
 
   if (newImages.length > 0) {
     add.images = [...add.images, ...newImages];
