@@ -6,11 +6,11 @@ import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
 import Spinner from "../../Components/Spinner/Spinner";
-import ImageUploader from "../../Components/ImageUploader/ImageUploader";
+import ImageUploaderUpdateADS from "../../Components/ImageUploaderUpdateADS/ImageUploaderUpdateADS.jsx";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 // Redux
@@ -60,6 +60,7 @@ const UpdateAds = () => {
   const [carVacancies, setCarVacancies] = useState("");
   const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
 
   useEffect(() => {
     if (error) {
@@ -111,10 +112,6 @@ const UpdateAds = () => {
     }
   }, [add]);
 
-  const handleImageChange = (updatedImages) => {
-    setNewImages(updatedImages);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -145,14 +142,36 @@ const UpdateAds = () => {
     formData.append("bathrooms", bathrooms);
     formData.append("carVacancies", carVacancies);
 
+    if (existingImages.length > 0) {
+      console.log(existingImages);
+      existingImages.forEach((image) => {
+        formData.append("existingImages", image);
+      });
+    }
+
     if (newImages.length > 0) {
+      console.log(newImages);
       newImages.forEach((image) => {
         formData.append("images", image);
       });
     }
 
     dispatch(updateAds(formData));
-    navigate(`/ads/${id}`);
+    // navigate(`/atualizar-anuncio/${id}`);
+    // navigate(`/anuncio/${add.referenceAds}`);
+  };
+
+  const handleImageChange = (imageList) => {
+    const updatedExistingImages = imageList
+      .filter((image) => !image.file)
+      .map((image) => image.name);
+
+    const updatedNewImages = imageList
+      .filter((image) => image.file)
+      .map((image) => image.file);
+
+    setExistingImages(updatedExistingImages);
+    setNewImages(updatedNewImages);
   };
 
   // Api CEP
@@ -192,12 +211,12 @@ const UpdateAds = () => {
   // Função para converter String em Number
   const parseStringToNumber = (priceStr) => {
     if (!priceStr) return null;
-    const cleanedString = priceStr
-      .replace("R$ ", "")
-      .replace(/\./g, "")
-      .replace(",", ".");
+    // const cleanedString = priceStr
+    //   .replace("R$ ", "")
+    //   .replace(/\./g, "")
+    //   .replace(",", ".");
 
-    const priceNumber = parseFloat(cleanedString);
+    const priceNumber = parseFloat(priceStr);
 
     return priceNumber;
   };
@@ -251,12 +270,13 @@ const UpdateAds = () => {
         <span>Atualizar</span> anúncio de imóvel
       </h1>
       <h3>Altere os campos abaixo para atualizar o anúncio</h3>
-      <form onSubmit={handleSubmit}>
-        <ImageUploader
-          initialImages={images}
-          onImagesChange={handleImageChange}
-        />
 
+      <ImageUploaderUpdateADS
+        initialImages={images}
+        onChange={handleImageChange}
+      />
+
+      <form onSubmit={handleSubmit}>
         <label>
           <span>Referencia do anúncio:</span>
           <input

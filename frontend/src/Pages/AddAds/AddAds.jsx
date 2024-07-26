@@ -65,6 +65,7 @@ const AddAds = () => {
       file: image.file,
     }));
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const priceNumber = parseStringToNumber(price);
@@ -211,12 +212,13 @@ const AddAds = () => {
         <span>Adicionar</span> anúncio de imóvel
       </h1>
       <h3>Preencha os campos abaixo para criar um anúncio</h3>
-      <form onSubmit={handleSubmit}>
-        <ImageUploader
-          initialImages={imageUrls.current}
-          onChange={handleImageChange}
-        />
 
+      <ImageUploader
+        initialImages={imageUrls.current}
+        onChange={handleImageChange}
+      />
+
+      <form onSubmit={handleSubmit}>
         <label>
           <span>Título:</span>
           <input

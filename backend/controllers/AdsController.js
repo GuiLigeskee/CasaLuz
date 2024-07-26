@@ -215,14 +215,15 @@ const updateAds = async (req, res) => {
     bedrooms,
     bathrooms,
     carVacancies,
+    existingImages,
   } = req.body;
 
   const add = await Ads.findById(id);
 
-  let images;
+  let newImages;
 
   if (req.files) {
-    images = req.files.map((file) => file.filename);
+    newImages = req.files.map((file) => file.filename);
   }
 
   if (!add) {
@@ -290,10 +291,6 @@ const updateAds = async (req, res) => {
     add.whatsapp = whatsapp;
   }
 
-  if (images) {
-    add.images = images;
-  }
-
   if (bedrooms) {
     add.bedrooms = bedrooms;
   }
@@ -304,6 +301,30 @@ const updateAds = async (req, res) => {
 
   if (carVacancies) {
     add.carVacancies = carVacancies;
+  }
+
+  let deletedImages = [];
+  let currentImages = [];
+
+  if (existingImages && existingImages.length > 0) {
+    add.images.forEach((imgName) => {
+      if (!existingImages.includes(imgName)) {
+        deletedImages.push(imgName);
+      } else {
+        currentImages.push(imgName);
+      }
+    });
+  }
+
+  if (deletedImages.length > 0) {
+    add.images = currentImages;
+    deletedImages.forEach((imgName) => {
+      deleteImages("ads", imgName);
+    });
+  }
+
+  if (newImages.length > 0) {
+    add.images = [...add.images, ...newImages];
   }
 
   await add.save();
