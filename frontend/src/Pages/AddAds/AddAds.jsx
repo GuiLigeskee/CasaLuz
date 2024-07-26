@@ -216,6 +216,7 @@ const AddAds = () => {
       <ImageUploader
         initialImages={imageUrls.current}
         onChange={handleImageChange}
+        typePage={"CREATE"}
       />
 
       <form onSubmit={handleSubmit}>

@@ -6,11 +6,11 @@ import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
 import Spinner from "../../Components/Spinner/Spinner";
-import ImageUploaderUpdateADS from "../../Components/ImageUploaderUpdateADS/ImageUploaderUpdateADS.jsx";
+import ImageUploader from "../../Components/ImageUploader/ImageUploader.jsx";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 // Redux
@@ -62,14 +62,14 @@ const UpdateAds = () => {
   const [newImages, setNewImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
 
-  useEffect(() => {
-    if (error) {
-      setIsErrorMessageOpen(true);
-    }
-    if (message) {
-      setIsSuccessMessageOpen(true);
-    }
-  }, [error, message]);
+  // useEffect(() => {
+  //   if (error) {
+  //     setIsErrorMessageOpen(true);
+  //   }
+  //   if (message) {
+  //     setIsSuccessMessageOpen(true);
+  //   }
+  // }, [error, message]);
 
   useEffect(() => {
     dispatch(getAdsDetails(id));
@@ -143,7 +143,6 @@ const UpdateAds = () => {
     formData.append("carVacancies", carVacancies);
 
     if (existingImages.length > 0) {
-      console.log(existingImages);
       existingImages.forEach((image) => {
         formData.append("existingImages", image);
       });
@@ -157,7 +156,6 @@ const UpdateAds = () => {
     }
 
     dispatch(updateAds(formData));
-    // navigate(`/atualizar-anuncio/${id}`);
     // navigate(`/anuncio/${add.referenceAds}`);
   };
 
@@ -271,9 +269,10 @@ const UpdateAds = () => {
       </h1>
       <h3>Altere os campos abaixo para atualizar o anúncio</h3>
 
-      <ImageUploaderUpdateADS
+      <ImageUploader
         initialImages={images}
         onChange={handleImageChange}
+        typePage={"UPDATE"}
       />
 
       <form onSubmit={handleSubmit}>
