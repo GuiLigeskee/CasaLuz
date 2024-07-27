@@ -33,14 +33,23 @@ const AddAds = () => {
   const zipCodeError = useSelector(selectZipCodeError);
   const [messageZipCode, setMessageZipCode] = useState("");
 
-  // Modal
-  const [isOpen, setIsOpen] = useState(false);
+  // Modal do CEP
+  const [isCepModalOpen, setIsCepModalOpen] = useState(false);
+
+  // Modal da validação do formulario
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
+  // Animação do Modal
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
+
+  // Mensagem
   const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
   const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
   // Validação do formulario
   const [errors, setErrors] = useState({});
 
+  // UseState ADS
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tell, setTell] = useState("");
@@ -62,15 +71,7 @@ const AddAds = () => {
   const [adsImages, setAdsImages] = useState([]);
   const imageUrls = useRef([]);
 
-  // ImageUploader
-  const handleImageChange = (imageList) => {
-    setAdsImages(imageList.map((image) => image.file));
-    imageUrls.current = imageList.map((image) => ({
-      data_url: image.data_url,
-      file: image.file,
-    }));
-  };
-
+  // Função de Submit ADS
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -97,35 +98,47 @@ const AddAds = () => {
       carVacancies,
     };
 
-    const validationErrors = formValidation(adsData);
-    setErrors(validationErrors);
+    const validationErrors = formValidation(adsData, adsImages);
+    setErrors(Object.values(validationErrors));
 
-    if (Object.keys(validationErrors).length === 0) {
-      console.log("Formulário enviado com sucesso:", adsData);
+    if (Object.keys(validationErrors).length > 0) {
+      openErrorModal();
+    } else {
+      const formData = new FormData();
+
+      for (const key in adsData) {
+        formData.append(key, adsData[key]);
+      }
+
+      for (let i = 0; i < adsImages.length; i++) {
+        formData.append("images", adsImages[i]);
+      }
+
+      dispatch(publishAds(formData));
     }
-
-    return;
-
-    // const formData = new FormData();
-    // for (const key in adsData) {
-    //   formData.append(key, adsData[key]);
-    // }
-
-    // for (let i = 0; i < adsImages.length; i++) {
-    //   formData.append("images", adsImages[i]);
-    // }
-
-    // dispatch(publishAds(formData));
   };
 
-  useEffect(() => {
-    if (error) {
-      setIsErrorMessageOpen(true);
+  // Função do ImageUploader
+  const handleImageChange = (imageList) => {
+    setAdsImages(imageList.map((image) => image.file));
+    imageUrls.current = imageList.map((image) => ({
+      data_url: image.data_url,
+      file: image.file,
+    }));
+  };
+
+  // Faz a chamada para API CEP
+  const handleZipCode = async () => {
+    const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
+    if (cleanedZipCode.length !== 8) {
+      setMessageZipCode("Por favor, insira um CEP válido.");
+      setIsCepModalOpen(true);
+      return;
     }
-    if (message) {
-      setIsSuccessMessageOpen(true);
-    }
-  }, [error, message]);
+
+    await dispatch(getZipCode(cleanedZipCode));
+    setIsCepModalOpen(true);
+  };
 
   useEffect(() => {
     if (zipCodeError) {
@@ -139,36 +152,47 @@ const AddAds = () => {
     }
   }, [zipCodeApi, zipCodeError]);
 
-  const handleZipCode = async () => {
-    const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
-    if (cleanedZipCode.length !== 8) {
-      setMessageZipCode("Por favor, insira um CEP válido.");
-      setIsOpen(true);
-      return;
-    }
-    await dispatch(getZipCode(cleanedZipCode));
-    setIsOpen(true);
-  };
-
-  const openModal = (e) => {
+  // Modal de CEP
+  const openCepModal = (e) => {
     e.preventDefault();
     handleZipCode();
   };
-
-  const closeModal = () => {
+  const closeCepModal = () => {
     dispatch(resetZipCode());
     setMessageZipCode("");
-    setIsOpen(false);
+    setIsAnimationDone(false);
+    setIsCepModalOpen(false);
   };
 
-  const closeErrorMessage = () => {
-    setIsErrorMessageOpen(false);
+  // Modal da validação do formulario
+  const openErrorModal = () => setIsErrorModalOpen(true);
+  const closeErrorModal = () => {
+    setIsAnimationDone(false);
+    setIsErrorModalOpen(false);
   };
 
-  const closeSuccessMessage = () => {
-    setIsSuccessMessageOpen(false);
-  };
+  useEffect(() => {
+    if (isErrorModalOpen || isCepModalOpen) {
+      setIsAnimationDone(true);
+    } else {
+      setIsAnimationDone(false);
+    }
+  }, [isErrorModalOpen, isCepModalOpen]);
 
+  // Mensagem
+  const closeErrorMessage = () => setIsErrorMessageOpen(false);
+  const closeSuccessMessage = () => setIsSuccessMessageOpen(false);
+
+  useEffect(() => {
+    if (error) {
+      setIsErrorMessageOpen(true);
+    }
+    if (message) {
+      setIsSuccessMessageOpen(true);
+    }
+  }, [error, message]);
+
+  // Converter a mascara do preço pra number
   const parseStringToNumber = (priceStr) => {
     if (!priceStr) return null;
     const cleanedString = priceStr
@@ -181,12 +205,40 @@ const AddAds = () => {
 
   return (
     <div className="createAds">
+      {/* Modal da validação do formulario */}
       <Modal
-        isOpen={isOpen}
-        onRequestClose={closeModal}
+        isOpen={isErrorModalOpen}
+        onRequestClose={closeErrorModal}
+        contentLabel="Erros de Validação"
+        overlayClassName="modal-overlay"
+        className={`modal-content ${
+          isAnimationDone ? "modal-content-open" : ""
+        }`}
+        shouldCloseOnOverlayClick={false}
+        shouldCloseOnEsc={false}
+      >
+        <h1>Erros de Validação</h1>
+        {errors.length > 0 && (
+          <ul>
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        )}
+        <button onClick={closeErrorModal}>Fechar</button>
+      </Modal>
+
+      {/* Modal do CEP */}
+      <Modal
+        isOpen={isCepModalOpen}
+        onRequestClose={closeCepModal}
         contentLabel="Verificação de CEP"
         overlayClassName="modal-overlay"
-        className="modal-content"
+        className={`modal-content ${
+          isAnimationDone ? "modal-content-open" : ""
+        }`}
+        shouldCloseOnOverlayClick={false}
+        shouldCloseOnEsc={false}
       >
         <h1>Resultado da Pesquisa</h1>
         {messageZipCode && <p>{messageZipCode}</p>}
@@ -206,7 +258,7 @@ const AddAds = () => {
             </p>
           </div>
         )}
-        <button onClick={closeModal}>Fechar</button>
+        <button onClick={closeCepModal}>Fechar</button>
       </Modal>
 
       <Message
@@ -236,7 +288,7 @@ const AddAds = () => {
 
       <form onSubmit={handleSubmit}>
         <label>
-          <span>Título: *</span>
+          <span className="Obg">Título: *</span>
           <input
             type="text"
             name="title"
@@ -301,7 +353,7 @@ const AddAds = () => {
               value={zipCode || ""}
               onChange={(e) => setZipCode(e.target.value)}
             />
-            <button onClick={openModal}>Pesquisar CEP</button>
+            <button onClick={openCepModal}>Pesquisar CEP</button>
           </div>
         </label>
         <label>

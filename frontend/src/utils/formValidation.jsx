@@ -4,9 +4,7 @@ const formValidation = (adsData, images) => {
   // Título
   if (!adsData.title) {
     errors.title = "O título é obrigatório";
-  }
-
-  if (adsData.title && adsData.title.length <= 5) {
+  } else if (adsData.title.length <= 5) {
     errors.title = "O título precisa ter no mínimo 5 caracteres.";
   }
 
@@ -21,8 +19,10 @@ const formValidation = (adsData, images) => {
   }
 
   // Preço
-  if (isNaN(adsData.price) || adsData.price <= 0) {
-    errors.price = "Preço inválido";
+  if (!adsData.price) {
+    errors.price = "O preço é obrigatório";
+  } else if (isNaN(adsData.price) || adsData.price <= 0) {
+    errors.price = "Por favor, insira um preço válido e maior que zero";
   }
 
   // CEP
@@ -42,7 +42,7 @@ const formValidation = (adsData, images) => {
 
   // Bairro
   if (!adsData.district) {
-    errors.district = "O bairro obrigatório";
+    errors.district = "O bairro é obrigatório";
   }
 
   // Cidade
@@ -60,9 +60,9 @@ const formValidation = (adsData, images) => {
     errors.methodOfSale = "O tipo de venda é obrigatório";
   }
 
-  // Tamanho do imovel
+  // Tamanho do imóvel
   if (!adsData.landMeasurement) {
-    errors.landMeasurement = "O tamanho do imovel é obrigatório";
+    errors.landMeasurement = "O tamanho do imóvel é obrigatório";
   }
 
   // Whatsapp e Telefone do vendedor

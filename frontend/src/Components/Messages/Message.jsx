@@ -14,7 +14,7 @@ const Message = ({ msg, type, isOpen, onRequestClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(onRequestClose, 3000); // Fecha automaticamente após 3 segundos
+      const timer = setTimeout(onRequestClose, 3000);
       return () => clearTimeout(timer);
     }
   }, [isOpen, onRequestClose]);

@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, check } = require("express-validator");
 
 const adsInsertValidation = () => {
   return [
@@ -10,55 +10,87 @@ const adsInsertValidation = () => {
       .withMessage("O título precisa ser uma string")
       .isLength({ min: 5 })
       .withMessage("O título precisa ter no mínimo 5 caracteres."),
+
     body("typeOfRealty")
       .not()
       .equals("undefined")
       .withMessage("A categoria do imóvel é obrigatória"),
+
     body("description")
       .not()
       .equals("undefined")
       .withMessage("A descrição é obrigatória")
       .isString()
       .withMessage("A descrição precisa ser uma string"),
+
+    body("price")
+      .not()
+      .equals("undefined")
+      .withMessage("O preço é obrigatório"),
+
     body("zipCode")
       .not()
       .equals("undefined")
       .withMessage("O CEP é obrigatório"),
+
     body("address")
       .not()
       .equals("undefined")
       .withMessage("O endereço é obrigatório")
       .isString()
       .withMessage("O endereço precisa ser uma string"),
+
     body("addressNumber")
       .not()
       .equals("undefined")
       .withMessage("O número de endereço é obrigatório"),
+
     body("district")
       .not()
       .equals("undefined")
       .withMessage("O bairro obrigatório"),
+
     body("city")
       .not()
       .equals("undefined")
       .withMessage("A cidade é obrigatória"),
+
     body("stateAddress")
       .not()
       .equals("undefined")
       .withMessage("O estado é obrigatório"),
+
     body("methodOfSale")
       .not()
       .equals("undefined")
       .withMessage("O tipo de venda é obrigatório"),
+
     body("landMeasurement")
       .not()
       .equals("undefined")
       .withMessage("O tamanho do imovel é obrigatório")
       .isNumeric()
       .withMessage("O tamanho do imovel precisa ser um número"),
+
     body("whatsapp")
+      .optional()
       .isString()
       .withMessage("O número do WhatsApp precisa ser um texto"),
+
+    body("tell")
+      .optional()
+      .isString()
+      .withMessage("O número de telefone precisa ser um texto"),
+
+    check("whatsapp").custom((value, { req }) => {
+      if (!value && !req.body.tell) {
+        throw new Error(
+          "Pelo menos o número de telefone ou WhatsApp deve ser preenchido"
+        );
+      }
+      return true;
+    }),
+
     body("images").custom((value, { req }) => {
       if (!req.files || req.files.length === 0) {
         throw new Error("Pelo menos uma foto é obrigatória");
