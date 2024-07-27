@@ -64,6 +64,7 @@ const UpdateAds = () => {
 
   useEffect(() => {
     if (error) {
+      console.log(error);
       setIsErrorMessageOpen(true);
     }
     if (message) {
@@ -286,7 +287,6 @@ const UpdateAds = () => {
             placeholder="Título do anúncio"
             value={title || ""}
             onChange={(e) => setTitle(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -294,7 +294,6 @@ const UpdateAds = () => {
           <select
             onChange={(e) => setTypeOfRealty(e.target.value)}
             value={typeOfRealty || ""}
-            required
           >
             <option value="">Selecione uma categoria</option>
             <option value="Casa">Casa</option>
@@ -325,7 +324,6 @@ const UpdateAds = () => {
             value={price || ""}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="Digite o valor do imóvel"
-            required
           />
         </label>
         <label>
@@ -346,7 +344,6 @@ const UpdateAds = () => {
               placeholder="Digite o CEP"
               value={zipCode || ""}
               onChange={(e) => setZipCode(e.target.value)}
-              required
             />
             <button onClick={openModal}>Pesquisar CEP</button>
           </div>
@@ -359,7 +356,6 @@ const UpdateAds = () => {
             placeholder="Digite o endereço"
             value={address || ""}
             onChange={(e) => setAddress(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -371,7 +367,6 @@ const UpdateAds = () => {
             placeholder="Digite o número"
             value={addressNumber || ""}
             onChange={(e) => setAddressNumber(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -392,7 +387,6 @@ const UpdateAds = () => {
             placeholder="Digite o bairro"
             value={district || ""}
             onChange={(e) => setDistrict(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -403,7 +397,6 @@ const UpdateAds = () => {
             placeholder="Digite a cidade"
             value={city || ""}
             onChange={(e) => setCity(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -414,7 +407,6 @@ const UpdateAds = () => {
             placeholder="Digite o estado"
             value={stateAddress || ""}
             onChange={(e) => setStateAddress(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -425,7 +417,6 @@ const UpdateAds = () => {
             placeholder="Digite a área do imóvel em metros quadrados"
             value={landMeasurement || ""}
             onChange={(e) => setLandMeasurement(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -437,7 +428,6 @@ const UpdateAds = () => {
             min={0}
             value={bedrooms || ""}
             onChange={(e) => setBedrooms(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -449,7 +439,6 @@ const UpdateAds = () => {
             min={0}
             value={bathrooms || ""}
             onChange={(e) => setBathrooms(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -461,7 +450,6 @@ const UpdateAds = () => {
             min={0}
             value={carVacancies || ""}
             onChange={(e) => setCarVacancies(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -469,7 +457,6 @@ const UpdateAds = () => {
           <select
             onChange={(e) => setMethodOfSale(e.target.value)}
             value={methodOfSale || ""}
-            required
           >
             <option value="">Selecione um método</option>
             <option value="Venda">Venda</option>
@@ -500,7 +487,6 @@ const UpdateAds = () => {
             placeholder="(00) 00000-0000"
             onChange={(e) => setTell(e.target.value)}
             value={tell || ""}
-            required
           />
         </label>
         <label>
@@ -526,7 +512,6 @@ const UpdateAds = () => {
             placeholder="(00) 00000-0000"
             onChange={(e) => setWhatsapp(e.target.value)}
             value={whatsapp || ""}
-            required
           />
         </label>
 

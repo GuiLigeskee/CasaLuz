@@ -1,10 +1,12 @@
 import "./AddAds.css";
 
 // Components
+import Modal from "react-modal";
+import CepModal from "../../Components/CepModal/CepModal";
+import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import Message from "../../Components/Messages/Message";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
-import Modal from "react-modal";
 import Spinner from "../../Components/Spinner/Spinner";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader";
 import formValidation from "../../utils/formValidation";
@@ -41,9 +43,9 @@ const AddAds = () => {
 
   // Animação do Modal
   const [isAnimationDone, setIsAnimationDone] = useState(false);
+  const [isAnimationClosing, setIsAnimationClosing] = useState(false);
 
   // Mensagem
-  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
   const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
   // Validação do formulario
@@ -98,24 +100,24 @@ const AddAds = () => {
       carVacancies,
     };
 
-    const validationErrors = formValidation(adsData, adsImages);
-    setErrors(Object.values(validationErrors));
+    // const validationErrors = formValidation(adsData, adsImages);
+    // setErrors(Object.values(validationErrors));
 
-    if (Object.keys(validationErrors).length > 0) {
-      openErrorModal();
-    } else {
-      const formData = new FormData();
+    // if (Object.keys(validationErrors).length > 0) {
+    //   openErrorModal();
+    // } else {
+    const formData = new FormData();
 
-      for (const key in adsData) {
-        formData.append(key, adsData[key]);
-      }
-
-      for (let i = 0; i < adsImages.length; i++) {
-        formData.append("images", adsImages[i]);
-      }
-
-      dispatch(publishAds(formData));
+    for (const key in adsData) {
+      formData.append(key, adsData[key]);
     }
+
+    for (let i = 0; i < adsImages.length; i++) {
+      formData.append("images", adsImages[i]);
+    }
+
+    dispatch(publishAds(formData));
+    // }
   };
 
   // Função do ImageUploader
@@ -158,34 +160,35 @@ const AddAds = () => {
     handleZipCode();
   };
   const closeCepModal = () => {
-    dispatch(resetZipCode());
-    setMessageZipCode("");
-    setIsAnimationDone(false);
-    setIsCepModalOpen(false);
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      dispatch(resetZipCode());
+      setMessageZipCode("");
+      setIsAnimationDone(false);
+      setIsCepModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
   // Modal da validação do formulario
   const openErrorModal = () => setIsErrorModalOpen(true);
   const closeErrorModal = () => {
-    setIsAnimationDone(false);
-    setIsErrorModalOpen(false);
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setErrors({});
+      setIsAnimationDone(false);
+      setIsErrorModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
-  useEffect(() => {
-    if (isErrorModalOpen || isCepModalOpen) {
-      setIsAnimationDone(true);
-    } else {
-      setIsAnimationDone(false);
-    }
-  }, [isErrorModalOpen, isCepModalOpen]);
-
   // Mensagem
-  const closeErrorMessage = () => setIsErrorMessageOpen(false);
   const closeSuccessMessage = () => setIsSuccessMessageOpen(false);
 
   useEffect(() => {
     if (error) {
-      setIsErrorMessageOpen(true);
+      setErrors((prevErrors) => [...prevErrors, error]);
+      openErrorModal();
     }
     if (message) {
       setIsSuccessMessageOpen(true);
@@ -205,67 +208,25 @@ const AddAds = () => {
 
   return (
     <div className="createAds">
-      {/* Modal da validação do formulario */}
-      <Modal
+      {/* Modal da validação do formulario Frontend */}
+      <ErrorModal
         isOpen={isErrorModalOpen}
-        onRequestClose={closeErrorModal}
-        contentLabel="Erros de Validação"
-        overlayClassName="modal-overlay"
-        className={`modal-content ${
-          isAnimationDone ? "modal-content-open" : ""
-        }`}
-        shouldCloseOnOverlayClick={false}
-        shouldCloseOnEsc={false}
-      >
-        <h1>Erros de Validação</h1>
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((error, index) => (
-              <li key={index}>{error}</li>
-            ))}
-          </ul>
-        )}
-        <button onClick={closeErrorModal}>Fechar</button>
-      </Modal>
+        onClose={closeErrorModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        errors={errors}
+        setIsAnimationDone={setIsAnimationDone}
+      />
 
       {/* Modal do CEP */}
-      <Modal
+      <CepModal
         isOpen={isCepModalOpen}
-        onRequestClose={closeCepModal}
-        contentLabel="Verificação de CEP"
-        overlayClassName="modal-overlay"
-        className={`modal-content ${
-          isAnimationDone ? "modal-content-open" : ""
-        }`}
-        shouldCloseOnOverlayClick={false}
-        shouldCloseOnEsc={false}
-      >
-        <h1>Resultado da Pesquisa</h1>
-        {messageZipCode && <p>{messageZipCode}</p>}
-        {zipCodeApi && (
-          <div>
-            <p>
-              <strong>Rua:</strong> {zipCodeApi.logradouro}
-            </p>
-            <p>
-              <strong>Bairro:</strong> {zipCodeApi.bairro}
-            </p>
-            <p>
-              <strong>Cidade:</strong> {zipCodeApi.localidade}
-            </p>
-            <p>
-              <strong>Estado:</strong> {zipCodeApi.uf}
-            </p>
-          </div>
-        )}
-        <button onClick={closeCepModal}>Fechar</button>
-      </Modal>
-
-      <Message
-        msg={error}
-        type="error"
-        isOpen={isErrorMessageOpen}
-        onRequestClose={closeErrorMessage}
+        onClose={closeCepModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        messageZipCode={messageZipCode}
+        zipCodeApi={zipCodeApi}
+        setIsAnimationDone={setIsAnimationDone}
       />
 
       <Message
