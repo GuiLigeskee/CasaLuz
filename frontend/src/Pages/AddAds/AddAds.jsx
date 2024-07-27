@@ -236,22 +236,20 @@ const AddAds = () => {
 
       <form onSubmit={handleSubmit}>
         <label>
-          <span>Título:</span>
+          <span>Título: *</span>
           <input
             type="text"
             name="title"
             placeholder="Título do anúncio"
             onChange={(e) => setTitle(e.target.value)}
             value={title || ""}
-            required
           />
         </label>
         <label>
-          <span>Tipo de imóvel:</span>
+          <span>Tipo de imóvel: *</span>
           <select
             onChange={(e) => setTypeOfRealty(e.target.value)}
             value={typeOfRealty || ""}
-            required
           >
             <option value="">Selecione uma categoria</option>
             <option value="Casa">Casa</option>
@@ -261,7 +259,7 @@ const AddAds = () => {
           </select>
         </label>
         <label>
-          <span>Descrição do imóvel:</span>
+          <span>Descrição do imóvel: *</span>
           <textarea
             name="description"
             placeholder="Descreva o imóvel"
@@ -271,7 +269,7 @@ const AddAds = () => {
           ></textarea>
         </label>
         <label>
-          <span>Valor do imóvel:</span>
+          <span>Valor do imóvel: *</span>
           <NumericFormat
             prefix="R$ "
             decimalSeparator=","
@@ -282,11 +280,10 @@ const AddAds = () => {
             value={price || ""}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="Digite o valor do imóvel"
-            required
           />
         </label>
         <label>
-          <span>CEP:</span>
+          <span>CEP: *</span>
           <div className="label-input-button">
             <MaskedInput
               mask={[
@@ -303,24 +300,22 @@ const AddAds = () => {
               placeholder="Digite o CEP"
               value={zipCode || ""}
               onChange={(e) => setZipCode(e.target.value)}
-              required
             />
             <button onClick={openModal}>Pesquisar CEP</button>
           </div>
         </label>
         <label>
-          <span>Endereço:</span>
+          <span>Endereço: *</span>
           <input
             type="text"
             name="address"
             placeholder="Digite o endereço"
             value={address || ""}
             onChange={(e) => setAddress(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Número de endereço:</span>
+          <span>Número de endereço: *</span>
           <input
             type="text"
             name="addressNumber"
@@ -328,7 +323,6 @@ const AddAds = () => {
             placeholder="Digite o número"
             value={addressNumber || ""}
             onChange={(e) => setAddressNumber(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -342,47 +336,43 @@ const AddAds = () => {
           />
         </label>
         <label>
-          <span>Bairro:</span>
+          <span>Bairro: *</span>
           <input
             type="text"
             name="district"
             placeholder="Digite o bairro"
             value={district || ""}
             onChange={(e) => setDistrict(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Cidade:</span>
+          <span>Cidade: *</span>
           <input
             type="text"
             name="city"
             placeholder="Digite a cidade"
             value={city || ""}
             onChange={(e) => setCity(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Estado:</span>
+          <span>Estado: *</span>
           <input
             type="text"
             name="stateAddress"
             placeholder="Digite o estado"
             value={stateAddress || ""}
             onChange={(e) => setStateAddress(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Área do imóvel (m²):</span>
+          <span>Área do imóvel (m²): *</span>
           <input
             type="number"
             name="landMeasurement"
             placeholder="Digite a área do imóvel em metros quadrados"
             value={landMeasurement || ""}
             onChange={(e) => setLandMeasurement(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -394,7 +384,6 @@ const AddAds = () => {
             min={0}
             value={bedrooms || ""}
             onChange={(e) => setBedrooms(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -406,7 +395,6 @@ const AddAds = () => {
             min={0}
             value={bathrooms || ""}
             onChange={(e) => setBathrooms(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -418,15 +406,13 @@ const AddAds = () => {
             min={0}
             value={carVacancies || ""}
             onChange={(e) => setCarVacancies(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Método de negócio:</span>
+          <span>Método de negócio: *</span>
           <select
             onChange={(e) => setMethodOfSale(e.target.value)}
             value={methodOfSale || ""}
-            required
           >
             <option value="">Selecione um método</option>
             <option value="Venda">Venda</option>
@@ -457,7 +443,6 @@ const AddAds = () => {
             placeholder="(00) 00000-0000"
             onChange={(e) => setTell(e.target.value)}
             value={tell || ""}
-            required
           />
         </label>
         <label>
@@ -483,7 +468,6 @@ const AddAds = () => {
             placeholder="(00) 00000-0000"
             onChange={(e) => setWhatsapp(e.target.value)}
             value={whatsapp || ""}
-            required
           />
         </label>
 
