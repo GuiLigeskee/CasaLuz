@@ -62,14 +62,14 @@ const UpdateAds = () => {
   const [newImages, setNewImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     setIsErrorMessageOpen(true);
-  //   }
-  //   if (message) {
-  //     setIsSuccessMessageOpen(true);
-  //   }
-  // }, [error, message]);
+  useEffect(() => {
+    if (error) {
+      setIsErrorMessageOpen(true);
+    }
+    if (message) {
+      setIsSuccessMessageOpen(true);
+    }
+  }, [error, message]);
 
   useEffect(() => {
     dispatch(getAdsDetails(id));
@@ -114,12 +114,7 @@ const UpdateAds = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    let priceNumber = parseStringToNumber(price);
-
-    if (typeof priceNumber !== "string") {
-      priceNumber = String(priceNumber);
-    }
+    const priceNumber = parseStringToNumber(price);
 
     const formData = new FormData();
     formData.append("id", id);
@@ -213,9 +208,7 @@ const UpdateAds = () => {
       .replace("R$ ", "")
       .replace(/\./g, "")
       .replace(",", ".");
-
     const priceNumber = parseFloat(cleanedString);
-
     return priceNumber;
   };
 

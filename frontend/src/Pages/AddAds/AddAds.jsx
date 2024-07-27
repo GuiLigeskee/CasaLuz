@@ -7,6 +7,7 @@ import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
 import Spinner from "../../Components/Spinner/Spinner";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader";
+import formValidation from "../../utils/formValidation";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -37,6 +38,9 @@ const AddAds = () => {
   const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
   const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
+  // Validação do formulario
+  const [errors, setErrors] = useState({});
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tell, setTell] = useState("");
@@ -58,6 +62,7 @@ const AddAds = () => {
   const [adsImages, setAdsImages] = useState([]);
   const imageUrls = useRef([]);
 
+  // ImageUploader
   const handleImageChange = (imageList) => {
     setAdsImages(imageList.map((image) => image.file));
     imageUrls.current = imageList.map((image) => ({
@@ -68,6 +73,7 @@ const AddAds = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const priceNumber = parseStringToNumber(price);
 
     const adsData = {
@@ -91,16 +97,25 @@ const AddAds = () => {
       carVacancies,
     };
 
-    const formData = new FormData();
-    for (const key in adsData) {
-      formData.append(key, adsData[key]);
+    const validationErrors = formValidation(adsData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      console.log("Formulário enviado com sucesso:", adsData);
     }
 
-    for (let i = 0; i < adsImages.length; i++) {
-      formData.append("images", adsImages[i]);
-    }
+    return;
 
-    dispatch(publishAds(formData));
+    // const formData = new FormData();
+    // for (const key in adsData) {
+    //   formData.append(key, adsData[key]);
+    // }
+
+    // for (let i = 0; i < adsImages.length; i++) {
+    //   formData.append("images", adsImages[i]);
+    // }
+
+    // dispatch(publishAds(formData));
   };
 
   useEffect(() => {
