@@ -9,68 +9,92 @@ const adsInsertValidation = () => {
       .isString()
       .withMessage("O título precisa ser uma string")
       .isLength({ min: 5 })
-      .withMessage("O título precisa ter no mínimo 5 caracteres."),
+      .withMessage("O título precisa ter no mínimo 5 caracteres.")
+      .notEmpty()
+      .withMessage("O título não pode ser vazio"),
 
     body("typeOfRealty")
       .not()
       .equals("undefined")
-      .withMessage("A categoria do imóvel é obrigatória"),
+      .withMessage("A categoria do imóvel é obrigatória")
+      .notEmpty()
+      .withMessage("A categoria do imóvel não pode ser vazia"),
 
     body("description")
       .not()
       .equals("undefined")
       .withMessage("A descrição é obrigatória")
       .isString()
-      .withMessage("A descrição precisa ser uma string"),
+      .withMessage("A descrição precisa ser uma string")
+      .notEmpty()
+      .withMessage("A descrição não pode ser vazia"),
 
     body("price")
       .not()
       .equals("undefined")
-      .withMessage("O preço é obrigatório"),
+      .withMessage("O preço é obrigatório")
+      .notEmpty()
+      .withMessage("O preço não pode ser vazio")
+      .isFloat({ gt: 0 })
+      .withMessage("O preço deve ser um número maior que zero"),
 
     body("zipCode")
       .not()
       .equals("undefined")
-      .withMessage("O CEP é obrigatório"),
+      .withMessage("O CEP é obrigatório")
+      .notEmpty()
+      .withMessage("O CEP não pode ser vazio"),
 
     body("address")
       .not()
       .equals("undefined")
       .withMessage("O endereço é obrigatório")
       .isString()
-      .withMessage("O endereço precisa ser uma string"),
+      .withMessage("O endereço precisa ser uma string")
+      .notEmpty()
+      .withMessage("O endereço não pode ser vazio"),
 
     body("addressNumber")
       .not()
       .equals("undefined")
-      .withMessage("O número de endereço é obrigatório"),
+      .withMessage("O número de endereço é obrigatório")
+      .notEmpty()
+      .withMessage("O número de endereço não pode ser vazio"),
 
     body("district")
       .not()
       .equals("undefined")
-      .withMessage("O bairro obrigatório"),
+      .withMessage("O bairro é obrigatório")
+      .notEmpty()
+      .withMessage("O bairro não pode ser vazio"),
 
     body("city")
       .not()
       .equals("undefined")
-      .withMessage("A cidade é obrigatória"),
+      .withMessage("A cidade é obrigatória")
+      .notEmpty()
+      .withMessage("A cidade não pode ser vazia"),
 
     body("stateAddress")
       .not()
       .equals("undefined")
-      .withMessage("O estado é obrigatório"),
+      .withMessage("O estado é obrigatório")
+      .notEmpty()
+      .withMessage("O estado não pode ser vazio"),
 
     body("methodOfSale")
       .not()
       .equals("undefined")
-      .withMessage("O tipo de venda é obrigatório"),
+      .withMessage("O tipo de venda é obrigatório")
+      .notEmpty()
+      .withMessage("O tipo de venda não pode ser vazio"),
 
     body("landMeasurement")
       .not()
       .equals("undefined")
-      .withMessage("O tamanho do imovel é obrigatório")
+      .withMessage("O tamanho do imóvel é obrigatório")
       .isNumeric()
-      .withMessage("O tamanho do imovel precisa ser um número"),
+      .withMessage("O tamanho do imóvel precisa ser um número"),
 
     body("whatsapp")
       .optional()

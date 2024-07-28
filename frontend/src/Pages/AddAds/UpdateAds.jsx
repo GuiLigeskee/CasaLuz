@@ -523,8 +523,6 @@ const UpdateAds = () => {
             <input type="submit" disabled value="Aguarde..." />
           </>
         )}
-        {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />}
       </form>
     </div>
   );

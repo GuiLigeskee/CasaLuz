@@ -4,7 +4,7 @@ import "./AddAds.css";
 import Modal from "react-modal";
 import CepModal from "../../Components/CepModal/CepModal";
 import ErrorModal from "../../Components/ErrorModal/ErrorModal";
-import Message from "../../Components/Messages/Message";
+import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Spinner from "../../Components/Spinner/Spinner";
@@ -41,12 +41,12 @@ const AddAds = () => {
   // Modal da validação do formulario
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
+  // Modal de sucesso
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
   // Animação do Modal
   const [isAnimationDone, setIsAnimationDone] = useState(false);
   const [isAnimationClosing, setIsAnimationClosing] = useState(false);
-
-  // Mensagem
-  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
 
   // Validação do formulario
   const [errors, setErrors] = useState({});
@@ -100,24 +100,24 @@ const AddAds = () => {
       carVacancies,
     };
 
-    // const validationErrors = formValidation(adsData, adsImages);
-    // setErrors(Object.values(validationErrors));
+    const validationErrors = formValidation(adsData, adsImages);
+    setErrors(Object.values(validationErrors));
 
-    // if (Object.keys(validationErrors).length > 0) {
-    //   openErrorModal();
-    // } else {
-    const formData = new FormData();
+    if (Object.keys(validationErrors).length > 0) {
+      openErrorModal();
+    } else {
+      const formData = new FormData();
 
-    for (const key in adsData) {
-      formData.append(key, adsData[key]);
+      for (const key in adsData) {
+        formData.append(key, adsData[key]);
+      }
+
+      for (let i = 0; i < adsImages.length; i++) {
+        formData.append("images", adsImages[i]);
+      }
+
+      dispatch(publishAds(formData));
     }
-
-    for (let i = 0; i < adsImages.length; i++) {
-      formData.append("images", adsImages[i]);
-    }
-
-    dispatch(publishAds(formData));
-    // }
   };
 
   // Função do ImageUploader
@@ -182,18 +182,51 @@ const AddAds = () => {
     }, 300);
   };
 
-  // Mensagem
-  const closeSuccessMessage = () => setIsSuccessMessageOpen(false);
+  // Modal de sucesso
+  const openSuccessModal = () => setIsSuccessModalOpen(true);
+  const closeSuccessModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setIsAnimationDone(false);
+      setIsSuccessModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
+  };
 
   useEffect(() => {
     if (error) {
-      setErrors((prevErrors) => [...prevErrors, error]);
+      const backendErrors = { error: error };
+      setErrors(backendErrors);
       openErrorModal();
     }
+
     if (message) {
-      setIsSuccessMessageOpen(true);
+      openSuccessModal();
     }
   }, [error, message]);
+
+  // Função para cadastrar um novo ADS
+  const resetStates = () => {
+    setTitle("");
+    setDescription("");
+    setTell("");
+    setWhatsapp("");
+    setZipCode("");
+    setAddress("");
+    setAddressNumber("");
+    setComplement("");
+    setDistrict("");
+    setCity("");
+    setStateAddress("");
+    setTypeOfRealty("");
+    setMethodOfSale("");
+    setLandMeasurement("");
+    setPrice("");
+    setBedrooms("");
+    setBathrooms("");
+    setCarVacancies("");
+    setAdsImages([]);
+  };
 
   // Converter a mascara do preço pra number
   const parseStringToNumber = (priceStr) => {
@@ -229,11 +262,16 @@ const AddAds = () => {
         setIsAnimationDone={setIsAnimationDone}
       />
 
-      <Message
+      {/* Modal de sucesso */}
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={closeSuccessModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        type={"CREATE"}
         msg={message}
-        type="success"
-        isOpen={isSuccessMessageOpen}
-        onRequestClose={closeSuccessMessage}
+        setIsAnimationDone={setIsAnimationDone}
+        onResetStates={resetStates}
       />
 
       <h1>
@@ -249,7 +287,7 @@ const AddAds = () => {
 
       <form onSubmit={handleSubmit}>
         <label>
-          <span className="Obg">Título: *</span>
+          <span>Título: *</span>
           <input
             type="text"
             name="title"

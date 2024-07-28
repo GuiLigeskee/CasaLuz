@@ -6,7 +6,7 @@ const ErrorModal = ({
   onClose,
   isAnimationDone,
   isAnimationClosing,
-  errors = {}, // Define a default value to ensure it's always an object
+  errors = {},
   setIsAnimationDone,
 }) => {
   useEffect(() => {
