@@ -1,12 +1,15 @@
 import "./AddAds.css";
 
 // Components
-import Message from "../../Components/Messages/Message";
+import Modal from "react-modal";
+import CepModal from "../../Components/CepModal/CepModal";
+import ErrorModal from "../../Components/ErrorModal/ErrorModal";
+import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
-import Modal from "react-modal";
 import Spinner from "../../Components/Spinner/Spinner";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader";
+import formValidation from "../../utils/formValidation";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -32,11 +35,23 @@ const AddAds = () => {
   const zipCodeError = useSelector(selectZipCodeError);
   const [messageZipCode, setMessageZipCode] = useState("");
 
-  // Modal
-  const [isOpen, setIsOpen] = useState(false);
-  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
-  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
+  // Modal do CEP
+  const [isCepModalOpen, setIsCepModalOpen] = useState(false);
 
+  // Modal da validação do formulario
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
+  // Modal de sucesso
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  // Animação do Modal
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
+  const [isAnimationClosing, setIsAnimationClosing] = useState(false);
+
+  // Validação do formulario
+  const [errors, setErrors] = useState({});
+
+  // UseState ADS
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tell, setTell] = useState("");
@@ -58,16 +73,10 @@ const AddAds = () => {
   const [adsImages, setAdsImages] = useState([]);
   const imageUrls = useRef([]);
 
-  const handleImageChange = (imageList) => {
-    setAdsImages(imageList.map((image) => image.file));
-    imageUrls.current = imageList.map((image) => ({
-      data_url: image.data_url,
-      file: image.file,
-    }));
-  };
-
+  // Função de Submit ADS
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const priceNumber = parseStringToNumber(price);
 
     const adsData = {
@@ -91,26 +100,47 @@ const AddAds = () => {
       carVacancies,
     };
 
-    const formData = new FormData();
-    for (const key in adsData) {
-      formData.append(key, adsData[key]);
-    }
+    const validationErrors = formValidation(adsData, adsImages);
+    setErrors(Object.values(validationErrors));
 
-    for (let i = 0; i < adsImages.length; i++) {
-      formData.append("images", adsImages[i]);
-    }
+    if (Object.keys(validationErrors).length > 0) {
+      openErrorModal();
+    } else {
+      const formData = new FormData();
 
-    dispatch(publishAds(formData));
+      for (const key in adsData) {
+        formData.append(key, adsData[key]);
+      }
+
+      for (let i = 0; i < adsImages.length; i++) {
+        formData.append("images", adsImages[i]);
+      }
+
+      dispatch(publishAds(formData));
+    }
   };
 
-  useEffect(() => {
-    if (error) {
-      setIsErrorMessageOpen(true);
+  // Função do ImageUploader
+  const handleImageChange = (imageList) => {
+    setAdsImages(imageList.map((image) => image.file));
+    imageUrls.current = imageList.map((image) => ({
+      data_url: image.data_url,
+      file: image.file,
+    }));
+  };
+
+  // Faz a chamada para API CEP
+  const handleZipCode = async () => {
+    const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
+    if (cleanedZipCode.length !== 8) {
+      setMessageZipCode("Por favor, insira um CEP válido.");
+      setIsCepModalOpen(true);
+      return;
     }
-    if (message) {
-      setIsSuccessMessageOpen(true);
-    }
-  }, [error, message]);
+
+    await dispatch(getZipCode(cleanedZipCode));
+    setIsCepModalOpen(true);
+  };
 
   useEffect(() => {
     if (zipCodeError) {
@@ -124,36 +154,81 @@ const AddAds = () => {
     }
   }, [zipCodeApi, zipCodeError]);
 
-  const handleZipCode = async () => {
-    const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
-    if (cleanedZipCode.length !== 8) {
-      setMessageZipCode("Por favor, insira um CEP válido.");
-      setIsOpen(true);
-      return;
-    }
-    await dispatch(getZipCode(cleanedZipCode));
-    setIsOpen(true);
-  };
-
-  const openModal = (e) => {
+  // Modal de CEP
+  const openCepModal = (e) => {
     e.preventDefault();
     handleZipCode();
   };
-
-  const closeModal = () => {
-    dispatch(resetZipCode());
-    setMessageZipCode("");
-    setIsOpen(false);
+  const closeCepModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      dispatch(resetZipCode());
+      setMessageZipCode("");
+      setIsAnimationDone(false);
+      setIsCepModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
-  const closeErrorMessage = () => {
-    setIsErrorMessageOpen(false);
+  // Modal da validação do formulario
+  const openErrorModal = () => setIsErrorModalOpen(true);
+  const closeErrorModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setErrors({});
+      setIsAnimationDone(false);
+      setIsErrorModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
-  const closeSuccessMessage = () => {
-    setIsSuccessMessageOpen(false);
+  // Modal de sucesso
+  const openSuccessModal = () => setIsSuccessModalOpen(true);
+  const closeSuccessModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setIsAnimationDone(false);
+      setIsSuccessModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
+  useEffect(() => {
+    if (error) {
+      const backendErrors = { error: error };
+      setErrors(backendErrors);
+      openErrorModal();
+    }
+
+    if (message) {
+      openSuccessModal();
+    }
+  }, [error, message]);
+
+  // Função para cadastrar um novo ADS
+  const resetStates = () => {
+    setTitle("");
+    setDescription("");
+    setTell("");
+    setWhatsapp("");
+    setZipCode("");
+    setAddress("");
+    setAddressNumber("");
+    setComplement("");
+    setDistrict("");
+    setCity("");
+    setStateAddress("");
+    setTypeOfRealty("");
+    setMethodOfSale("");
+    setLandMeasurement("");
+    setPrice("");
+    setBedrooms("");
+    setBathrooms("");
+    setCarVacancies("");
+    setAdsImages([]);
+  };
+
+  // Converter a mascara do preço pra number
   const parseStringToNumber = (priceStr) => {
     if (!priceStr) return null;
     const cleanedString = priceStr
@@ -166,46 +241,37 @@ const AddAds = () => {
 
   return (
     <div className="createAds">
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={closeModal}
-        contentLabel="Verificação de CEP"
-        overlayClassName="modal-overlay"
-        className="modal-content"
-      >
-        <h1>Resultado da Pesquisa</h1>
-        {messageZipCode && <p>{messageZipCode}</p>}
-        {zipCodeApi && (
-          <div>
-            <p>
-              <strong>Rua:</strong> {zipCodeApi.logradouro}
-            </p>
-            <p>
-              <strong>Bairro:</strong> {zipCodeApi.bairro}
-            </p>
-            <p>
-              <strong>Cidade:</strong> {zipCodeApi.localidade}
-            </p>
-            <p>
-              <strong>Estado:</strong> {zipCodeApi.uf}
-            </p>
-          </div>
-        )}
-        <button onClick={closeModal}>Fechar</button>
-      </Modal>
-
-      <Message
-        msg={error}
-        type="error"
-        isOpen={isErrorMessageOpen}
-        onRequestClose={closeErrorMessage}
+      {/* Modal da validação do formulario Frontend */}
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={closeErrorModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        errors={errors}
+        setIsAnimationDone={setIsAnimationDone}
       />
 
-      <Message
+      {/* Modal do CEP */}
+      <CepModal
+        isOpen={isCepModalOpen}
+        onClose={closeCepModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        messageZipCode={messageZipCode}
+        zipCodeApi={zipCodeApi}
+        setIsAnimationDone={setIsAnimationDone}
+      />
+
+      {/* Modal de sucesso */}
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={closeSuccessModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        type={"CREATE"}
         msg={message}
-        type="success"
-        isOpen={isSuccessMessageOpen}
-        onRequestClose={closeSuccessMessage}
+        setIsAnimationDone={setIsAnimationDone}
+        onResetStates={resetStates}
       />
 
       <h1>
@@ -216,26 +282,25 @@ const AddAds = () => {
       <ImageUploader
         initialImages={imageUrls.current}
         onChange={handleImageChange}
+        typePage={"CREATE"}
       />
 
       <form onSubmit={handleSubmit}>
         <label>
-          <span>Título:</span>
+          <span>Título: *</span>
           <input
             type="text"
             name="title"
             placeholder="Título do anúncio"
             onChange={(e) => setTitle(e.target.value)}
             value={title || ""}
-            required
           />
         </label>
         <label>
-          <span>Tipo de imóvel:</span>
+          <span>Tipo de imóvel: *</span>
           <select
             onChange={(e) => setTypeOfRealty(e.target.value)}
             value={typeOfRealty || ""}
-            required
           >
             <option value="">Selecione uma categoria</option>
             <option value="Casa">Casa</option>
@@ -245,7 +310,7 @@ const AddAds = () => {
           </select>
         </label>
         <label>
-          <span>Descrição do imóvel:</span>
+          <span>Descrição do imóvel: *</span>
           <textarea
             name="description"
             placeholder="Descreva o imóvel"
@@ -255,7 +320,7 @@ const AddAds = () => {
           ></textarea>
         </label>
         <label>
-          <span>Valor do imóvel:</span>
+          <span>Valor do imóvel: *</span>
           <NumericFormat
             prefix="R$ "
             decimalSeparator=","
@@ -266,11 +331,10 @@ const AddAds = () => {
             value={price || ""}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="Digite o valor do imóvel"
-            required
           />
         </label>
         <label>
-          <span>CEP:</span>
+          <span>CEP: *</span>
           <div className="label-input-button">
             <MaskedInput
               mask={[
@@ -287,24 +351,22 @@ const AddAds = () => {
               placeholder="Digite o CEP"
               value={zipCode || ""}
               onChange={(e) => setZipCode(e.target.value)}
-              required
             />
-            <button onClick={openModal}>Pesquisar CEP</button>
+            <button onClick={openCepModal}>Pesquisar CEP</button>
           </div>
         </label>
         <label>
-          <span>Endereço:</span>
+          <span>Endereço: *</span>
           <input
             type="text"
             name="address"
             placeholder="Digite o endereço"
             value={address || ""}
             onChange={(e) => setAddress(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Número de endereço:</span>
+          <span>Número de endereço: *</span>
           <input
             type="text"
             name="addressNumber"
@@ -312,7 +374,6 @@ const AddAds = () => {
             placeholder="Digite o número"
             value={addressNumber || ""}
             onChange={(e) => setAddressNumber(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -326,47 +387,43 @@ const AddAds = () => {
           />
         </label>
         <label>
-          <span>Bairro:</span>
+          <span>Bairro: *</span>
           <input
             type="text"
             name="district"
             placeholder="Digite o bairro"
             value={district || ""}
             onChange={(e) => setDistrict(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Cidade:</span>
+          <span>Cidade: *</span>
           <input
             type="text"
             name="city"
             placeholder="Digite a cidade"
             value={city || ""}
             onChange={(e) => setCity(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Estado:</span>
+          <span>Estado: *</span>
           <input
             type="text"
             name="stateAddress"
             placeholder="Digite o estado"
             value={stateAddress || ""}
             onChange={(e) => setStateAddress(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Área do imóvel (m²):</span>
+          <span>Área do imóvel (m²): *</span>
           <input
             type="number"
             name="landMeasurement"
             placeholder="Digite a área do imóvel em metros quadrados"
             value={landMeasurement || ""}
             onChange={(e) => setLandMeasurement(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -378,7 +435,6 @@ const AddAds = () => {
             min={0}
             value={bedrooms || ""}
             onChange={(e) => setBedrooms(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -390,7 +446,6 @@ const AddAds = () => {
             min={0}
             value={bathrooms || ""}
             onChange={(e) => setBathrooms(e.target.value)}
-            required
           />
         </label>
         <label>
@@ -402,15 +457,13 @@ const AddAds = () => {
             min={0}
             value={carVacancies || ""}
             onChange={(e) => setCarVacancies(e.target.value)}
-            required
           />
         </label>
         <label>
-          <span>Método de negócio:</span>
+          <span>Método de negócio: *</span>
           <select
             onChange={(e) => setMethodOfSale(e.target.value)}
             value={methodOfSale || ""}
-            required
           >
             <option value="">Selecione um método</option>
             <option value="Venda">Venda</option>
@@ -441,7 +494,6 @@ const AddAds = () => {
             placeholder="(00) 00000-0000"
             onChange={(e) => setTell(e.target.value)}
             value={tell || ""}
-            required
           />
         </label>
         <label>
@@ -467,7 +519,6 @@ const AddAds = () => {
             placeholder="(00) 00000-0000"
             onChange={(e) => setWhatsapp(e.target.value)}
             value={whatsapp || ""}
-            required
           />
         </label>
 

@@ -162,23 +162,46 @@ textarea {
   margin: 1em auto;
 }
 
+/* CSS do Modal */
 .modal-overlay {
-  background: #ececec;
   position: fixed;
   top: 0;
-  bottom: 0;
   right: 0;
+  bottom: 0;
   left: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay-open {
+  opacity: 1;
+}
+
+.modal-overlay-close {
+  opacity: 0;
 }
 
 .modal-content {
-  width: 90%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 4px;
   max-width: 500px;
-  background-color: white;
-  padding: 10px;
-  border-radius: 5px;
+  width: 90%;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.modal-content-open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.modal-content-close {
+  opacity: 0;
+  transform: scale(0.8);
 }

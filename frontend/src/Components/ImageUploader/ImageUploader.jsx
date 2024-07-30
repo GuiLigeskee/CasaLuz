@@ -1,16 +1,31 @@
 import "./ImageUploader.css";
 
+import { uploads } from "../../utils/config";
+
+// Hooks
 import { useState, useEffect } from "react";
 import ImageUploading from "react-images-uploading";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
-const ImageUploader = ({ initialImages = [], onChange }) => {
+const ImageUploader = ({ initialImages = [], onChange, typePage }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    setImages(initialImages);
-  }, [initialImages]);
+    if (initialImages && typePage === "UPDATE") {
+      setImages(
+        initialImages.map((img) => ({
+          data_url: `${uploads}/ads/${img}`,
+          file: null,
+          name: img,
+        }))
+      );
+    }
+
+    if (initialImages && typePage === "CREATE") {
+      setImages(initialImages);
+    }
+  }, [initialImages, typePage]);
 
   const handleImageChange = (imageList) => {
     setImages(imageList);
@@ -68,7 +83,10 @@ const ImageUploader = ({ initialImages = [], onChange }) => {
                             className="image-item"
                           >
                             <span>{index + 1}. </span>
-                            <img src={image.data_url} alt="" />
+                            <img
+                              src={image.data_url}
+                              alt={`Imagem ${index + 1}`}
+                            />
                             <div className="image-item-btn-wrapper">
                               <button onClick={() => onImageUpdate(index)}>
                                 <FaEdit />
