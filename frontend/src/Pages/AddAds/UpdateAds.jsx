@@ -5,7 +5,7 @@ import Message from "../../Components/Messages/Message";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
-import Spinner from "../../Components/Spinner/Spinner";
+import Loading from "../../Components/Loading/Loading";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader.jsx";
 
 // Hooks
@@ -519,8 +519,7 @@ const UpdateAds = () => {
           <input type="submit" value="Atualizar anúncio" />
         ) : (
           <>
-            <Spinner />
-            <input type="submit" disabled value="Aguarde..." />
+            <Loading />
           </>
         )}
       </form>

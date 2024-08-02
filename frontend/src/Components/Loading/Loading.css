@@ -1,0 +1,30 @@
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.205); /* Fundo semi-transparente */
+  z-index: 9999; /* Garante que o loader fique acima de outros elementos */
+}
+
+.spinner {
+  border: 6px solid #f3f3f300; /* Cor de fundo do spinner */
+  border-top: 6px solid #fdb303; /* Cor da borda do topo (efeito de rotação) */
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

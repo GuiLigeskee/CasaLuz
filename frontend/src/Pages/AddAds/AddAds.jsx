@@ -7,7 +7,7 @@ import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
-import Spinner from "../../Components/Spinner/Spinner";
+import Loading from "../../Components/Loading/Loading";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader";
 import formValidation from "../../utils/formValidation";
 
@@ -525,8 +525,8 @@ const AddAds = () => {
         {!loading && <input type="submit" value="Criar anúncio" />}
         {loading && (
           <div className="loading-container">
-            <Spinner />
-            <input type="submit" disabled value="Aguarde..." />
+            <Loading />
+            {/* <input type="submit" disabled value="Aguarde..." /> */}
           </div>
         )}
       </form>
