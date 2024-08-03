@@ -31,6 +31,25 @@ input[type="file"] {
   display: none;
 }
 
+.imagePreviews {
+  display: flex;
+  overflow-x: auto; /* Adiciona rolagem horizontal quando as imagens ultrapassam a largura do contêiner */
+  padding: 10px; /* Adiciona algum espaçamento entre as imagens */
+  width: 100%; /* Garante que o contêiner ocupe toda a largura disponível */
+}
+
+.imagePreviewContainer {
+  flex: 0 0 auto; /* Garante que as imagens tenham largura fixa e não se estendam */
+  margin-right: 10px; /* Adiciona algum espaçamento entre as imagens */
+}
+
+.imagePreview {
+  max-width: 150px; /* Define a largura máxima para as imagens */
+  height: auto; /* Mantém a proporção da imagem */
+  border: 1px solid #ccc; /* Adiciona uma borda ao redor das imagens */
+  border-radius: 5px; /* Adiciona uma borda arredondada às imagens */
+}
+
 select {
   color: #08273c;
   border: 1px solid #08273c;
@@ -52,6 +71,54 @@ select option {
   font-size: 0.8em;
   padding: 1em;
   border: none;
+}
+
+.upload__image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.image-list {
+  display: flex;
+  flex-direction: row; /* Assegura que os itens fiquem em uma linha */
+  gap: 10px;
+  overflow-x: auto; /* Permite rolagem horizontal se necessário */
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.image-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.image-item__btn-wrapper {
+  position: absolute;
+  top: 10px;
+}
+
+.image-item__btn-wrapper button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  font-size: 1.2em;
+  transition: color 0.3s;
+  padding: 1em;
+}
+
+.image-item__btn-wrapper button:hover {
+  color: #fdb303;
+}
+
+.image-item img {
+  width: 250px; /* Ajuste o valor conforme desejado */
+  height: auto; /* Mantém a proporção da imagem */
 }
 
 @media screen and (max-width: 767px) {

@@ -1,0 +1,84 @@
+/* CustomSuccessModal.css */
+
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.custom-modal-overlay-open {
+  opacity: 1;
+}
+
+.custom-modal-overlay-close {
+  opacity: 0;
+}
+
+.custom-modal-content {
+  background: #d4edda;
+  padding: 20px;
+  border-radius: 15px;
+  border: 4px solid #155724;
+  max-width: 500px;
+  width: 90%;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-modal-content-open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.custom-modal-content-close {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.custom-modal-success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.custom-modal-success-title {
+  color: #155724; /* Verde para sucesso */
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.custom-modal-success-message {
+  color: #155724;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.custom-modal-success-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.custom-modal-success-button {
+  background-color: #155724; /* Verde para sucesso */
+  border: none;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 1em;
+  transition: background-color 0.3s;
+}
+
+.custom-modal-success-button:hover {
+  background-color: #33944a; /* Um tom mais escuro de verde */
+}

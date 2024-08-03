@@ -2,7 +2,7 @@ import "./AddDepoiment.css";
 
 // Components
 import Message from "../../Components/Messages/Message";
-import Spinner from "../../Components/Spinner/Spinner";
+import Loading from "../../Components/Loading/Loading";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -143,7 +143,7 @@ const AddDepoiment = () => {
         {!loading && <input type="submit" value="Adicionar depoimento" />}
         {loading && (
           <>
-            <Spinner />
+            <Loading />
             <input type="submit" disabled value="Aguarde..." />
           </>
         )}
