@@ -518,10 +518,10 @@ const UpdateAds = () => {
         {!loading ? (
           <input type="submit" value="Atualizar anúncio" />
         ) : (
-          <>
-            <Loading />
-          </>
+          <input type="submit" disabled value="Aguarde..." />
         )}
+
+        {loading && <Loading />}
       </form>
     </div>
   );

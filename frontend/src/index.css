@@ -192,6 +192,7 @@ textarea {
   max-width: 500px;
   width: 90%;
   opacity: 0;
+  outline: none;
   transform: scale(0.8);
   transition: opacity 0.2s ease, transform 0.2s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
