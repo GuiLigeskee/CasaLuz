@@ -21,33 +21,31 @@ const ErrorModal = ({
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Erros de Validação"
-      overlayClassName={`custom-error-modal-overlay ${
+      overlayClassName={`modal-overlay ${
         isAnimationDone
           ? isAnimationClosing
-            ? "custom-error-modal-overlay-close"
-            : "custom-error-modal-overlay-open"
+            ? "modal-overlay-close"
+            : "modal-overlay-open"
           : ""
       }`}
-      className={`custom-error-modal-content ${
-        isAnimationDone ? "custom-error-modal-content-open" : ""
-      } ${isAnimationClosing ? "custom-error-modal-content-close" : ""}`}
+      className={`modal-content modal-content-Error ${
+        isAnimationDone ? "modal-content-open" : ""
+      } ${isAnimationClosing ? "modal-content-close" : ""}`}
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEsc={false}
     >
-      <div className="custom-error-modal-container">
-        <h1 className="custom-error-modal-title">
-          Corrija os erros abaixo para continuar
-        </h1>
+      <div className="modal-container">
+        <h1 className="modal-title">Corrija os erros abaixo para continuar</h1>
         {Object.keys(errors).length > 0 && (
-          <ul className="custom-error-modal-list">
+          <ul className="modal-list">
             {Object.values(errors).map((error, index) => (
-              <li key={index} className="custom-error-modal-list-item">
-                {error}
+              <li key={index} className="modal-list-item">
+                - {error}*
               </li>
             ))}
           </ul>
         )}
-        <button className="custom-error-modal-button" onClick={onClose}>
+        <button className="modal-button" onClick={onClose}>
           Fechar
         </button>
       </div>

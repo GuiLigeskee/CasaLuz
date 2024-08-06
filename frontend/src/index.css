@@ -188,12 +188,13 @@ textarea {
 .modal-content {
   background: #fff;
   padding: 20px;
-  border-radius: 4px;
+  border-radius: 15px;
   max-width: 500px;
   width: 90%;
   opacity: 0;
   transform: scale(0.8);
   transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .modal-content-open {
