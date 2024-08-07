@@ -11,6 +11,8 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteAdd } from "../../Slice/adsSlice";
 
+import anuncioSemImagem from "../../assets/add-sem-imagem.png";
+
 const AdsItem = ({ add }) => {
   const admin = useSelector((state) => state.auth.admin);
   const dispatch = useDispatch();
@@ -18,10 +20,26 @@ const AdsItem = ({ add }) => {
 
   const [newPrice, setNewPrice] = useState();
 
+  const [isImageValid, setIsImageValid] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza de que deseja excluir este anúncio?")) {
       dispatch(deleteAdd(id));
     }
+  };
+
+  // Anuncio sem imagem
+  const handleImageError = () => {
+    if (imageLoaded) return;
+    setIsImageValid(false);
+    setImageLoaded(true);
+  };
+
+  const handleImageLoad = () => {
+    if (imageLoaded) return;
+    setIsImageValid(true);
+    setImageLoaded(true);
   };
 
   const renderAdminOptions = () => {
@@ -71,9 +89,22 @@ const AdsItem = ({ add }) => {
             <p className="price">
               {add.methodOfSale === "Venda" ? newPrice : `${newPrice}/mês`}
             </p>
-            {add.images && (
-              <img src={`${uploads}/ads/${add.images}`} alt={add.title} />
-            )}
+            {add.images &&
+              (isImageValid ? (
+                <img
+                  src={`${uploads}/ads/${add.images}`}
+                  alt={add.title}
+                  onError={handleImageError}
+                  onLoad={handleImageLoad}
+                />
+              ) : (
+                <img
+                  src={anuncioSemImagem}
+                  alt="Anúncio sem imagem"
+                  onError={handleImageError}
+                  onLoad={handleImageLoad}
+                />
+              ))}
             <p className="title">
               {add.typeOfRealty}
               {/* <br />

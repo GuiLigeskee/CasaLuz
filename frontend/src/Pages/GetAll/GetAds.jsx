@@ -1,8 +1,15 @@
 import "./GetAll.css";
+
+// Hooks
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+// Components
 import AdsItem from "../../Components/Ads/AdsItem";
 import Filter from "../../Components/Filters/Filters";
+import Loading from "../../Components/Loading/Loading";
+
+// Redux
 import { getAdsFilters, setPage, resetAds } from "../../Slice/adsSlice";
 
 const GetAds = () => {
@@ -56,7 +63,7 @@ const GetAds = () => {
         Veja <span>todos</span> os nossos anúncios!
       </h1>
       <Filter filters={filters} onFilterChange={handleFilterChange} />
-      {loading && <p>Carregando anúncios...</p>}
+      {loading && <Loading />}
       {error && <p>{error}</p>}
       {ads && ads.length > 0 ? (
         <div className="ads-content">
@@ -69,7 +76,7 @@ const GetAds = () => {
       ) : (
         <h3>Não foi possível mostrar todos os nossos anúncios :(</h3>
       )}
-      {!hasMore && <p>todos anuncios carregados</p>}
+      {/* {!hasMore && <p>todos anuncios carregados</p>} */}
     </div>
   );
 };

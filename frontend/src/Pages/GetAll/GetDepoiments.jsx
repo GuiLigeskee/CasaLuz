@@ -1,13 +1,14 @@
 import "./GetAll.css";
 
 // Hooks
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Components
 import DepoimentItem from "../../Components/Depoiment/DepoimentItem";
+import Loading from "../../Components/Loading/Loading";
 
-// redux
+// Redux
 import { getDepoiments } from "../../Slice/depoimentSlice";
 
 const GetDepoiments = () => {
@@ -36,6 +37,7 @@ const GetDepoiments = () => {
       ) : (
         <p>Não foi possível mostrar todos os depoimentos :(</p>
       )}
+      {loading && <Loading />}
     </div>
   );
 };

@@ -2,14 +2,14 @@ import "./AddAds.css";
 
 // Components
 import Modal from "react-modal";
+import Loading from "../../Components/Loading/Loading";
 import CepModal from "../../Components/CepModal/CepModal";
 import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import SuccessModal from "../../Components/SuccessModal/SuccessModal";
-import MaskedInput from "react-text-mask";
-import { NumericFormat } from "react-number-format";
-import Loading from "../../Components/Loading/Loading";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader";
 import formValidation from "../../utils/formValidation";
+import MaskedInput from "react-text-mask";
+import { NumericFormat } from "react-number-format";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -29,6 +29,7 @@ Modal.setAppElement("#root");
 const AddAds = () => {
   const dispatch = useDispatch();
   const { loading, error, message } = useSelector((state) => state.ads);
+  const { loading: loadingZipCode } = useSelector((state) => state.zipCode);
 
   // ZipCode da Api
   const zipCodeApi = useSelector(selectZipCodeApi);
@@ -426,39 +427,43 @@ const AddAds = () => {
             onChange={(e) => setLandMeasurement(e.target.value)}
           />
         </label>
-        <label>
-          <span>Quantidade de quartos:</span>
-          <input
-            type="number"
-            name="bedrooms"
-            placeholder="Digite a quantidade de quartos"
-            min={0}
-            value={bedrooms || ""}
-            onChange={(e) => setBedrooms(e.target.value)}
-          />
-        </label>
-        <label>
-          <span>Quantidade de banheiros:</span>
-          <input
-            type="number"
-            name="bathrooms"
-            placeholder="Digite a quantidade de banheiros"
-            min={0}
-            value={bathrooms || ""}
-            onChange={(e) => setBathrooms(e.target.value)}
-          />
-        </label>
-        <label>
-          <span>Vagas de garagem:</span>
-          <input
-            type="number"
-            name="carVacancies"
-            placeholder="Digite a quantidade de vagas de garagem"
-            min={0}
-            value={carVacancies || ""}
-            onChange={(e) => setCarVacancies(e.target.value)}
-          />
-        </label>
+        {true && (
+          <>
+            <label>
+              <span>Quantidade de quartos:</span>
+              <input
+                type="number"
+                name="bedrooms"
+                placeholder="Digite a quantidade de quartos"
+                min={0}
+                value={bedrooms || ""}
+                onChange={(e) => setBedrooms(e.target.value)}
+              />
+            </label>
+            <label>
+              <span>Quantidade de banheiros:</span>
+              <input
+                type="number"
+                name="bathrooms"
+                placeholder="Digite a quantidade de banheiros"
+                min={0}
+                value={bathrooms || ""}
+                onChange={(e) => setBathrooms(e.target.value)}
+              />
+            </label>
+            <label>
+              <span>Vagas de garagem:</span>
+              <input
+                type="number"
+                name="carVacancies"
+                placeholder="Digite a quantidade de vagas de garagem"
+                min={0}
+                value={carVacancies || ""}
+                onChange={(e) => setCarVacancies(e.target.value)}
+              />
+            </label>
+          </>
+        )}
         <label>
           <span>Método de negócio: *</span>
           <select
@@ -522,13 +527,13 @@ const AddAds = () => {
           />
         </label>
 
-        {!loading && <input type="submit" value="Criar anúncio" />}
-        {loading && (
-          <div className="loading-container">
-            <Loading />
-            {/* <input type="submit" disabled value="Aguarde..." /> */}
-          </div>
+        {!loading ? (
+          <input type="submit" value="Criar anúncio" />
+        ) : (
+          <input type="submit" disabled value="Aguarde..." />
         )}
+
+        {(loading || loadingZipCode) && <Loading />}
       </form>
     </div>
   );

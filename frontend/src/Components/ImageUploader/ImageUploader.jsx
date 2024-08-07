@@ -8,8 +8,26 @@ import ImageUploading from "react-images-uploading";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
+import anuncioSemImagem from "../../assets/add-sem-imagem.png";
+
 const ImageUploader = ({ initialImages = [], onChange, typePage }) => {
   const [images, setImages] = useState([]);
+
+  const [isImageValid, setIsImageValid] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Anuncio sem imagem
+  const handleImageError = () => {
+    if (imageLoaded) return;
+    setIsImageValid(false);
+    setImageLoaded(true);
+  };
+
+  const handleImageLoad = () => {
+    if (imageLoaded) return;
+    setIsImageValid(true);
+    setImageLoaded(true);
+  };
 
   useEffect(() => {
     if (initialImages && typePage === "UPDATE") {
@@ -83,10 +101,21 @@ const ImageUploader = ({ initialImages = [], onChange, typePage }) => {
                             className="image-item"
                           >
                             <span>{index + 1}. </span>
-                            <img
-                              src={image.data_url}
-                              alt={`Imagem ${index + 1}`}
-                            />
+                            {isImageValid ? (
+                              <img
+                                src={image.data_url}
+                                alt={`Imagem ${index + 1}`}
+                                onError={handleImageError}
+                                onLoad={handleImageLoad}
+                              />
+                            ) : (
+                              <img
+                                src={anuncioSemImagem}
+                                alt={`Imagem ${index + 1}`}
+                                onError={handleImageError}
+                                onLoad={handleImageLoad}
+                              />
+                            )}
                             <div className="image-item-btn-wrapper">
                               <button onClick={() => onImageUpdate(index)}>
                                 <FaEdit />

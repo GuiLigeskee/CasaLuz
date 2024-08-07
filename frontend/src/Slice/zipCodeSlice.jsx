@@ -38,8 +38,8 @@ const zipCodeSlice = createSlice({
       })
       .addCase(getZipCode.fulfilled, (state, action) => {
         state.loading = false;
-        state.zipCodeApi = action.payload;
         state.errorZipCodeApi = null;
+        state.zipCodeApi = action.payload;
       })
       .addCase(getZipCode.rejected, (state, action) => {
         state.loading = false;

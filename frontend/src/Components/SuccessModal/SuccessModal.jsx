@@ -1,6 +1,8 @@
 import "./SuccessModal.css";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Modal from "react-modal";
+
+import { useNavigate } from "react-router-dom";
 
 const SuccessModal = ({
   isOpen,
@@ -12,6 +14,8 @@ const SuccessModal = ({
   setIsAnimationDone,
   onResetStates,
 }) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (isOpen) {
       setIsAnimationDone(true);
@@ -23,10 +27,8 @@ const SuccessModal = ({
       if (onResetStates) {
         onResetStates();
       }
-      if (onClose) {
-        onClose();
-      }
     } else if (actionType === "PUT") {
+      // TESTE
     }
   };
 
@@ -35,47 +37,43 @@ const SuccessModal = ({
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Sucesso Modal"
-      overlayClassName={`custom-modal-overlay ${
+      overlayClassName={`overlay ${
         isAnimationDone
           ? isAnimationClosing
-            ? "custom-modal-overlay-close"
-            : "custom-modal-overlay-open"
+            ? "overlay-close"
+            : "overlay-open"
           : ""
       }`}
-      className={`custom-modal-content ${
-        isAnimationDone ? "custom-modal-content-open" : ""
-      } ${isAnimationClosing ? "custom-modal-content-close" : ""}`}
+      className={`modal-content modal-content-success ${
+        isAnimationDone ? "content-open" : ""
+      } ${isAnimationClosing ? "content-close" : ""}`}
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEsc={false}
     >
-      <div className="custom-modal-success-container">
-        <h1 className="custom-modal-success-title">
+      <div className="success-container">
+        <h1 className="success-title">
           {type === "CREATE" && "O anúncio foi criado com sucesso!"}
           {type === "PUT" && "O anúncio foi atualizado com sucesso!"}
         </h1>
-        <p className="custom-modal-success-message">{msg}</p>
-        <div className="custom-modal-success-buttons">
+        <p className="success-message">{msg}</p>
+        <div className="success-buttons">
           {type === "CREATE" && (
             <>
               <button
-                className="custom-modal-success-button"
+                className="success-button"
                 onClick={() => handleAction("CREATE")}
               >
-                Cadastrar Novo Anúncio
+                Cadastrar movo anúncio
               </button>
-              {/* <button onClick={() => handleAction()}>
-                Ir para o Anúncio Cadastrado
-              </button> */}
+              <button onClick={() => navigate("/")}>Ir para home</button>
             </>
           )}
           {type === "PUT" && (
             <>
-              <button className="custom-modal-success-button" onClick={onClose}>
+              <button className="success-button" onClick={onClose}>
                 Fechar
               </button>
-              {/* <button onClick={() => handleAction()}>
-                Ir para o Anúncio Atualizado
-              </button> */}
+              <button onClick={() => navigate("/")}>Ir para home</button>
             </>
           )}
         </div>

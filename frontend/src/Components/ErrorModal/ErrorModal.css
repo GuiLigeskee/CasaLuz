@@ -1,81 +1,39 @@
-/* CustomErrorModal.css */
-
-.custom-error-modal-overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.75);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.custom-error-modal-overlay-open {
-  opacity: 1;
-}
-
-.custom-error-modal-overlay-close {
-  opacity: 0;
-}
-
-.custom-error-modal-content {
+.modal-content-Error {
   background: #f8d7da;
-  padding: 20px;
-  border-radius: 15px;
   border: 4px solid #721c24;
-  max-width: 500px;
-  width: 90%;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.custom-error-modal-content-open {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.custom-error-modal-content-close {
-  opacity: 0;
-  transform: scale(0.8);
-}
-
-.custom-error-modal-container {
+.modal-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.custom-error-modal-title {
-  color: #721c24; /* Vermelho para erro */
+.modal-title {
+  color: #721c24;
   font-size: 24px;
   margin-bottom: 20px;
 }
 
-.custom-error-modal-message {
+.modal-message {
   color: #721c24;
   font-size: 18px;
   margin-bottom: 20px;
 }
 
-.custom-error-modal-list {
-  color: #721c24; /* Vermelho para erro */
+.modal-list {
+  color: #721c24;
   list-style-type: none;
   padding: 0;
   margin-bottom: 20px;
 }
 
-.custom-error-modal-list-item {
+.modal-list-item {
   margin-bottom: 10px;
 }
 
-.custom-error-modal-button {
-  background-color: #721c24; /* Vermelho para erro */
+.modal-button {
+  background-color: #721c24;
   border: none;
   border-radius: 15px;
   color: white;
@@ -85,6 +43,6 @@
   transition: background-color 0.3s;
 }
 
-.custom-error-modal-button:hover {
-  background-color: #b33a46; /* Um tom mais escuro de vermelho */
+.modal-button:hover {
+  background-color: #b33a46;
 }

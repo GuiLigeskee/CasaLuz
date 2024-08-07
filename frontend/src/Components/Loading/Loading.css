@@ -7,13 +7,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.205); /* Fundo semi-transparente */
-  z-index: 9999; /* Garante que o loader fique acima de outros elementos */
+  background-color: rgba(0, 0, 0, 0.205);
+  z-index: 9999;
 }
 
 .spinner {
-  border: 6px solid #f3f3f300; /* Cor de fundo do spinner */
-  border-top: 6px solid #fdb303; /* Cor da borda do topo (efeito de rotação) */
+  border: 6px solid #f3f3f300;
+  border-top: 6px solid #fdb303;
   border-radius: 50%;
   width: 150px;
   height: 150px;
