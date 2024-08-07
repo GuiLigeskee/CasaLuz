@@ -1,17 +1,20 @@
 import "./AddAds.css";
 
 // Components
-import Message from "../../Components/Messages/Message";
-import MaskedInput from "react-text-mask";
-import { NumericFormat } from "react-number-format";
 import Modal from "react-modal";
 import Loading from "../../Components/Loading/Loading";
+import CepModal from "../../Components/CepModal/CepModal";
+import ErrorModal from "../../Components/ErrorModal/ErrorModal";
+import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader.jsx";
+// import formValidation from "../../utils/formValidation";
+import MaskedInput from "react-text-mask";
+import { NumericFormat } from "react-number-format";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // Redux
 import { updateAds, getAdsDetails } from "../../Slice/adsSlice";
@@ -22,23 +25,37 @@ import {
   selectZipCodeError,
 } from "../../Slice/zipCodeSlice";
 
+Modal.setAppElement("#root");
+
 const UpdateAds = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { add, loading, error, message } = useSelector((state) => state.ads);
+  const { loading: loadingZipCode } = useSelector((state) => state.zipCode);
 
   // ZipCode da Api
   const zipCodeApi = useSelector(selectZipCodeApi);
   const zipCodeError = useSelector(selectZipCodeError);
   const [messageZipCode, setMessageZipCode] = useState("");
 
-  // Modal
-  const [isOpen, setIsOpen] = useState(false);
-  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
-  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
+  // Modal do CEP
+  const [isCepModalOpen, setIsCepModalOpen] = useState(false);
 
+  // Modal da validação do formulario
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
+  // Modal de sucesso
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  // Animação do Modal
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
+  const [isAnimationClosing, setIsAnimationClosing] = useState(false);
+
+  // Validação do formulario
+  const [errors, setErrors] = useState({});
+
+  // UseState ADS
   const [referenceAds, setReferenceAds] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -64,11 +81,13 @@ const UpdateAds = () => {
 
   useEffect(() => {
     if (error) {
-      console.log(error);
-      setIsErrorMessageOpen(true);
+      const backendErrors = { error: error };
+      setErrors(backendErrors);
+      openErrorModal();
     }
+
     if (message) {
-      setIsSuccessMessageOpen(true);
+      openSuccessModal();
     }
   }, [error, message]);
 
@@ -115,7 +134,7 @@ const UpdateAds = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const priceNumber = parseStringToNumber(price);
+    const priceNumber = parseStringToNumber(price.toString());
 
     const formData = new FormData();
     formData.append("id", id);
@@ -151,8 +170,26 @@ const UpdateAds = () => {
       });
     }
 
+    // const validationErrors = formValidation(adsData, adsImages);
+    // setErrors(Object.values(validationErrors));
+
+    // if (Object.keys(validationErrors).length > 0) {
+    //   openErrorModal();
+    // } else {
+    //   const formData = new FormData();
+
+    //   for (const key in adsData) {
+    //     formData.append(key, adsData[key]);
+    //   }
+
+    //   for (let i = 0; i < adsImages.length; i++) {
+    //     formData.append("images", adsImages[i]);
+    //   }
+
+    //   dispatch(publishAds(formData));
+    // }
+
     dispatch(updateAds(formData));
-    // navigate(`/anuncio/${add.referenceAds}`);
   };
 
   const handleImageChange = (imageList) => {
@@ -168,38 +205,56 @@ const UpdateAds = () => {
     setNewImages(updatedNewImages);
   };
 
-  // Api CEP
+  // Faz a chamada para API CEP
   const handleZipCode = async () => {
     const cleanedZipCode = zipCode.replace(/[^0-9]/g, "");
-
     if (cleanedZipCode.length !== 8) {
-      console.log(cleanedZipCode);
       setMessageZipCode("Por favor, insira um CEP válido.");
-      setIsOpen(true);
+      setIsCepModalOpen(true);
       return;
     }
 
     await dispatch(getZipCode(cleanedZipCode));
-    setIsOpen(true);
+    setIsCepModalOpen(true);
   };
 
-  const openModal = (e) => {
+  // Modal de CEP
+  const openCepModal = (e) => {
     e.preventDefault();
     handleZipCode();
   };
-
-  const closeModal = () => {
-    dispatch(resetZipCode());
-    setMessageZipCode("");
-    setIsOpen(false);
+  const closeCepModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      dispatch(resetZipCode());
+      setMessageZipCode("");
+      setIsAnimationDone(false);
+      setIsCepModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
-  const closeErrorMessage = () => {
-    setIsErrorMessageOpen(false);
+  // Modal da validação do formulario
+  const openErrorModal = () => setIsErrorModalOpen(true);
+  const closeErrorModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setErrors({});
+      setIsAnimationDone(false);
+      setIsErrorModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
-  const closeSuccessMessage = () => {
-    setIsSuccessMessageOpen(false);
+  // Modal de sucesso
+  const openSuccessModal = () => setIsSuccessModalOpen(true);
+  const closeSuccessModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setIsAnimationDone(false);
+      setIsSuccessModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
   // Função para converter String em Number
@@ -215,47 +270,36 @@ const UpdateAds = () => {
 
   return (
     <div className="updateAds">
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={closeModal}
-        contentLabel="Verificação de CEP"
-        overlayClassName="modal-overlay"
-        className="modal-content"
-      >
-        <h1>Resultado da Pesquisa</h1>
-        {messageZipCode && <p>{messageZipCode}</p>}
-        {zipCodeApi && (
-          <div>
-            <p>
-              <strong>Rua:</strong> {zipCodeApi.logradouro}
-            </p>
-            <p>
-              <strong>Bairro:</strong> {zipCodeApi.bairro}
-            </p>
-            <p>
-              <strong>Cidade:</strong> {zipCodeApi.localidade}
-            </p>
-            <p>
-              <strong>Estado:</strong> {zipCodeApi.uf}
-            </p>
-          </div>
-        )}
-
-        <button onClick={closeModal}>Fechar</button>
-      </Modal>
-
-      <Message
-        msg={error}
-        type="error"
-        isOpen={isErrorMessageOpen}
-        onRequestClose={closeErrorMessage}
+      {/* Modal da validação do formulario Frontend */}
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={closeErrorModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        errors={errors}
+        setIsAnimationDone={setIsAnimationDone}
       />
 
-      <Message
+      {/* Modal do CEP */}
+      <CepModal
+        isOpen={isCepModalOpen}
+        onClose={closeCepModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        messageZipCode={messageZipCode}
+        zipCodeApi={zipCodeApi}
+        setIsAnimationDone={setIsAnimationDone}
+      />
+
+      {/* Modal de sucesso */}
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={closeSuccessModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        type={"CREATE"}
         msg={message}
-        type="success"
-        isOpen={isSuccessMessageOpen}
-        onRequestClose={closeSuccessMessage}
+        setIsAnimationDone={setIsAnimationDone}
       />
 
       <h1>
@@ -345,7 +389,7 @@ const UpdateAds = () => {
               value={zipCode || ""}
               onChange={(e) => setZipCode(e.target.value)}
             />
-            <button onClick={openModal}>Pesquisar CEP</button>
+            <button onClick={openCepModal}>Pesquisar CEP</button>
           </div>
         </label>
         <label>
@@ -521,7 +565,7 @@ const UpdateAds = () => {
           <input type="submit" disabled value="Aguarde..." />
         )}
 
-        {loading && <Loading />}
+        {(loading || loadingZipCode) && <Loading />}
       </form>
     </div>
   );

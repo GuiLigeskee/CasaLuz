@@ -1,9 +1,16 @@
+import "./GetAll.css";
+
+// Hooks
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { getAdsFilters } from "../../Slice/adsSlice";
+
+// Components
 import AdsItem from "../../Components/Ads/AdsItem";
-import "./GetAll.css";
+import Loading from "../../Components/Loading/Loading";
+
+// Redux
+import { getAdsFilters } from "../../Slice/adsSlice";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -29,7 +36,7 @@ const SearchResultsPage = () => {
       <h1 id="title">
         Resultados da <span>Pesquisa</span>
       </h1>
-      {loading && <p>Carregando anúncios...</p>}
+      {loading && <Loading />}
       {error && <p>{error}</p>}
       {ads && ads.length > 0 ? (
         <div className="getResults">
