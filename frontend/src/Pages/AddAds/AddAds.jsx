@@ -49,6 +49,9 @@ const AddAds = () => {
   // Validação do formulario
   const [errors, setErrors] = useState({});
 
+  // Terreno
+  const [ground, setGround] = useState(false);
+
   // UseState ADS
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -106,9 +109,7 @@ const AddAds = () => {
       landMeasurement,
       tell,
       whatsapp,
-      bedrooms,
-      bathrooms,
-      carVacancies,
+      ...(ground === false && { bedrooms, bathrooms, carVacancies }),
     };
 
     const validationErrors = adsFormValidation(adsDataCreate, adsImages);
@@ -238,6 +239,10 @@ const AddAds = () => {
     return priceNumber;
   };
 
+  // Função para retirar os campos quando selecionado o Terreno
+  const handleSetGround = () => setGround(true);
+  const handleNotGround = () => setGround(false);
+
   return (
     <div className="createAds">
       {/* Modal da validação do formulario Frontend */}
@@ -298,7 +303,15 @@ const AddAds = () => {
         <label>
           <span>Tipo de imóvel: *</span>
           <select
-            onChange={(e) => setTypeOfRealty(e.target.value)}
+            onChange={(e) => {
+              const selectedValue = e.target.value;
+              setTypeOfRealty(selectedValue);
+              if (selectedValue === "Terreno") {
+                handleSetGround();
+              } else {
+                handleNotGround();
+              }
+            }}
             value={typeOfRealty || ""}
           >
             <option value="">Selecione uma categoria</option>
@@ -425,7 +438,7 @@ const AddAds = () => {
             onChange={(e) => setLandMeasurement(e.target.value)}
           />
         </label>
-        {true && (
+        {!ground && (
           <>
             <label>
               <span>Quantidade de quartos:</span>
