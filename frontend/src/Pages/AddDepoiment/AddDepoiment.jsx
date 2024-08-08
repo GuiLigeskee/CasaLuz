@@ -127,6 +127,14 @@ const AddDepoiment = () => {
     }, 300);
   };
 
+  // Função para cadastrar um novo ADS
+  const resetStates = () => {
+    setTitle("");
+    setDescription("");
+    depoimentImages([]);
+    imagePreviews([]);
+  };
+
   return (
     <div className="AddDepoiment">
       {/* Modal da validação do formulario Frontend */}
@@ -145,9 +153,10 @@ const AddDepoiment = () => {
         onClose={closeSuccessModal}
         isAnimationDone={isAnimationDone}
         isAnimationClosing={isAnimationClosing}
-        type={"CREATE"}
+        type={"CREATE_DEPOIMENT"}
         msg={message}
         setIsAnimationDone={setIsAnimationDone}
+        onResetStates={resetStates}
       />
 
       <h1>Adicionar depoimento de cliente</h1>

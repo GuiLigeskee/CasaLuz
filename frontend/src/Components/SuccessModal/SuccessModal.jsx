@@ -23,12 +23,18 @@ const SuccessModal = ({
   }, [isOpen, setIsAnimationDone]);
 
   const handleAction = (actionType) => {
-    if (actionType === "CREATE") {
+    if (actionType === "CREATE_ADS") {
       if (onResetStates) {
         onResetStates();
       }
-    } else if (actionType === "PUT") {
-      // TESTE
+    } else if (actionType == "CREATE_DEPOIMENT") {
+      if (onResetStates) {
+        onResetStates();
+      }
+    } else if (actionType == "REGISTER") {
+      if (onResetStates) {
+        onResetStates();
+      }
     }
   };
 
@@ -52,28 +58,55 @@ const SuccessModal = ({
     >
       <div className="success-container">
         <h1 className="success-title">
-          {type === "CREATE" && "O anúncio foi criado com sucesso!"}
-          {type === "PUT" && "O anúncio foi atualizado com sucesso!"}
+          {type === "CREATE_ADS" && "O anúncio foi criado com sucesso!"}
+          {type === "PUT_ADS" && "O anúncio foi atualizado com sucesso!"}
+          {type === "CREATE_DEPOIMENT" &&
+            "O depoimento foi criado com sucesso!"}
+          {type === "REGISTER" && "Administrador cadastrado com sucesso!"}
         </h1>
         <p className="success-message">{msg}</p>
         <div className="success-buttons">
-          {type === "CREATE" && (
+          {type === "CREATE_ADS" && (
             <>
               <button
                 className="success-button"
-                onClick={() => handleAction("CREATE")}
+                onClick={() => handleAction("CREATE_ADS")}
               >
-                Cadastrar movo anúncio
+                Cadastrar novo anúncio
               </button>
               <button onClick={() => navigate("/")}>Ir para home</button>
             </>
           )}
-          {type === "PUT" && (
+          {type === "PUT_ADS" && (
             <>
               <button className="success-button" onClick={onClose}>
                 Fechar
               </button>
               <button onClick={() => navigate("/")}>Ir para home</button>
+            </>
+          )}
+          {type === "CREATE_DEPOIMENT" && (
+            <>
+              <button
+                className="success-button"
+                onClick={() => handleAction("CREATE_DEPOIMENT")}
+              >
+                Cadastrar novo depoimento
+              </button>
+              <button onClick={() => navigate("/")}>Ir para home</button>
+            </>
+          )}
+          {type === "REGISTER" && (
+            <>
+              <button
+                className="success-button"
+                onClick={() => handleAction("REGISTER")}
+              >
+                Cadastrar novo administrador
+              </button>
+              <button className="success-button" onClick={onClose}>
+                Fechar
+              </button>
             </>
           )}
         </div>

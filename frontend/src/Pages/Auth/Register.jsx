@@ -1,7 +1,10 @@
 import "./Auth.css";
 
 // Components
-import Message from "../../Components/Messages/Message";
+import Loading from "../../Components/Loading/Loading";
+import ErrorModal from "../../Components/ErrorModal/ErrorModal";
+import SuccessModal from "../../Components/SuccessModal/SuccessModal";
+import { registerValidation } from "../../utils/formValidation";
 
 // Redux
 import { register } from "../../Slice/authSlice";
@@ -9,75 +12,122 @@ import { register } from "../../Slice/authSlice";
 // Hooks
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
+// import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 const Register = () => {
-  const dispatch = useDispatch();
-
-  const resetMessage = useResetComponentMessage();
-
   const { message, loading, error } = useSelector((state) => state.auth.admin);
 
+  const dispatch = useDispatch();
+  // const resetMessage = useResetComponentMessage();
+
+  // Modal da validação do formulario
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
+  // Modal de sucesso
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  // Animação do Modal
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
+  const [isAnimationClosing, setIsAnimationClosing] = useState(false);
+
+  // Validação do formulario
+  const [errors, setErrors] = useState({});
+
+  // UseState do Register
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
-  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validar se os campos estão preenchidos
-    if (!name || !email || !password || !confirmPassword) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
-
-    const adminData = {
+    const createAdmin = {
       name,
       email,
       password,
       confirmPassword,
     };
 
-    dispatch(register(adminData));
-    resetMessage();
+    const validationErrors = registerValidation(createAdmin);
+    setErrors(Object.values(validationErrors));
+
+    if (Object.keys(validationErrors).length > 0) {
+      openErrorModal();
+    } else {
+      dispatch(register(createAdmin));
+      // resetMessage();
+    }
   };
 
+  // UseEffect de erros
   useEffect(() => {
     if (error) {
-      setIsErrorMessageOpen(true);
+      const backendErrors = { error: error };
+      setErrors(backendErrors);
+      openErrorModal();
     }
+
     if (message) {
-      setIsSuccessMessageOpen(true);
+      openSuccessModal();
     }
   }, [error, message]);
 
-  const closeErrorMessage = () => {
-    setIsErrorMessageOpen(false);
+  // Modal da validação do formulario
+  const openErrorModal = () => setIsErrorModalOpen(true);
+  const closeErrorModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setErrors({});
+      setIsAnimationDone(false);
+      setIsErrorModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
-  const closeSuccessMessage = () => {
-    setIsSuccessMessageOpen(false);
+  // Modal de sucesso
+  const openSuccessModal = () => setIsSuccessModalOpen(true);
+  const closeSuccessModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setIsAnimationDone(false);
+      setIsSuccessModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
+  };
+
+  // Função para cadastrar um novo ADS
+  const resetStates = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
   return (
     <div id="register">
-      <Message
-        msg={error}
-        type="error"
-        isOpen={isErrorMessageOpen}
-        onRequestClose={closeErrorMessage}
+      {/* Modal da validação do formulario Frontend */}
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={closeErrorModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        errors={errors}
+        setIsAnimationDone={setIsAnimationDone}
       />
 
-      <Message
+      {/* Modal de sucesso */}
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={closeSuccessModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        type={"REGISTER"}
         msg={message}
-        type="success"
-        isOpen={isSuccessMessageOpen}
-        onRequestClose={closeSuccessMessage}
+        setIsAnimationDone={setIsAnimationDone}
+        onResetStates={resetStates}
       />
+
       <h1 id="title">
         <span>Registrar</span> novo Administrador
       </h1>
@@ -86,49 +136,49 @@ const Register = () => {
       </p>
       <form onSubmit={handleSubmit}>
         <label>
-          <span>Nome</span>
+          <span>Nome:</span>
           <input
             type="text"
             placeholder="Nome"
             onChange={(e) => setName(e.target.value)}
             value={name || ""}
-            required
           />
         </label>
         <label>
-          <span>E-mail</span>
+          <span>E-mail:</span>
           <input
-            type="email"
+            type="text"
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
             value={email || ""}
-            required
           />
         </label>
         <label>
-          <span>Senha</span>
+          <span>Senha:</span>
           <input
             type="password"
             placeholder="Senha"
             onChange={(e) => setPassword(e.target.value)}
             value={password || ""}
-            required
           />
         </label>
         <label>
-          <span>Confirmar senha</span>
+          <span>Confirmar senha:</span>
           <input
             type="password"
             placeholder="Confirmar senha"
             onChange={(e) => setConfirmPassword(e.target.value)}
             value={confirmPassword || ""}
-            required
           />
         </label>
-        {!loading && <input type="submit" value="Registrar" />}
-        {loading && <input type="submit" disabled value="Aguarde..." />}
-        {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="success" />}
+
+        {!loading ? (
+          <input type="submit" value="Registrar" />
+        ) : (
+          <input type="submit" disabled value="Aguarde..." />
+        )}
+
+        {loading && <Loading />}
       </form>
     </div>
   );

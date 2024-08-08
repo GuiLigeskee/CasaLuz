@@ -7,13 +7,13 @@ import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader.jsx";
 import { adsFormValidation } from "../../utils/formValidation";
-import MaskedInput from "react-text-mask";
-import { NumericFormat } from "react-number-format";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { NumericFormat } from "react-number-format";
+import MaskedInput from "react-text-mask";
 
 // Redux
 import { updateAds, getAdsDetails } from "../../Slice/adsSlice";
@@ -292,7 +292,7 @@ const UpdateAds = () => {
         onClose={closeSuccessModal}
         isAnimationDone={isAnimationDone}
         isAnimationClosing={isAnimationClosing}
-        type={"CREATE"}
+        type={"PUT_ADS"}
         msg={message}
         setIsAnimationDone={setIsAnimationDone}
       />
