@@ -9,7 +9,7 @@
 }
 
 .carousel-container {
-  width: 50%; /* Faz o carrossel ocupar metade da largura da tela */
+  width: 50%;
 }
 
 .carousel-img {
@@ -108,7 +108,7 @@ h4 {
   border: solid 3px #08273c;
   border-radius: 15px;
   margin: 0.5em;
-  width: auto; /* Adicionado para responsividade */
+  width: auto;
 }
 
 .addMaps .icon {
@@ -124,18 +124,18 @@ h4 {
 
 @media screen and (max-width: 767px) {
   .adsPage {
-    padding: 1em; /* Reduz o preenchimento para dispositivos móveis */
+    padding: 1em;
   }
 
   .carousel-container,
   .details-container {
-    width: 100%; /* Define a largura total para os contêineres em dispositivos móveis */
-    max-width: none; /* Remove a largura máxima */
+    width: 100%;
+    max-width: none;
   }
 
   .contact-section h3,
   .contact-section h4 {
-    text-align: center; /* Centraliza o texto dos botões de contato */
+    text-align: center;
   }
 
   .contact-buttons {
