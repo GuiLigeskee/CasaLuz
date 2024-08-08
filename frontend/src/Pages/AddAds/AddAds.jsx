@@ -26,7 +26,7 @@ import {
 const AddAds = () => {
   const dispatch = useDispatch();
   const { loading, error, message } = useSelector((state) => state.ads);
-  const { loading: loadingZipCode } = useSelector((state) => state.zipCode);
+  // const { loading: loadingZipCode } = useSelector((state) => state.zipCode);
 
   // ZipCode da Api
   const zipCodeApi = useSelector(selectZipCodeApi);
@@ -531,7 +531,8 @@ const AddAds = () => {
           <input type="submit" disabled value="Aguarde..." />
         )}
 
-        {(loading || loadingZipCode) && <Loading />}
+        {/* {(loading || loadingZipCode) && <Loading />} */}
+        {loading && <Loading />}
       </form>
     </div>
   );

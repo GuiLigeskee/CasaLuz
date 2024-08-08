@@ -11,12 +11,11 @@ import { register } from "../../Slice/authSlice";
 
 // Hooks
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 // import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 const Register = () => {
-  const { message, loading, error } = useSelector((state) => state.auth.admin);
-
+  const { loading, error, message } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   // const resetMessage = useResetComponentMessage();
 
@@ -62,6 +61,9 @@ const Register = () => {
 
   // UseEffect de erros
   useEffect(() => {
+    console.log("Error state:", error); // Log do estado de erro
+    console.log("Message state:", message); // Log do estado de mensagem
+
     if (error) {
       const backendErrors = { error: error };
       setErrors(backendErrors);

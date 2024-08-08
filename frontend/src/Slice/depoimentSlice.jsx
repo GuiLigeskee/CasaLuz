@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import depoimentService from "../Service/depoimentService.jsx";
 
 const initialState = {
-  depoiments: [], // Make sure it's initialized as an empty array
+  depoiments: [],
   depoiment: {},
   error: false,
   success: false,
@@ -18,7 +18,6 @@ export const publishDepoiment = createAsyncThunk(
 
     const data = await depoimentService.publishDepoiment(depoiment, token);
 
-    console.log(data.errors);
     // Check for errors
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);
@@ -35,7 +34,6 @@ export const deleteDepoiment = createAsyncThunk(
 
     const data = await depoimentService.deleteDepoiment(id, token);
 
-    console.log(data.errors);
     // Check for errors
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);
