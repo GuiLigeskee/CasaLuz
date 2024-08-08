@@ -1,8 +1,10 @@
 import "./AddDepoiment.css";
 
 // Components
-import Message from "../../Components/Messages/Message";
 import Loading from "../../Components/Loading/Loading";
+import ErrorModal from "../../Components/ErrorModal/ErrorModal";
+import SuccessModal from "../../Components/SuccessModal/SuccessModal";
+import { depoimentFormValidation } from "../../utils/formValidation";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -16,23 +18,39 @@ const AddDepoiment = () => {
 
   const dispatch = useDispatch();
 
+  // Modal da validação do formulario
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
+  // Modal de sucesso
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  // Animação do Modal
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
+  const [isAnimationClosing, setIsAnimationClosing] = useState(false);
+
+  // Validação do formulario
+  const [errors, setErrors] = useState({});
+
+  // UseState Depoiment
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [depoimentImages, setDepoimentImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
-  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
-  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
-
+  // UseEffect de erros
   useEffect(() => {
     if (error) {
-      setIsErrorMessageOpen(true);
+      const backendErrors = { error: error };
+      setErrors(backendErrors);
+      openErrorModal();
     }
+
     if (message) {
-      setIsSuccessMessageOpen(true);
+      openSuccessModal();
     }
   }, [error, message]);
 
+  // Função de Submit Depoiment
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -41,17 +59,27 @@ const AddDepoiment = () => {
       description,
     };
 
-    const formData = new FormData();
+    const validationErrors = depoimentFormValidation(
+      depoimentData,
+      depoimentImages
+    );
+    setErrors(Object.values(validationErrors));
 
-    for (const key in depoimentData) {
-      formData.append(key, depoimentData[key]);
+    if (Object.keys(validationErrors).length > 0) {
+      openErrorModal();
+    } else {
+      const formData = new FormData();
+
+      for (const key in depoimentData) {
+        formData.append(key, depoimentData[key]);
+      }
+
+      for (let i = 0; i < depoimentImages.length; i++) {
+        formData.append("images", depoimentImages[i]);
+      }
+
+      dispatch(publishDepoiment(formData));
     }
-
-    for (let i = 0; i < depoimentImages.length; i++) {
-      formData.append("images", depoimentImages[i]);
-    }
-
-    dispatch(publishDepoiment(formData));
   };
 
   const handleFile = (e) => {
@@ -76,31 +104,55 @@ const AddDepoiment = () => {
     }
   };
 
-  const closeErrorMessage = () => {
-    setIsErrorMessageOpen(false);
+  // Modal da validação do formulario
+  const openErrorModal = () => setIsErrorModalOpen(true);
+  const closeErrorModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setErrors({});
+      setIsAnimationDone(false);
+      setIsErrorModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
-  const closeSuccessMessage = () => {
-    setIsSuccessMessageOpen(false);
+  // Modal de sucesso
+  const openSuccessModal = () => setIsSuccessModalOpen(true);
+  const closeSuccessModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setIsAnimationDone(false);
+      setIsSuccessModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
   return (
     <div className="AddDepoiment">
-      <Message
-        msg={error}
-        type="error"
-        isOpen={isErrorMessageOpen}
-        onRequestClose={closeErrorMessage}
+      {/* Modal da validação do formulario Frontend */}
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={closeErrorModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        errors={errors}
+        setIsAnimationDone={setIsAnimationDone}
       />
 
-      <Message
+      {/* Modal de sucesso */}
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={closeSuccessModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        type={"CREATE"}
         msg={message}
-        type="success"
-        isOpen={isSuccessMessageOpen}
-        onRequestClose={closeSuccessMessage}
+        setIsAnimationDone={setIsAnimationDone}
       />
+
       <h1>Adicionar depoimento de cliente</h1>
       <h3>Preencha o formulário para adicionar um novo depoimento</h3>
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="arquivo" className="foto-perfil">
           <span id="buttonFile">Carregar imagem do depoimento</span>
@@ -117,24 +169,23 @@ const AddDepoiment = () => {
           ))}
         </div>
         <label>
-          <span>Título:</span>
+          <span>Título: *</span>
           <input
             type="text"
             name="title"
             placeholder="Título do depoimento"
-            value={title || ""}
             onChange={(e) => setTitle(e.target.value)}
-            required
+            value={title || ""}
           />
         </label>
         <label>
-          <span>Depoimento:</span>
+          <span>Depoimento: *</span>
           <textarea
             name="description"
             placeholder="Descreva o depoimento"
             rows={4}
             onChange={(e) => setDescription(e.target.value)}
-            value={description}
+            value={description || ""}
           ></textarea>
         </label>
 

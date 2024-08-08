@@ -1,14 +1,17 @@
+import "./index.css";
+
+// Hooks
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
+// Components
+import Modal from "react-modal";
 import App from "./App.jsx";
-import "./index.css";
 
 // Redux
 import { Provider } from "react-redux";
 import { store } from "./store.jsx";
-
-// React router
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Pages
 import Home from "./Pages/Home/Home.jsx";
@@ -23,6 +26,8 @@ import UpdateAds from "./Pages/AddAds/UpdateAds.jsx";
 import SearchResultsPage from "./Pages/GetAll/SearchResultsPage.jsx";
 import About from "./Pages/About/About.jsx";
 import Contact from "./Pages/Contact/Contact.jsx";
+
+Modal.setAppElement("#root");
 
 const router = createBrowserRouter([
   {

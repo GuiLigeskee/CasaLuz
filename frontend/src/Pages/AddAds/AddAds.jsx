@@ -1,13 +1,12 @@
 import "./AddAds.css";
 
 // Components
-import Modal from "react-modal";
 import Loading from "../../Components/Loading/Loading";
 import CepModal from "../../Components/CepModal/CepModal";
 import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader";
-import formValidation from "../../utils/formValidation";
+import { adsFormValidation } from "../../utils/formValidation";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 
@@ -23,8 +22,6 @@ import {
   selectZipCodeApi,
   selectZipCodeError,
 } from "../../Slice/zipCodeSlice";
-
-Modal.setAppElement("#root");
 
 const AddAds = () => {
   const dispatch = useDispatch();
@@ -74,13 +71,26 @@ const AddAds = () => {
   const [adsImages, setAdsImages] = useState([]);
   const imageUrls = useRef([]);
 
+  // UseEffect de erros
+  useEffect(() => {
+    if (error) {
+      const backendErrors = { error: error };
+      setErrors(backendErrors);
+      openErrorModal();
+    }
+
+    if (message) {
+      openSuccessModal();
+    }
+  }, [error, message]);
+
   // Função de Submit ADS
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const priceNumber = parseStringToNumber(price);
+    const priceNumber = parseStringToNumber(price.toString());
 
-    const adsData = {
+    const adsDataCreate = {
       title,
       typeOfRealty,
       description,
@@ -101,7 +111,7 @@ const AddAds = () => {
       carVacancies,
     };
 
-    const validationErrors = formValidation(adsData, adsImages);
+    const validationErrors = adsFormValidation(adsDataCreate, adsImages);
     setErrors(Object.values(validationErrors));
 
     if (Object.keys(validationErrors).length > 0) {
@@ -109,8 +119,8 @@ const AddAds = () => {
     } else {
       const formData = new FormData();
 
-      for (const key in adsData) {
-        formData.append(key, adsData[key]);
+      for (const key in adsDataCreate) {
+        formData.append(key, adsDataCreate[key]);
       }
 
       for (let i = 0; i < adsImages.length; i++) {
@@ -193,18 +203,6 @@ const AddAds = () => {
       setIsAnimationClosing(false);
     }, 300);
   };
-
-  useEffect(() => {
-    if (error) {
-      const backendErrors = { error: error };
-      setErrors(backendErrors);
-      openErrorModal();
-    }
-
-    if (message) {
-      openSuccessModal();
-    }
-  }, [error, message]);
 
   // Função para cadastrar um novo ADS
   const resetStates = () => {

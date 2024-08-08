@@ -1,13 +1,12 @@
 import "./AddAds.css";
 
 // Components
-import Modal from "react-modal";
 import Loading from "../../Components/Loading/Loading";
 import CepModal from "../../Components/CepModal/CepModal";
 import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader.jsx";
-// import formValidation from "../../utils/formValidation";
+import { adsFormValidation } from "../../utils/formValidation";
 import MaskedInput from "react-text-mask";
 import { NumericFormat } from "react-number-format";
 
@@ -24,8 +23,6 @@ import {
   selectZipCodeApi,
   selectZipCodeError,
 } from "../../Slice/zipCodeSlice";
-
-Modal.setAppElement("#root");
 
 const UpdateAds = () => {
   const { id } = useParams();
@@ -134,62 +131,60 @@ const UpdateAds = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const priceNumber = parseStringToNumber(price.toString());
 
-    const formData = new FormData();
-    formData.append("id", id);
-    formData.append("title", title);
-    formData.append("typeOfRealty", typeOfRealty);
-    formData.append("description", description);
-    formData.append("price", priceNumber);
-    formData.append("zipCode", zipCode);
-    formData.append("address", address);
-    formData.append("addressNumber", addressNumber);
-    formData.append("complement", complement);
-    formData.append("district", district);
-    formData.append("city", city);
-    formData.append("stateAddress", stateAddress);
-    formData.append("methodOfSale", methodOfSale);
-    formData.append("landMeasurement", landMeasurement);
-    formData.append("tell", tell);
-    formData.append("whatsapp", whatsapp);
-    formData.append("bedrooms", bedrooms);
-    formData.append("bathrooms", bathrooms);
-    formData.append("carVacancies", carVacancies);
+    const adsDataUpdate = {
+      id,
+      title,
+      typeOfRealty,
+      description,
+      price: priceNumber,
+      zipCode,
+      address,
+      addressNumber,
+      complement,
+      district,
+      city,
+      stateAddress,
+      methodOfSale,
+      landMeasurement,
+      tell,
+      whatsapp,
+      bedrooms,
+      bathrooms,
+      carVacancies,
+    };
 
-    if (existingImages.length > 0) {
-      existingImages.forEach((image) => {
-        formData.append("existingImages", image);
-      });
+    const adsImages = [...existingImages, ...newImages];
+
+    const validationErrors = adsFormValidation(adsDataUpdate, adsImages);
+    setErrors(Object.values(validationErrors));
+
+    if (Object.keys(validationErrors).length > 0) {
+      openErrorModal();
+    } else {
+      const formData = new FormData();
+
+      for (const key in adsDataUpdate) {
+        formData.append(key, adsDataUpdate[key]);
+      }
+
+      if (existingImages.length > 0) {
+        existingImages.forEach((image) => {
+          formData.append("existingImages", image);
+        });
+      }
+
+      if (newImages.length > 0) {
+        console.log(newImages);
+        newImages.forEach((image) => {
+          formData.append("images", image);
+        });
+      }
+
+      dispatch(updateAds(formData));
     }
-
-    if (newImages.length > 0) {
-      console.log(newImages);
-      newImages.forEach((image) => {
-        formData.append("images", image);
-      });
-    }
-
-    // const validationErrors = formValidation(adsData, adsImages);
-    // setErrors(Object.values(validationErrors));
-
-    // if (Object.keys(validationErrors).length > 0) {
-    //   openErrorModal();
-    // } else {
-    //   const formData = new FormData();
-
-    //   for (const key in adsData) {
-    //     formData.append(key, adsData[key]);
-    //   }
-
-    //   for (let i = 0; i < adsImages.length; i++) {
-    //     formData.append("images", adsImages[i]);
-    //   }
-
-    //   dispatch(publishAds(formData));
-    // }
-
-    dispatch(updateAds(formData));
   };
 
   const handleImageChange = (imageList) => {

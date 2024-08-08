@@ -1,5 +1,10 @@
-const formValidation = (adsData, images) => {
+const adsFormValidation = (adsData, images) => {
   const errors = {};
+
+  // Imagem
+  if (images.length === 0) {
+    errors.images = "Pelo menos uma foto é obrigatória";
+  }
 
   // Título
   if (!adsData.title) {
@@ -65,18 +70,49 @@ const formValidation = (adsData, images) => {
     errors.landMeasurement = "O tamanho do imóvel é obrigatório";
   }
 
+  // Validador de formato (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+  const phoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/;
+
   // Whatsapp e Telefone do vendedor
   if (!adsData.whatsapp && !adsData.tell) {
     errors.whatsapp =
       "Pelo menos o número de telefone ou WhatsApp deve ser preenchido";
+  } else {
+    if (adsData.tell && !phoneRegex.test(adsData.tell)) {
+      errors.tell =
+        "O número de telefone deve estar no formato (XX) XXXXX-XXXX ou (XX) XXXX-XXXX";
+    }
+
+    if (adsData.whatsapp && !phoneRegex.test(adsData.whatsapp)) {
+      errors.whatsapp =
+        "O número de WhatsApp deve estar no formato (XX) XXXXX-XXXX";
+    }
   }
+
+  return errors;
+};
+
+const depoimentFormValidation = (depoimentData, images) => {
+  const errors = {};
 
   // Imagem
   if (images.length === 0) {
     errors.images = "Pelo menos uma foto é obrigatória";
   }
 
+  // Título
+  if (!depoimentData.title) {
+    errors.title = "O título é obrigatório";
+  } else if (depoimentData.title.length <= 5) {
+    errors.title = "O título precisa ter no mínimo 5 caracteres.";
+  }
+
+  // Descrição
+  if (!depoimentData.description) {
+    errors.description = "A descrição é obrigatória";
+  }
+
   return errors;
 };
 
-export default formValidation;
+export { adsFormValidation, depoimentFormValidation };
