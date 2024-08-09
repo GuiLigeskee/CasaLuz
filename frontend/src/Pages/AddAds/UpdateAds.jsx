@@ -1,31 +1,28 @@
 import "./AddAds.css";
 
 // Components
-import Modal from "react-modal";
 import Loading from "../../Components/Loading/Loading";
 import CepModal from "../../Components/CepModal/CepModal";
 import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader.jsx";
-// import formValidation from "../../utils/formValidation";
-import MaskedInput from "react-text-mask";
-import { NumericFormat } from "react-number-format";
+import { adsFormValidation } from "../../utils/formValidation";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { NumericFormat } from "react-number-format";
+import MaskedInput from "react-text-mask";
 
 // Redux
-import { updateAds, getAdsDetails } from "../../Slice/adsSlice";
+import { updateAds, getAdsDetails, reset } from "../../Slice/adsSlice";
 import {
   getZipCode,
   resetZipCode,
   selectZipCodeApi,
   selectZipCodeError,
 } from "../../Slice/zipCodeSlice";
-
-Modal.setAppElement("#root");
 
 const UpdateAds = () => {
   const { id } = useParams();
@@ -54,6 +51,9 @@ const UpdateAds = () => {
 
   // Validação do formulario
   const [errors, setErrors] = useState({});
+
+  // Terreno
+  const [ground, setGround] = useState(false);
 
   // UseState ADS
   const [referenceAds, setReferenceAds] = useState("");
@@ -129,67 +129,68 @@ const UpdateAds = () => {
       setBedrooms(add.bedrooms || "");
       setCarVacancies(add.carVacancies || "");
       setImages(add.images || []);
+      if (add.typeOfRealty === "Terreno") {
+        handleSetGround();
+      }
     }
   }, [add]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const priceNumber = parseStringToNumber(price.toString());
 
-    const formData = new FormData();
-    formData.append("id", id);
-    formData.append("title", title);
-    formData.append("typeOfRealty", typeOfRealty);
-    formData.append("description", description);
-    formData.append("price", priceNumber);
-    formData.append("zipCode", zipCode);
-    formData.append("address", address);
-    formData.append("addressNumber", addressNumber);
-    formData.append("complement", complement);
-    formData.append("district", district);
-    formData.append("city", city);
-    formData.append("stateAddress", stateAddress);
-    formData.append("methodOfSale", methodOfSale);
-    formData.append("landMeasurement", landMeasurement);
-    formData.append("tell", tell);
-    formData.append("whatsapp", whatsapp);
-    formData.append("bedrooms", bedrooms);
-    formData.append("bathrooms", bathrooms);
-    formData.append("carVacancies", carVacancies);
+    const adsDataUpdate = {
+      id,
+      title,
+      typeOfRealty,
+      description,
+      price: priceNumber,
+      zipCode,
+      address,
+      addressNumber,
+      complement,
+      district,
+      city,
+      stateAddress,
+      methodOfSale,
+      landMeasurement,
+      tell,
+      whatsapp,
+      ...(ground === false && { bedrooms, bathrooms, carVacancies }),
+    };
 
-    if (existingImages.length > 0) {
-      existingImages.forEach((image) => {
-        formData.append("existingImages", image);
-      });
+    const adsImages = [...existingImages, ...newImages];
+
+    const validationErrors = adsFormValidation(adsDataUpdate, adsImages);
+    setErrors(Object.values(validationErrors));
+
+    if (Object.keys(validationErrors).length > 0) {
+      openErrorModal();
+    } else {
+      const formData = new FormData();
+
+      for (const key in adsDataUpdate) {
+        formData.append(key, adsDataUpdate[key]);
+      }
+
+      if (existingImages.length > 0) {
+        existingImages.forEach((image) => {
+          formData.append("existingImages", image);
+        });
+      }
+
+      if (newImages.length > 0) {
+        newImages.forEach((image) => {
+          formData.append("images", image);
+        });
+      }
+
+      dispatch(updateAds(formData));
+      setTimeout(() => {
+        dispatch(reset());
+      }, 2000);
     }
-
-    if (newImages.length > 0) {
-      console.log(newImages);
-      newImages.forEach((image) => {
-        formData.append("images", image);
-      });
-    }
-
-    // const validationErrors = formValidation(adsData, adsImages);
-    // setErrors(Object.values(validationErrors));
-
-    // if (Object.keys(validationErrors).length > 0) {
-    //   openErrorModal();
-    // } else {
-    //   const formData = new FormData();
-
-    //   for (const key in adsData) {
-    //     formData.append(key, adsData[key]);
-    //   }
-
-    //   for (let i = 0; i < adsImages.length; i++) {
-    //     formData.append("images", adsImages[i]);
-    //   }
-
-    //   dispatch(publishAds(formData));
-    // }
-
-    dispatch(updateAds(formData));
   };
 
   const handleImageChange = (imageList) => {
@@ -268,6 +269,10 @@ const UpdateAds = () => {
     return priceNumber;
   };
 
+  // Função para retirar os campos quando selecionado o Terreno
+  const handleSetGround = () => setGround(true);
+  const handleNotGround = () => setGround(false);
+
   return (
     <div className="updateAds">
       {/* Modal da validação do formulario Frontend */}
@@ -297,7 +302,7 @@ const UpdateAds = () => {
         onClose={closeSuccessModal}
         isAnimationDone={isAnimationDone}
         isAnimationClosing={isAnimationClosing}
-        type={"CREATE"}
+        type={"PUT_ADS"}
         msg={message}
         setIsAnimationDone={setIsAnimationDone}
       />
@@ -336,7 +341,15 @@ const UpdateAds = () => {
         <label>
           <span>Tipo de imóvel:</span>
           <select
-            onChange={(e) => setTypeOfRealty(e.target.value)}
+            onChange={(e) => {
+              const selectedValue = e.target.value;
+              setTypeOfRealty(selectedValue);
+              if (selectedValue === "Terreno") {
+                handleSetGround();
+              } else {
+                handleNotGround();
+              }
+            }}
             value={typeOfRealty || ""}
           >
             <option value="">Selecione uma categoria</option>
@@ -463,39 +476,43 @@ const UpdateAds = () => {
             onChange={(e) => setLandMeasurement(e.target.value)}
           />
         </label>
-        <label>
-          <span>Quantidade de quartos:</span>
-          <input
-            type="number"
-            name="bedrooms"
-            placeholder="Digite a quantidade de quartos"
-            min={0}
-            value={bedrooms || ""}
-            onChange={(e) => setBedrooms(e.target.value)}
-          />
-        </label>
-        <label>
-          <span>Quantidade de banheiros:</span>
-          <input
-            type="number"
-            name="bathrooms"
-            placeholder="Digite a quantidade de banheiros"
-            min={0}
-            value={bathrooms || ""}
-            onChange={(e) => setBathrooms(e.target.value)}
-          />
-        </label>
-        <label>
-          <span>Vagas de garagem:</span>
-          <input
-            type="number"
-            name="carVacancies"
-            placeholder="Digite a quantidade de vagas de garagem"
-            min={0}
-            value={carVacancies || ""}
-            onChange={(e) => setCarVacancies(e.target.value)}
-          />
-        </label>
+        {!ground && (
+          <>
+            <label>
+              <span>Quantidade de quartos:</span>
+              <input
+                type="number"
+                name="bedrooms"
+                placeholder="Digite a quantidade de quartos"
+                min={0}
+                value={bedrooms || ""}
+                onChange={(e) => setBedrooms(e.target.value)}
+              />
+            </label>
+            <label>
+              <span>Quantidade de banheiros:</span>
+              <input
+                type="number"
+                name="bathrooms"
+                placeholder="Digite a quantidade de banheiros"
+                min={0}
+                value={bathrooms || ""}
+                onChange={(e) => setBathrooms(e.target.value)}
+              />
+            </label>
+            <label>
+              <span>Vagas de garagem:</span>
+              <input
+                type="number"
+                name="carVacancies"
+                placeholder="Digite a quantidade de vagas de garagem"
+                min={0}
+                value={carVacancies || ""}
+                onChange={(e) => setCarVacancies(e.target.value)}
+              />
+            </label>
+          </>
+        )}
         <label>
           <span>Método de negócio:</span>
           <select

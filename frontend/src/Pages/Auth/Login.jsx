@@ -1,45 +1,57 @@
 import "./Auth.css";
 
+// Components
+import Logo from "../../assets/logo-casa-luz.png";
+import Loading from "../../Components/Loading/Loading";
+import ErrorModal from "../../Components/ErrorModal/ErrorModal";
+import { loginValidation } from "../../utils/formValidation";
+
 // hooks
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../assets/logo-casa-luz.png";
-// import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 // Redux
 import { login, reset } from "../../Slice/authSlice";
 
-// Components
-import Message from "../../Components/Messages/Message";
-
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isErrorMessageOpen, setIsErrorMessageOpen] = useState(false);
-  const [isSuccessMessageOpen, setIsSuccessMessageOpen] = useState(false);
+  const { admin, loading, error } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
-
-  // const resetMessage = useResetComponentMessage(dispatch);
-
   const navigate = useNavigate();
 
-  const { admin, message, loading, error } = useSelector((state) => state.auth);
+  // Modal da validação do formulario
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
+  // Animação do Modal
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
+  const [isAnimationClosing, setIsAnimationClosing] = useState(false);
+
+  // Validação do formulario
+  const [errors, setErrors] = useState({});
+
+  // UseState do Login
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const createAdmin = {
+    const adminData = {
       email,
       password,
     };
 
-    dispatch(login(createAdmin));
-    // resetMessage();
+    const validationErrors = loginValidation(adminData);
+    setErrors(Object.values(validationErrors));
+
+    if (Object.keys(validationErrors).length > 0) {
+      openErrorModal();
+    } else {
+      dispatch(login(adminData));
+    }
   };
 
-  // Clean all auth states and redirect after 2 seconds if the user is logged in
   useEffect(() => {
     if (admin) {
       const redirectTimeout = setTimeout(() => {
@@ -54,38 +66,39 @@ const Login = () => {
     };
   }, [admin, dispatch, navigate]);
 
+  // UseEffect de erros
   useEffect(() => {
     if (error) {
-      setIsErrorMessageOpen(true);
+      const backendErrors = { error: error };
+      setErrors(backendErrors);
+      openErrorModal();
     }
-    if (message) {
-      setIsSuccessMessageOpen(true);
-    }
-  }, [error, message]);
+  }, [error]);
 
-  const closeErrorMessage = () => {
-    setIsErrorMessageOpen(false);
-  };
-
-  const closeSuccessMessage = () => {
-    setIsSuccessMessageOpen(false);
+  // Modal da validação do formulario
+  const openErrorModal = () => setIsErrorModalOpen(true);
+  const closeErrorModal = () => {
+    setIsAnimationClosing(true);
+    setTimeout(() => {
+      setErrors({});
+      setIsAnimationDone(false);
+      setIsErrorModalOpen(false);
+      setIsAnimationClosing(false);
+    }, 300);
   };
 
   return (
     <div id="login">
-      <Message
-        msg={error}
-        type="error"
-        isOpen={isErrorMessageOpen}
-        onRequestClose={closeErrorMessage}
+      {/* Modal da validação do formulario Frontend */}
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={closeErrorModal}
+        isAnimationDone={isAnimationDone}
+        isAnimationClosing={isAnimationClosing}
+        errors={errors}
+        setIsAnimationDone={setIsAnimationDone}
       />
 
-      <Message
-        msg={message}
-        type="success"
-        isOpen={isSuccessMessageOpen}
-        onRequestClose={closeSuccessMessage}
-      />
       <div className="logo">
         <img src={Logo} alt="Casa Luz" className="logo" />
       </div>
@@ -94,7 +107,7 @@ const Login = () => {
         <label>
           <span>Seu email:</span>
           <input
-            type="email"
+            type="text"
             placeholder="E-mail"
             onChange={(e) => setEmail(e.target.value)}
             value={email || ""}
@@ -109,8 +122,14 @@ const Login = () => {
             value={password || ""}
           />
         </label>
-        {!loading && <input type="submit" value="Entrar" />}
-        {loading && <input type="submit" disabled value="Aguarde..." />}
+
+        {!loading ? (
+          <input type="submit" value="Entrar" />
+        ) : (
+          <input type="submit" disabled value="Aguarde..." />
+        )}
+
+        {loading && <Loading />}
       </form>
     </div>
   );

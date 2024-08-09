@@ -99,8 +99,12 @@ export const adsSlice = createSlice({
   name: "ads",
   initialState,
   reducers: {
-    resetMessage: (state) => {
+    reset: (state) => {
+      state.error = false;
+      state.success = false;
+      state.loading = false;
       state.message = null;
+      console.log("RESET DO REDUX");
     },
     fetchAdsStart(state) {
       state.loading = true;
@@ -244,7 +248,7 @@ export const adsSlice = createSlice({
 });
 
 export const {
-  resetMessage,
+  reset,
   fetchAdsStart,
   fetchAdsSuccess,
   fetchAdsFailure,

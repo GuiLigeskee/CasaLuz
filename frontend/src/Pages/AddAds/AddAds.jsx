@@ -1,30 +1,27 @@
 import "./AddAds.css";
 
 // Components
-import Modal from "react-modal";
 import Loading from "../../Components/Loading/Loading";
 import CepModal from "../../Components/CepModal/CepModal";
 import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader";
-import formValidation from "../../utils/formValidation";
-import MaskedInput from "react-text-mask";
-import { NumericFormat } from "react-number-format";
+import { adsFormValidation } from "../../utils/formValidation";
 
 // Hooks
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from "react";
+import { NumericFormat } from "react-number-format";
+import MaskedInput from "react-text-mask";
 
 // Redux
-import { publishAds } from "../../Slice/adsSlice";
+import { publishAds, reset } from "../../Slice/adsSlice";
 import {
   getZipCode,
   resetZipCode,
   selectZipCodeApi,
   selectZipCodeError,
 } from "../../Slice/zipCodeSlice";
-
-Modal.setAppElement("#root");
 
 const AddAds = () => {
   const dispatch = useDispatch();
@@ -52,6 +49,9 @@ const AddAds = () => {
   // Validação do formulario
   const [errors, setErrors] = useState({});
 
+  // Terreno
+  const [ground, setGround] = useState(false);
+
   // UseState ADS
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -74,13 +74,26 @@ const AddAds = () => {
   const [adsImages, setAdsImages] = useState([]);
   const imageUrls = useRef([]);
 
+  // UseEffect de erros
+  useEffect(() => {
+    if (error) {
+      const backendErrors = { error: error };
+      setErrors(backendErrors);
+      openErrorModal();
+    }
+
+    if (message) {
+      openSuccessModal();
+    }
+  }, [error, message]);
+
   // Função de Submit ADS
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const priceNumber = parseStringToNumber(price);
+    const priceNumber = parseStringToNumber(price.toString());
 
-    const adsData = {
+    const adsDataCreate = {
       title,
       typeOfRealty,
       description,
@@ -96,12 +109,10 @@ const AddAds = () => {
       landMeasurement,
       tell,
       whatsapp,
-      bedrooms,
-      bathrooms,
-      carVacancies,
+      ...(ground === false && { bedrooms, bathrooms, carVacancies }),
     };
 
-    const validationErrors = formValidation(adsData, adsImages);
+    const validationErrors = adsFormValidation(adsDataCreate, adsImages);
     setErrors(Object.values(validationErrors));
 
     if (Object.keys(validationErrors).length > 0) {
@@ -109,8 +120,8 @@ const AddAds = () => {
     } else {
       const formData = new FormData();
 
-      for (const key in adsData) {
-        formData.append(key, adsData[key]);
+      for (const key in adsDataCreate) {
+        formData.append(key, adsDataCreate[key]);
       }
 
       for (let i = 0; i < adsImages.length; i++) {
@@ -118,6 +129,9 @@ const AddAds = () => {
       }
 
       dispatch(publishAds(formData));
+      setTimeout(() => {
+        dispatch(reset());
+      }, 2000);
     }
   };
 
@@ -194,18 +208,6 @@ const AddAds = () => {
     }, 300);
   };
 
-  useEffect(() => {
-    if (error) {
-      const backendErrors = { error: error };
-      setErrors(backendErrors);
-      openErrorModal();
-    }
-
-    if (message) {
-      openSuccessModal();
-    }
-  }, [error, message]);
-
   // Função para cadastrar um novo ADS
   const resetStates = () => {
     setTitle("");
@@ -240,6 +242,10 @@ const AddAds = () => {
     return priceNumber;
   };
 
+  // Função para retirar os campos quando selecionado o Terreno
+  const handleSetGround = () => setGround(true);
+  const handleNotGround = () => setGround(false);
+
   return (
     <div className="createAds">
       {/* Modal da validação do formulario Frontend */}
@@ -269,7 +275,7 @@ const AddAds = () => {
         onClose={closeSuccessModal}
         isAnimationDone={isAnimationDone}
         isAnimationClosing={isAnimationClosing}
-        type={"CREATE"}
+        type={"CREATE_ADS"}
         msg={message}
         setIsAnimationDone={setIsAnimationDone}
         onResetStates={resetStates}
@@ -300,7 +306,15 @@ const AddAds = () => {
         <label>
           <span>Tipo de imóvel: *</span>
           <select
-            onChange={(e) => setTypeOfRealty(e.target.value)}
+            onChange={(e) => {
+              const selectedValue = e.target.value;
+              setTypeOfRealty(selectedValue);
+              if (selectedValue === "Terreno") {
+                handleSetGround();
+              } else {
+                handleNotGround();
+              }
+            }}
             value={typeOfRealty || ""}
           >
             <option value="">Selecione uma categoria</option>
@@ -427,7 +441,7 @@ const AddAds = () => {
             onChange={(e) => setLandMeasurement(e.target.value)}
           />
         </label>
-        {true && (
+        {!ground && (
           <>
             <label>
               <span>Quantidade de quartos:</span>

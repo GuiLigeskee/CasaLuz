@@ -13,14 +13,6 @@
   color: #08273c;
 }
 
-.carousel-container {
-  margin-bottom: 20px;
-}
-
-.mySwiper {
-  width: 100%;
-  border-radius: 15px;
-}
 
 .carousel-img {
   width: 100%;
@@ -133,21 +125,7 @@
   color: white;
 }
 
-/* Adicionando destaque ao botão "Ver no mapa" */
-.addMaps {
-  background-color: #08273c;
-  color: white;
-  padding: 1em 2em;
-  border: 2px solid #fafafa;
-  border-radius: 15px;
-  transition: background-color 0.3s, transform 0.3s;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+
 
 .addMaps:hover {
   background-color: #03426b;
@@ -161,21 +139,7 @@
   color: #fafafa;
 }
 
-.addMaps .icon {
-  color: #fafafa;
-}
 
-/* Consultas de mídia para responsividade */
-@media (min-width: 768px) {
-  .ads-title {
-    font-size: 3em;
-  }
-
-  .addDetails {
-    flex-basis: calc(25% - 10px);
-    max-width: 25%;
-  }
-}
 
 @media (max-width: 768px) {
   .adsPage {

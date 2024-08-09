@@ -1,6 +1,3 @@
-/* NavBar.css */
-
-/* Estilos para o menu lateral */
 .sidebar {
   position: fixed;
   top: 0;
@@ -13,7 +10,7 @@
 }
 
 .sidebar.open {
-  left: 0; /* Exibe o menu lateral quando aberto */
+  left: 0;
 }
 
 .sidebar__content {
@@ -37,10 +34,9 @@
 }
 
 .sidebar__options a:hover {
-  color: #fdb303; /* Cor de destaque ao passar o mouse */
+  color: #fdb303;
 }
 
-/* Estilos para o botão do menu */
 .menu__toggle {
   position: fixed;
   top: 15px;

@@ -28,7 +28,7 @@ const ErrorModal = ({
             : "modal-overlay-open"
           : ""
       }`}
-      className={`modal-content modal-content-Error ${
+      className={`modal-content modal-content-error ${
         isAnimationDone ? "modal-content-open" : ""
       } ${isAnimationClosing ? "modal-content-close" : ""}`}
       shouldCloseOnOverlayClick={false}
@@ -38,11 +38,18 @@ const ErrorModal = ({
         <h1 className="modal-title">Corrija os erros abaixo para continuar</h1>
         {Object.keys(errors).length > 0 && (
           <ul className="modal-list">
-            {Object.values(errors).map((error, index) => (
+            {/* {Object.values(errors).map((error, index) => (
               <li key={index} className="modal-list-item">
-                - {error}*
+                - {error}
               </li>
-            ))}
+            ))} */}
+            {Object.values(errors)
+              .slice(0, 5)
+              .map((error, index) => (
+                <li key={index} className="modal-list-item">
+                  - {error}
+                </li>
+              ))}
           </ul>
         )}
         <button className="modal-button" onClick={onClose}>
