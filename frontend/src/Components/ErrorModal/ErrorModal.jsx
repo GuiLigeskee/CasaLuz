@@ -28,7 +28,7 @@ const ErrorModal = ({
             : "modal-overlay-open"
           : ""
       }`}
-      className={`modal-content modal-content-Error ${
+      className={`modal-content modal-content-error ${
         isAnimationDone ? "modal-content-open" : ""
       } ${isAnimationClosing ? "modal-content-close" : ""}`}
       shouldCloseOnOverlayClick={false}

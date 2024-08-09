@@ -7,17 +7,15 @@ import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import { registerValidation } from "../../utils/formValidation";
 
 // Redux
-import { register } from "../../Slice/authSlice";
+import { register, reset } from "../../Slice/authSlice";
 
 // Hooks
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { useResetComponentMessage } from "../../Hooks/useResetComponentMessage";
 
 const Register = () => {
   const { loading, error, message } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  // const resetMessage = useResetComponentMessage();
 
   // Modal da validação do formulario
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
@@ -55,15 +53,14 @@ const Register = () => {
       openErrorModal();
     } else {
       dispatch(register(createAdmin));
-      // resetMessage();
+      setTimeout(() => {
+        dispatch(reset());
+      }, 2000);
     }
   };
 
   // UseEffect de erros
   useEffect(() => {
-    console.log("Error state:", error); // Log do estado de erro
-    console.log("Message state:", message); // Log do estado de mensagem
-
     if (error) {
       const backendErrors = { error: error };
       setErrors(backendErrors);

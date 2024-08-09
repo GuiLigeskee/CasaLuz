@@ -15,7 +15,7 @@ import { NumericFormat } from "react-number-format";
 import MaskedInput from "react-text-mask";
 
 // Redux
-import { publishAds } from "../../Slice/adsSlice";
+import { publishAds, reset } from "../../Slice/adsSlice";
 import {
   getZipCode,
   resetZipCode,
@@ -26,7 +26,7 @@ import {
 const AddAds = () => {
   const dispatch = useDispatch();
   const { loading, error, message } = useSelector((state) => state.ads);
-  // const { loading: loadingZipCode } = useSelector((state) => state.zipCode);
+  const { loading: loadingZipCode } = useSelector((state) => state.zipCode);
 
   // ZipCode da Api
   const zipCodeApi = useSelector(selectZipCodeApi);
@@ -129,6 +129,9 @@ const AddAds = () => {
       }
 
       dispatch(publishAds(formData));
+      setTimeout(() => {
+        dispatch(reset());
+      }, 2000);
     }
   };
 
@@ -544,8 +547,7 @@ const AddAds = () => {
           <input type="submit" disabled value="Aguarde..." />
         )}
 
-        {/* {(loading || loadingZipCode) && <Loading />} */}
-        {loading && <Loading />}
+        {(loading || loadingZipCode) && <Loading />}
       </form>
     </div>
   );

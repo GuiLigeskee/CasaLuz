@@ -4,7 +4,6 @@ import "./Auth.css";
 import Logo from "../../assets/logo-casa-luz.png";
 import Loading from "../../Components/Loading/Loading";
 import ErrorModal from "../../Components/ErrorModal/ErrorModal";
-import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import { loginValidation } from "../../utils/formValidation";
 
 // hooks
@@ -16,16 +15,13 @@ import { useNavigate } from "react-router-dom";
 import { login, reset } from "../../Slice/authSlice";
 
 const Login = () => {
-  const { admin, message, loading, error } = useSelector((state) => state.auth);
+  const { admin, loading, error } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Modal da validação do formulario
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-
-  // Modal de sucesso
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   // Animação do Modal
   const [isAnimationDone, setIsAnimationDone] = useState(false);
@@ -77,11 +73,7 @@ const Login = () => {
       setErrors(backendErrors);
       openErrorModal();
     }
-
-    if (message) {
-      openSuccessModal();
-    }
-  }, [error, message]);
+  }, [error]);
 
   // Modal da validação do formulario
   const openErrorModal = () => setIsErrorModalOpen(true);
@@ -95,17 +87,6 @@ const Login = () => {
     }, 300);
   };
 
-  // Modal de sucesso
-  const openSuccessModal = () => setIsSuccessModalOpen(true);
-  const closeSuccessModal = () => {
-    setIsAnimationClosing(true);
-    setTimeout(() => {
-      setIsAnimationDone(false);
-      setIsSuccessModalOpen(false);
-      setIsAnimationClosing(false);
-    }, 300);
-  };
-
   return (
     <div id="login">
       {/* Modal da validação do formulario Frontend */}
@@ -115,17 +96,6 @@ const Login = () => {
         isAnimationDone={isAnimationDone}
         isAnimationClosing={isAnimationClosing}
         errors={errors}
-        setIsAnimationDone={setIsAnimationDone}
-      />
-
-      {/* Modal de sucesso */}
-      <SuccessModal
-        isOpen={isSuccessModalOpen}
-        onClose={closeSuccessModal}
-        isAnimationDone={isAnimationDone}
-        isAnimationClosing={isAnimationClosing}
-        type={"LOGIN"}
-        msg={message}
         setIsAnimationDone={setIsAnimationDone}
       />
 

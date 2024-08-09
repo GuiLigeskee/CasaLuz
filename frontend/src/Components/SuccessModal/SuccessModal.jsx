@@ -1,7 +1,7 @@
 import "./SuccessModal.css";
-import { useEffect } from "react";
-import Modal from "react-modal";
 
+import Modal from "react-modal";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SuccessModal = ({
@@ -22,19 +22,24 @@ const SuccessModal = ({
     }
   }, [isOpen, setIsAnimationDone]);
 
-  const handleAction = (actionType) => {
-    if (actionType === "CREATE_ADS") {
-      if (onResetStates) {
-        onResetStates();
-      }
-    } else if (actionType == "CREATE_DEPOIMENT") {
-      if (onResetStates) {
-        onResetStates();
-      }
-    } else if (actionType == "REGISTER") {
-      if (onResetStates) {
-        onResetStates();
-      }
+  const handleAction = () => {
+    if (onResetStates) onResetStates();
+    if (onClose) onClose();
+  };
+
+  // Coloca o titulo referente a ação de sucesso
+  const getTitle = () => {
+    switch (type) {
+      case "CREATE_ADS":
+        return "Anúncio publicado com sucesso!";
+      case "PUT_ADS":
+        return "Anúncio atualizado com sucesso!";
+      case "CREATE_DEPOIMENT":
+        return "Depoimento publicado com sucesso!";
+      case "REGISTER":
+        return "Administrador criado com sucesso!";
+      default:
+        return "";
     }
   };
 
@@ -43,38 +48,39 @@ const SuccessModal = ({
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Sucesso Modal"
-      overlayClassName={`overlay ${
+      overlayClassName={`modal-overlay ${
         isAnimationDone
           ? isAnimationClosing
-            ? "overlay-close"
-            : "overlay-open"
+            ? "modal-overlay-close"
+            : "modal-overlay-open"
           : ""
       }`}
       className={`modal-content modal-content-success ${
-        isAnimationDone ? "content-open" : ""
-      } ${isAnimationClosing ? "content-close" : ""}`}
+        isAnimationDone ? "modal-content-open" : ""
+      } ${isAnimationClosing ? "modal-content-close" : ""}`}
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEsc={false}
     >
       <div className="success-container">
-        <h1 className="success-title">
-          {type === "CREATE_ADS" && "O anúncio foi criado com sucesso!"}
-          {type === "PUT_ADS" && "O anúncio foi atualizado com sucesso!"}
-          {type === "CREATE_DEPOIMENT" &&
-            "O depoimento foi criado com sucesso!"}
-          {type === "REGISTER" && "Administrador cadastrado com sucesso!"}
-        </h1>
-        <p className="success-message">{msg}</p>
+        <h1 className="success-title">{getTitle()}</h1>
+        {/* <p className="success-message">{msg}</p> */}
         <div className="success-buttons">
-          {type === "CREATE_ADS" && (
+          {type !== "PUT_ADS" && (
             <>
-              <button
-                className="success-button"
-                onClick={() => handleAction("CREATE_ADS")}
-              >
-                Cadastrar novo anúncio
+              <button className="success-button" onClick={() => handleAction()}>
+                {type === "CREATE_ADS"
+                  ? "Cadastrar novo anúncio"
+                  : type === "CREATE_DEPOIMENT"
+                  ? "Cadastrar novo depoimento"
+                  : "Cadastrar novo administrador"}
               </button>
-              <button onClick={() => navigate("/")}>Ir para home</button>
+              {type === "REGISTER" ? (
+                <button onClick={() => navigate("/")}>Ir para home</button>
+              ) : (
+                <button className="success-button" onClick={onClose}>
+                  Fechar
+                </button>
+              )}
             </>
           )}
           {type === "PUT_ADS" && (
@@ -83,30 +89,6 @@ const SuccessModal = ({
                 Fechar
               </button>
               <button onClick={() => navigate("/")}>Ir para home</button>
-            </>
-          )}
-          {type === "CREATE_DEPOIMENT" && (
-            <>
-              <button
-                className="success-button"
-                onClick={() => handleAction("CREATE_DEPOIMENT")}
-              >
-                Cadastrar novo depoimento
-              </button>
-              <button onClick={() => navigate("/")}>Ir para home</button>
-            </>
-          )}
-          {type === "REGISTER" && (
-            <>
-              <button
-                className="success-button"
-                onClick={() => handleAction("REGISTER")}
-              >
-                Cadastrar novo administrador
-              </button>
-              <button className="success-button" onClick={onClose}>
-                Fechar
-              </button>
             </>
           )}
         </div>

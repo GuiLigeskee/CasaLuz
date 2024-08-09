@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 
 // Redux
-import { publishDepoiment } from "../../Slice/depoimentSlice";
+import { publishDepoiment, reset } from "../../Slice/depoimentSlice";
 
 const AddDepoiment = () => {
   const { loading, error, message } = useSelector((state) => state.depoiments);
@@ -79,6 +79,9 @@ const AddDepoiment = () => {
       }
 
       dispatch(publishDepoiment(formData));
+      setTimeout(() => {
+        dispatch(reset());
+      }, 2000);
     }
   };
 
@@ -131,8 +134,8 @@ const AddDepoiment = () => {
   const resetStates = () => {
     setTitle("");
     setDescription("");
-    depoimentImages([]);
-    imagePreviews([]);
+    setDepoimentImages([]);
+    setImagePreviews([]);
   };
 
   return (

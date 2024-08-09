@@ -45,10 +45,11 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.error = null;
+      state.error = false;
       state.success = false;
       state.loading = false;
       state.message = null;
+      console.log("RESET DO REDUX (REGISTER)");
     },
   },
   extraReducers: (builder) => {

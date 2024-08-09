@@ -63,8 +63,12 @@ export const depoimentSlice = createSlice({
   name: "publish",
   initialState,
   reducers: {
-    resetMessage: (state) => {
+    reset: (state) => {
+      state.error = false;
+      state.success = false;
+      state.loading = false;
       state.message = null;
+      console.log("RESET DO REDUX (DEPOIMENTO)");
     },
   },
   extraReducers: (builder) => {
@@ -130,5 +134,5 @@ export const depoimentSlice = createSlice({
   },
 });
 
-export const { resetMessage } = depoimentSlice.actions;
+export const { reset } = depoimentSlice.actions;
 export default depoimentSlice.reducer;
