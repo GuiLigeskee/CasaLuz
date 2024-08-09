@@ -1,42 +1,28 @@
-// CSS
 import "./AdsPage.css";
-
-// Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
-// Uploads
 import { uploads } from "../../utils/config";
-
-// Components
 import Whatsapp from "../../assets/whatsapp.svg";
 import Tell from "../../assets/phone.svg";
-
-// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBed,
   faBath,
   faMapMarkerAlt,
   faCar,
+  faRuler,
 } from "@fortawesome/free-solid-svg-icons";
-
-// Hooks
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-
-// Redux
 import { getAdsDetailsByReference } from "../../Slice/adsSlice";
 
 const AdsPage = () => {
   const { referenceAds } = useParams();
-
   const dispatch = useDispatch();
-
   const { add } = useSelector((state) => state.ads);
   const [newPrice, setNewPrice] = useState();
 
@@ -44,18 +30,15 @@ const AdsPage = () => {
     add.whatsapp && add.whatsapp.replace(/[()\s-]/g, "");
   const cleanedNumberTell = add.tell && add.tell.replace(/[()\s-]/g, "");
 
-  // Load ads data
   useEffect(() => {
     dispatch(getAdsDetailsByReference(referenceAds));
   }, [dispatch, referenceAds]);
 
   const parseNumberToString = (priceNumber) => {
     if (priceNumber === null || priceNumber === undefined) return "";
-
     const priceStr = priceNumber.toFixed(2);
     const parts = priceStr.split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
     return `R$ ${parts.join(",")}`;
   };
 
@@ -67,17 +50,15 @@ const AdsPage = () => {
 
   return (
     <div className="adsPage">
+      <div>
+        <h2 className="ads-title">{add.title}</h2>
+      </div>
       <div className="carousel-container">
         <Swiper
           slidesPerView={1}
           loop={true}
-          pagination={{
-            clickable: true,
-          }}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
+          pagination={{ clickable: true }}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
           navigation={true}
           modules={[Pagination, Navigation, Autoplay]}
           className="mySwiper"
@@ -95,75 +76,46 @@ const AdsPage = () => {
             ))}
         </Swiper>
         <div className="addDetails-container">
-          <a
-            href={`https://www.google.com/maps?q=${add.address}, ${add.addressNumber},${add.district},${add.city}`}
-            target="_blank"
-          >
-            <div className="addMaps">
-              <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-              <p>Ver no mapa</p>
-            </div>
-          </a>
           {add.bedrooms !== undefined && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faBed} className="icon" />
-              <span>Quartos:</span>
               <p>{add.bedrooms}</p>
             </div>
           )}
           {add.bathrooms !== undefined && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faBath} className="icon" />
-              <span>Banheiros:</span>
               <p>{add.bathrooms}</p>
             </div>
           )}
           {add.carVacancies !== undefined && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faCar} className="icon" />
-              <span>Vagas de carro:</span>
               <p>{add.carVacancies}</p>
             </div>
           )}
-        </div>
-        <div className="contact-section">
-          <h3>Gostou do que viu?</h3>
-          <h4>Entre em contato com nossos corretores!</h4>
-          <div className="contact-buttons">
-            <a
-              id="contact-button"
-              href={`https://wa.me/+55${cleanedNumberWhatsapp}`}
-              target="blank"
-            >
-              <img src={Whatsapp} alt="Whatsapp" />
-              <p>Whatsapp</p>
-            </a>
-            <a
-              id="contact-button"
-              href={`tell:+55${cleanedNumberTell}`}
-              target="_blank"
-            >
-              <img src={Tell} alt="Telefone" />
-              <p>Telefone</p>
-            </a>
-          </div>
+          {add.landMeasurement !== undefined && (
+            <div className="addDetails">
+              <FontAwesomeIcon icon={faRuler} className="icon" />
+              <p>{add.landMeasurement}m2</p>
+            </div>
+          )}
         </div>
       </div>
       <div className="details-container">
-        <h2 className="details-title">{add.title}</h2>
-        {add.referenceAds && (
-          <label>
-            <span>Referencia do anúncio:</span>
-            <p>{add.referenceAds}</p>
-          </label>
-        )}
-        {add.description && (
-          <label>
-            <span>Descrição:</span>
-            <p>{add.description}</p>
-          </label>
-        )}
         <div className="details-flex">
+          {add.description && (
+            <label>
+              <span>Descrição</span>
+              <p>{add.description}</p>
+            </label>
+          )}
+          {add.referenceAds && (
+            <label>
+              <span>Referencia do anúncio:</span>
+              <p>{add.referenceAds}</p>
+            </label>
+          )}
           {add.price && (
             <label>
               <span>Preço:</span>
@@ -212,6 +164,40 @@ const AdsPage = () => {
             </label>
           )}
         </div>
+      </div>
+      <div className="contact-section">
+        <h3>Gostou do que viu?</h3>
+        <h4>Entre em contato com nossos corretores!</h4>
+        <div className="contact-buttons">
+          <a
+            id="contact-button"
+            href={`https://wa.me/+55${cleanedNumberWhatsapp}`}
+            target="blank"
+          >
+            <img src={Whatsapp} alt="Whatsapp" />
+            <p>Whatsapp</p>
+          </a>
+          <a
+            id="contact-button"
+            href={`tel:+55${cleanedNumberTell}`}
+            target="_blank"
+          >
+            <img src={Tell} alt="Telefone" />
+            <p>Telefone</p>
+          </a>
+        </div>
+      </div>
+      <div>
+        <a
+          href={`https://www.google.com/maps?q=${add.address}, ${add.addressNumber},${add.district},${add.city}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="addMaps">
+            <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
+            <p>Ver no mapa</p>
+          </div>
+        </a>
       </div>
     </div>
   );
