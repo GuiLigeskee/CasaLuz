@@ -104,10 +104,14 @@ const AdsPage = () => {
       </div>
       <div className="details-container">
         <div className="details-flex">
-          {add.description && (
-            <label>
-              <span>Descrição</span>
-              <p>{add.description}</p>
+          {add.price && (
+            <label id="price">
+              {/* <span>Preço:</span> */}
+              {add.methodOfSale === "Aluguel" ? (
+                <p>{newPrice}\mês</p>
+              ) : (
+                <p>{newPrice}</p>
+              )}
             </label>
           )}
           {add.referenceAds && (
@@ -116,10 +120,10 @@ const AdsPage = () => {
               <p>{add.referenceAds}</p>
             </label>
           )}
-          {add.price && (
+          {add.description && (
             <label>
-              <span>Preço:</span>
-              <p>{newPrice}</p>
+              <span>Descrição</span>
+              <p>{add.description}</p>
             </label>
           )}
           {add.typeOfRealty && (

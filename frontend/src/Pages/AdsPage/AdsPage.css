@@ -133,6 +133,17 @@
   color: white;
 }
 
+#price {
+  background-color: #08273c;
+  color: #fafafa;
+  padding: 1em 0.5em;
+  border-radius: 15px;
+  width: auto;
+}
+
+#price span {
+  color: #fafafa;
+}
 /* Adicionando destaque ao botão "Ver no mapa" */
 .addMaps {
   background-color: #08273c;
