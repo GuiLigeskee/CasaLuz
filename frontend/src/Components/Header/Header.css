@@ -13,10 +13,3 @@
   margin: 0.3em auto 0 auto;
   height: 2em;
 }
-
-@media (max-width: 768px) {
-  .header {
-    text-align: right;
-    padding-right: 1em;
-  }
-}

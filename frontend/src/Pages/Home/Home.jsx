@@ -85,13 +85,11 @@ const Home = () => {
   return (
     <div>
       <div className="intro-home">
-        <div>
-          <h1 id="intro-title">
-            Descubra <span>seu lar</span> em Curitiba-PR
-          </h1>
+        <div className="intro-content">
+          <h1 id="intro-title">Descubra seu lar em Curitiba-PR</h1>
           <h2>Venda e aluguel de imóveis</h2>
+          <SearchBar />
         </div>
-        <SearchBar />
       </div>
 
       {adsForSale.length > 0 && (
