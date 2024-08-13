@@ -31,14 +31,20 @@
   background-position: center center;
   color: #08273c;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 1.5em 0 7em 0;
+  padding: 3em 0;
 }
 
 .intro-home {
   min-height: 95vh;
+}
+
+.intro-content {
+  background-color: rgba(0, 0, 0, 0.055);
+  padding: 3em 2em;
+  border-radius: 15px;
 }
 
 #intro-title {
