@@ -1,16 +1,17 @@
 import "./AdsItem.css";
 
+// URL da pasta uploads
 import { uploads } from "../../utils/config";
-
-import { Link, useNavigate } from "react-router-dom";
 
 // Hooks
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 // Redux
-import { useSelector, useDispatch } from "react-redux";
 import { deleteAdd } from "../../Slice/adsSlice";
 
+// PNG
 import anuncioSemImagem from "../../assets/add-sem-imagem.png";
 
 const AdsItem = ({ add }) => {
@@ -18,11 +19,10 @@ const AdsItem = ({ add }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // State do preço
   const [newPrice, setNewPrice] = useState();
 
-  const [isImageValid, setIsImageValid] = useState(true);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
+  // Função para deletar os ADS
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza de que deseja excluir este anúncio?")) {
       dispatch(deleteAdd(id));
@@ -30,18 +30,11 @@ const AdsItem = ({ add }) => {
   };
 
   // Anuncio sem imagem
-  const handleImageError = () => {
-    if (imageLoaded) return;
-    setIsImageValid(false);
-    setImageLoaded(true);
+  const handleImageError = (event) => {
+    event.target.src = anuncioSemImagem;
   };
 
-  const handleImageLoad = () => {
-    if (imageLoaded) return;
-    setIsImageValid(true);
-    setImageLoaded(true);
-  };
-
+  // Função dos botões do admin
   const renderAdminOptions = () => {
     if (admin) {
       return (
@@ -64,6 +57,7 @@ const AdsItem = ({ add }) => {
     return null;
   };
 
+  // Formata corretamente o preço do ADS
   const parseNumberToString = (priceNumber) => {
     if (priceNumber === null || priceNumber === undefined) return "";
 
@@ -89,22 +83,20 @@ const AdsItem = ({ add }) => {
             <p className="price">
               {add.methodOfSale === "Venda" ? newPrice : `${newPrice}/mês`}
             </p>
-            {add.images &&
-              (isImageValid ? (
-                <img
-                  src={`${uploads}/ads/${add.images}`}
-                  alt={add.title}
-                  onError={handleImageError}
-                  onLoad={handleImageLoad}
-                />
-              ) : (
-                <img
-                  src={anuncioSemImagem}
-                  alt="Anúncio sem imagem"
-                  onError={handleImageError}
-                  onLoad={handleImageLoad}
-                />
-              ))}
+            {add.images ? (
+              <img
+                src={`${uploads}/ads/${add.images}`}
+                alt={add.title}
+                onError={handleImageError}
+                // className="carousel-img"
+              />
+            ) : (
+              <img
+                src={anuncioSemImagem}
+                alt="Anúncio sem imagem"
+                // className="carousel-img"
+              />
+            )}
             <p className="title">
               {add.typeOfRealty}
               {/* <br />
