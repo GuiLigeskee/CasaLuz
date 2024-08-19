@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 // Redux
 import { deleteAdd } from "../../Slice/adsSlice";
 
-// PNG
+// Anuncio sem imagem
 import anuncioSemImagem from "../../assets/add-sem-imagem.png";
 
 const AdsItem = ({ add }) => {
@@ -88,14 +88,9 @@ const AdsItem = ({ add }) => {
                 src={`${uploads}/ads/${add.images}`}
                 alt={add.title}
                 onError={handleImageError}
-                // className="carousel-img"
               />
             ) : (
-              <img
-                src={anuncioSemImagem}
-                alt="Anúncio sem imagem"
-                // className="carousel-img"
-              />
+              <img src={anuncioSemImagem} alt="Anúncio sem imagem" />
             )}
             <p className="title">
               {add.typeOfRealty}

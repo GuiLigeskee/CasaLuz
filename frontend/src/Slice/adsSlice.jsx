@@ -104,7 +104,6 @@ export const adsSlice = createSlice({
       state.success = false;
       state.loading = false;
       state.message = null;
-      console.log("RESET DO REDUX");
     },
     fetchAdsStart(state) {
       state.loading = true;

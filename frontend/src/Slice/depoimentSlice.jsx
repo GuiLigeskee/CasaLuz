@@ -68,7 +68,6 @@ export const depoimentSlice = createSlice({
       state.success = false;
       state.loading = false;
       state.message = null;
-      console.log("RESET DO REDUX (DEPOIMENTO)");
     },
   },
   extraReducers: (builder) => {

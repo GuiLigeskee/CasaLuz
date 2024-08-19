@@ -1,12 +1,14 @@
 import "./Home.css";
 
 // Components
+import AdsItem from "../../Components/Ads/AdsItem";
 import SearchBar from "../../Components/SearchBar/SearchBar";
+import DepoimentItem from "../../Components/Depoiment/DepoimentItem";
 
 // Import Swiper React components
+import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
-import "swiper/css/bundle";
 
 // Hooks
 import { useState, useEffect } from "react";
@@ -15,8 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 // Redux
 import { getAds } from "../../Slice/adsSlice";
 import { getDepoiments } from "../../Slice/depoimentSlice";
-import AdsItem from "../../Components/Ads/AdsItem";
-import DepoimentItem from "../../Components/Depoiment/DepoimentItem";
 
 const Home = () => {
   const dispatch = useDispatch();

@@ -74,6 +74,9 @@ const AddAds = () => {
   const [adsImages, setAdsImages] = useState([]);
   const imageUrls = useRef([]);
 
+  // ResetImages
+  const imageUploaderRef = useRef(null);
+
   // UseEffect de erros
   useEffect(() => {
     if (error) {
@@ -129,9 +132,6 @@ const AddAds = () => {
       }
 
       dispatch(publishAds(formData));
-      setTimeout(() => {
-        dispatch(reset());
-      }, 2000);
     }
   };
 
@@ -177,11 +177,11 @@ const AddAds = () => {
   const closeCepModal = () => {
     setIsAnimationClosing(true);
     setTimeout(() => {
-      dispatch(resetZipCode());
       setMessageZipCode("");
       setIsAnimationDone(false);
       setIsCepModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(resetZipCode());
     }, 300);
   };
 
@@ -194,6 +194,7 @@ const AddAds = () => {
       setIsAnimationDone(false);
       setIsErrorModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(reset());
     }, 300);
   };
 
@@ -205,6 +206,7 @@ const AddAds = () => {
       setIsAnimationDone(false);
       setIsSuccessModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(reset());
     }, 300);
   };
 
@@ -229,6 +231,7 @@ const AddAds = () => {
     setBathrooms("");
     setCarVacancies("");
     setAdsImages([]);
+    imageUploaderRef.current.removeAllImages();
   };
 
   // Converter a mascara do preço pra number
@@ -290,6 +293,7 @@ const AddAds = () => {
         initialImages={imageUrls.current}
         onChange={handleImageChange}
         typePage={"CREATE"}
+        ref={imageUploaderRef}
       />
 
       <form onSubmit={handleSubmit}>

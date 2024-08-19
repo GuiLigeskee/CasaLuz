@@ -63,7 +63,7 @@ const SuccessModal = ({
     >
       <div className="success-container">
         <h1 className="success-title">{getTitle()}</h1>
-        {/* <p className="success-message">{msg}</p> */}
+        <p className="success-message">{msg}</p>
         <div className="success-buttons">
           {type !== "PUT_ADS" && (
             <>

@@ -53,9 +53,6 @@ const Register = () => {
       openErrorModal();
     } else {
       dispatch(register(createAdmin));
-      setTimeout(() => {
-        dispatch(reset());
-      }, 2000);
     }
   };
 
@@ -81,6 +78,7 @@ const Register = () => {
       setIsAnimationDone(false);
       setIsErrorModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(reset());
     }, 300);
   };
 
@@ -92,6 +90,7 @@ const Register = () => {
       setIsAnimationDone(false);
       setIsSuccessModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(reset());
     }, 300);
   };
 
