@@ -79,9 +79,6 @@ const AddDepoiment = () => {
       }
 
       dispatch(publishDepoiment(formData));
-      setTimeout(() => {
-        dispatch(reset());
-      }, 2000);
     }
   };
 
@@ -116,6 +113,7 @@ const AddDepoiment = () => {
       setIsAnimationDone(false);
       setIsErrorModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(reset());
     }, 300);
   };
 
@@ -127,6 +125,7 @@ const AddDepoiment = () => {
       setIsAnimationDone(false);
       setIsSuccessModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(reset());
     }, 300);
   };
 

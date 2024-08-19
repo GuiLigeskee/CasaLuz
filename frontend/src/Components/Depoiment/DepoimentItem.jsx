@@ -1,25 +1,30 @@
 import "./DepoimentItem.css";
+
+// URL da pasta uploads
 import { uploads } from "../../utils/config";
+
+// Hooks
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+// Redux
 import { deleteDepoiment } from "../../Slice/depoimentSlice";
 
+// PNG
 import depoimentoSemImagem from "../../assets/depoiment-sem-imagem.png";
 
 const DepoimentItem = ({ depoiment }) => {
   const admin = useSelector((state) => state.auth.admin);
   const dispatch = useDispatch();
 
-  const [isImageValid, setIsImageValid] = useState(true);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
+  // Função para deletar os depoimentos
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza de que deseja excluir este anúncio?")) {
       dispatch(deleteDepoiment(id));
     }
   };
 
+  // Função dos botões do admin
   const renderAdminOptions = () => {
     if (admin) {
       return (
@@ -37,16 +42,8 @@ const DepoimentItem = ({ depoiment }) => {
   };
 
   // Depoimento sem imagem
-  const handleImageError = () => {
-    if (imageLoaded) return;
-    setIsImageValid(false);
-    setImageLoaded(true);
-  };
-
-  const handleImageLoad = () => {
-    if (imageLoaded) return;
-    setIsImageValid(true);
-    setImageLoaded(true);
+  const handleImageError = (event) => {
+    event.target.src = depoimentoSemImagem;
   };
 
   return (
@@ -54,22 +51,20 @@ const DepoimentItem = ({ depoiment }) => {
       {depoiment && (
         <div>
           {renderAdminOptions()}
-          {depoiment.images &&
-            (isImageValid ? (
-              <img
-                src={`${uploads}/depoiment/${depoiment.images}`}
-                alt={depoiment.title}
-                onError={handleImageError}
-                onLoad={handleImageLoad}
-              />
-            ) : (
-              <img
-                src={depoimentoSemImagem}
-                alt="Depoimento sem imagem"
-                onError={handleImageError}
-                onLoad={handleImageLoad}
-              />
-            ))}
+          {depoiment.images ? (
+            <img
+              src={`${uploads}/depoiment/${depoiment.images}`}
+              alt={depoiment.title}
+              onError={handleImageError}
+              // className="carousel-img"
+            />
+          ) : (
+            <img
+              src={depoimentoSemImagem}
+              alt="Depoimento sem imagem"
+              // className="carousel-img"
+            />
+          )}
           <p className="title">{depoiment.title}</p>
           <p className="description">"{depoiment.description}"</p>
         </div>

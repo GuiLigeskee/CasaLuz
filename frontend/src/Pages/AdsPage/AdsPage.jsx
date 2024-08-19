@@ -1,12 +1,29 @@
 import "./AdsPage.css";
+
+// URL da pasta uploads
+import { uploads } from "../../utils/config";
+
+// Hooks
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
+
+// CSS do Swiper
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { uploads } from "../../utils/config";
+
+// Redux
+import { getAdsDetailsByReference } from "../../Slice/adsSlice";
+
+// SVGs
+import anuncioSemImagem from "../../assets/add-sem-imagem.png";
 import Whatsapp from "../../assets/whatsapp.svg";
 import Tell from "../../assets/phone.svg";
+
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBed,
@@ -15,17 +32,19 @@ import {
   faCar,
   faRuler,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getAdsDetailsByReference } from "../../Slice/adsSlice";
 
 const AdsPage = () => {
-  const { referenceAds } = useParams();
-  const dispatch = useDispatch();
   const { add } = useSelector((state) => state.ads);
+  const dispatch = useDispatch();
+  const { referenceAds } = useParams();
+
+  // State do preço
   const [newPrice, setNewPrice] = useState();
 
+  // State do anuncio sem imagem
+  const [validImages, setValidImages] = useState([]);
+
+  // Limpa a string do telefone e whatsapp
   const cleanedNumberWhatsapp =
     add.whatsapp && add.whatsapp.replace(/[()\s-]/g, "");
   const cleanedNumberTell = add.tell && add.tell.replace(/[()\s-]/g, "");
@@ -34,11 +53,14 @@ const AdsPage = () => {
     dispatch(getAdsDetailsByReference(referenceAds));
   }, [dispatch, referenceAds]);
 
+  // Formata corretamente o preço do ADS
   const parseNumberToString = (priceNumber) => {
     if (priceNumber === null || priceNumber === undefined) return "";
+
     const priceStr = priceNumber.toFixed(2);
     const parts = priceStr.split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
     return `R$ ${parts.join(",")}`;
   };
 
@@ -47,6 +69,22 @@ const AdsPage = () => {
       setNewPrice(parseNumberToString(add.price));
     }
   }, [add.price]);
+
+  // Anuncio sem imagem
+  const handleImageError = (index) => {
+    setValidImages((prev) => {
+      const newValidImages = [...prev];
+      newValidImages[index] = false;
+      return newValidImages;
+    });
+  };
+  const handleImageLoad = (index) => {
+    setValidImages((prev) => {
+      const newValidImages = [...prev];
+      newValidImages[index] = true;
+      return newValidImages;
+    });
+  };
 
   return (
     <div className="adsPage">
@@ -66,12 +104,21 @@ const AdsPage = () => {
           {add.images &&
             add.images.map((image, index) => (
               <SwiperSlide key={index}>
-                <img
-                  key={index}
-                  src={`${uploads}/ads/${image}`}
-                  alt={`${add.title} - Foto ${index + 1}`}
-                  className="carousel-img"
-                />
+                {validImages[index] !== false ? (
+                  <img
+                    src={`${uploads}/ads/${image}`}
+                    alt={`${add.title} - Foto ${index + 1}`}
+                    className="carousel-img"
+                    onError={() => handleImageError(index)}
+                    onLoad={() => handleImageLoad(index)}
+                  />
+                ) : (
+                  <img
+                    src={anuncioSemImagem}
+                    alt="Anúncio sem imagem"
+                    className="carousel-img"
+                  />
+                )}
               </SwiperSlide>
             ))}
         </Swiper>
