@@ -187,9 +187,6 @@ const UpdateAds = () => {
       }
 
       dispatch(updateAds(formData));
-      setTimeout(() => {
-        dispatch(reset());
-      }, 2000);
     }
   };
 
@@ -244,6 +241,7 @@ const UpdateAds = () => {
       setIsAnimationDone(false);
       setIsErrorModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(reset());
     }, 300);
   };
 
@@ -255,6 +253,7 @@ const UpdateAds = () => {
       setIsAnimationDone(false);
       setIsSuccessModalOpen(false);
       setIsAnimationClosing(false);
+      dispatch(reset());
     }, 300);
   };
 
