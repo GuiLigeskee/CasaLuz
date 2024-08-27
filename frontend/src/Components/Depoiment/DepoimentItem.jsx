@@ -4,7 +4,6 @@ import "./DepoimentItem.css";
 import { uploads } from "../../utils/config";
 
 // Hooks
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Redux
@@ -19,7 +18,7 @@ const DepoimentItem = ({ depoiment }) => {
 
   // Função para deletar os depoimentos
   const handleDelete = (id) => {
-    if (window.confirm("Tem certeza de que deseja excluir este anúncio?")) {
+    if (window.confirm("Tem certeza de que deseja excluir esse depoimento?")) {
       dispatch(deleteDepoiment(id));
     }
   };
@@ -56,14 +55,9 @@ const DepoimentItem = ({ depoiment }) => {
               src={`${uploads}/depoiment/${depoiment.images}`}
               alt={depoiment.title}
               onError={handleImageError}
-              // className="carousel-img"
             />
           ) : (
-            <img
-              src={depoimentoSemImagem}
-              alt="Depoimento sem imagem"
-              // className="carousel-img"
-            />
+            <img src={depoimentoSemImagem} alt="Depoimento sem imagem" />
           )}
           <p className="title">{depoiment.title}</p>
           <p className="description">"{depoiment.description}"</p>

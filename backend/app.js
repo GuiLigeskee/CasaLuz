@@ -24,7 +24,7 @@ app.use(
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // DB connection
-require("./config/dbProd.js");
+require("./config/db.js");
 
 // Routes
 const router = require("./routes/Router.js");

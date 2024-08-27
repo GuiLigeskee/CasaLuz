@@ -16,11 +16,9 @@ const deleteImages = async (imageType, oldImageName) => {
     }
 
     await fs.unlink(imagePath);
-
-    // console.log(`Imagem excluída com sucesso.`);
   } catch (error) {
     console.error("Erro ao excluir as imagens:", error);
-    throw new Error("Erro ao excluir as imagens.");
+    // throw new Error("Erro ao excluir as imagens.");
   }
 };
 

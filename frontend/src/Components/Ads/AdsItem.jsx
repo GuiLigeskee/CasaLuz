@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 // Redux
-import { deleteAdd } from "../../Slice/adsSlice";
+import { deleteAdd, reset } from "../../Slice/adsSlice";
 
 // Anuncio sem imagem
 import anuncioSemImagem from "../../assets/add-sem-imagem.png";
@@ -26,6 +26,9 @@ const AdsItem = ({ add }) => {
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza de que deseja excluir este anúncio?")) {
       dispatch(deleteAdd(id));
+      setTimeout(() => {
+        dispatch(reset());
+      }, 300);
     }
   };
 
