@@ -23,17 +23,22 @@ const SearchBar = () => {
     try {
       const params = {
         ...(keyword.trim() && { keyword }),
-        methodOfSale,
-        typeOfRealty,
+        ...(methodOfSale && { methodOfSale }),
+        ...(typeOfRealty && { typeOfRealty }),
       };
 
+      // Faz a busca
       const data = await adsService.searchAds(params);
       dispatch(fetchAdsSuccess(data));
 
+      // Redireciona para a página de resultados
       const query = new URLSearchParams(params).toString();
       navigate(`/procurar?${query}`);
     } catch (error) {
+      // Atualiza o estado de erro
       dispatch(fetchAdsFailure(error.message));
+      // Redireciona para a página de resultados com erro
+      navigate(`/procurar?error=${encodeURIComponent(error.message)}`);
     }
   };
 

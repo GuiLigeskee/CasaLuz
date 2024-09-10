@@ -8,8 +8,6 @@ const initialState = {
   success: false,
   loading: false,
   message: null,
-  page: 1,
-  hasMore: true,
 };
 
 // Publish an user's ads
@@ -83,11 +81,9 @@ export const deleteAdd = createAsyncThunk(
 
 export const getAdsFilters = createAsyncThunk(
   "ads/getAds",
-  async ({ filters, page, limit }, thunkAPI) => {
+  async (params, thunkAPI) => {
     try {
-      const params = { ...filters, page, limit };
       const data = await adsService.searchAds(params);
-
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -117,13 +113,8 @@ export const adsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    setPage: (state, action) => {
-      state.page = action.payload;
-    },
     resetAds: (state) => {
       state.ads = [];
-      state.page = 1;
-      state.hasMore = true;
     },
   },
   extraReducers: (builder) => {
@@ -215,7 +206,6 @@ export const adsSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = null;
-
         state.ads = state.ads.filter((add) => {
           return add._id !== action.payload.id;
         });
@@ -233,11 +223,7 @@ export const adsSlice = createSlice({
       })
       .addCase(getAdsFilters.fulfilled, (state, action) => {
         state.loading = false;
-        state.ads =
-          action.meta.arg.page === 1
-            ? action.payload
-            : [...state.ads, ...action.payload];
-        state.hasMore = action.payload.length === action.meta.arg.limit;
+        state.ads = action.payload;
       })
       .addCase(getAdsFilters.rejected, (state, action) => {
         state.loading = false;

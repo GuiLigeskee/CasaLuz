@@ -138,10 +138,20 @@ const searchAds = async (params) => {
   try {
     const queryString = new URLSearchParams(params).toString();
     const response = await fetch(`${api}/ads/filter/search?${queryString}`);
+
+    if (!response.ok) {
+      throw new Error(
+        "Não foi encontrado anúncios correspondentes à sua pesquisa"
+      );
+    }
+
     const data = await response.json();
     return data;
   } catch (error) {
-    throw new Error(error.message || "Erro ao buscar anúncios");
+    throw new Error(
+      error.message ||
+        "Não foi encontrado anúncios correspondentes à sua pesquisa"
+    );
   }
 };
 

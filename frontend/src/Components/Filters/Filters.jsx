@@ -71,14 +71,18 @@ const Filters = ({ filters, onFilterChange }) => {
           </label>
           <label>
             <span>Tipo de imóvel</span>
-            <input
-              type="text"
+            <select
               name="typeOfRealty"
               value={localFilters.typeOfRealty || ""}
               onChange={handleChange}
-              placeholder="Tipo de Imóvel"
               className="filter-input"
-            />
+            >
+              <option value="">Tipo de imóvel</option>
+              <option value="casa">Casa</option>
+              <option value="apartamento">Apartamento</option>
+              <option value="comercial">Comercial</option>
+              <option value="terreno">Terreno</option>
+            </select>
           </label>
           <label>
             <span>Método de compra</span>

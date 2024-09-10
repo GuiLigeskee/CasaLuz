@@ -35,7 +35,7 @@ const ErrorModal = ({
       shouldCloseOnEsc={false}
     >
       <div className="modal-container">
-        <h1 className="modal-title">Corrija os erros abaixo para continuar</h1>
+        <h1 className="modal-title">Ops!</h1>
         {Object.keys(errors).length > 0 && (
           <ul className="modal-list">
             {/* {Object.values(errors).map((error, index) => (
