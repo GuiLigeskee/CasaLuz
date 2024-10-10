@@ -37,14 +37,14 @@ const Footer = () => {
         <div className="rodape-div-4">
           <div className="rodape-div-4-coluna">
             <span>
-              <h3>Outros</h3>
+              <h3>CRECI</h3>
             </span>
-            <p>Políticas de Privacidade</p>
+            <p>CRECI: 8891-J</p>
           </div>
         </div>
       </div>
       <p className="rodape-direitos">
-        Copyright © 2023 – Todos os Direitos Reservados.
+        Casa Luz CRECI-PR 8891-J – Todos os Direitos Reservados.
       </p>
     </footer>
   );

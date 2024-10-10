@@ -88,6 +88,7 @@ const Home = () => {
         <div className="intro-content">
           <h1 id="intro-title">Descubra seu lar em Curitiba-PR</h1>
           <h2>Venda e aluguel de imóveis</h2>
+          <h3 className="creci">CRECI: 8891-J</h3>
           <SearchBar />
         </div>
       </div>
