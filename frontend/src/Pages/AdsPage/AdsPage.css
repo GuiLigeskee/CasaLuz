@@ -24,7 +24,7 @@
 
 .carousel-img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   border-radius: 15px;
 }
@@ -187,9 +187,9 @@
     max-width: 25%;
   }
 
-  .carousel-img {
+  /* .carousel-img {
     max-height: 500px;
-  }
+  } */
 }
 
 @media (max-width: 768px) {
