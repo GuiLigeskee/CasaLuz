@@ -40,9 +40,24 @@ const GetAds = () => {
   
 
   const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
+    const cleanedFilters = { ...newFilters };
+  
+    if (cleanedFilters.minPrice) {
+      cleanedFilters.minPrice = parseFloat(
+        cleanedFilters.minPrice.replace(/[^\d,]/g, "").replace(",", ".")
+      );
+    }
+  
+    if (cleanedFilters.maxPrice) {
+      cleanedFilters.maxPrice = parseFloat(
+        cleanedFilters.maxPrice.replace(/[^\d,]/g, "").replace(",", ".")
+      );
+    }
+  
+    setFilters(cleanedFilters);
     dispatch(resetAds());
   };
+  
 
   // const handleScroll = useCallback(() => {
   //   if (

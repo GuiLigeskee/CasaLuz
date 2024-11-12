@@ -387,13 +387,14 @@ const searchAds = async (req, res) => {
     if (minPrice || maxPrice) {
       let priceFilter = {};
       if (minPrice) {
-        priceFilter.$gte = parseFloat(minPrice);
+        priceFilter.$gte = parseFloat(minPrice.replace(/[^\d.-]/g, ""));
       }
       if (maxPrice) {
-        priceFilter.$lte = parseFloat(maxPrice);
+        priceFilter.$lte = parseFloat(maxPrice.replace(/[^\d.-]/g, ""));
       }
       filter.price = priceFilter;
     }
+    
 
     if (minSpace || maxSpace) {
       let spaceFilter = {};
