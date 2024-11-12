@@ -123,25 +123,25 @@ const AdsPage = () => {
             ))}
         </Swiper>
         <div className="addDetails-container">
-          {add.bedrooms !== undefined && (
+          {add.bedrooms !== null && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faBed} className="icon" />
               <p>{add.bedrooms}</p>
             </div>
           )}
-          {add.bathrooms !== undefined && (
+          {add.bathrooms !== null && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faBath} className="icon" />
               <p>{add.bathrooms}</p>
             </div>
           )}
-          {add.carVacancies !== undefined && (
+          {add.carVacancies !== null && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faCar} className="icon" />
               <p>{add.carVacancies}</p>
             </div>
           )}
-          {add.landMeasurement !== undefined && (
+          {add.landMeasurement !== null && (
             <div className="addDetails">
               <FontAwesomeIcon icon={faRuler} className="icon" />
               <p>{add.landMeasurement}m2</p>

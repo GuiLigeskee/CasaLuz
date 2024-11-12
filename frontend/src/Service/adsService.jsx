@@ -134,26 +134,28 @@ const searchAdsByTypeOfRealty = async (q) => {
   }
 };
 
-const searchAds = async (params) => {
+const searchAds = async (filters) => {
   try {
-    const queryString = new URLSearchParams(params).toString();
-    const response = await fetch(`${api}/ads/filter/search?${queryString}`);
+    // Filtre para incluir apenas chaves com valores não vazios
+    const queryString = new URLSearchParams(
+      Object.entries(filters).filter(([_, value]) => value)
+    ).toString();
 
+    const response = await fetch(`${api}/ads/filter/search?${queryString}`);
     if (!response.ok) {
-      throw new Error(
-        "Não foi encontrado anúncios correspondentes à sua pesquisa"
-      );
+      throw new Error("Não foi encontrado anúncios correspondentes à sua pesquisa");
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
     throw new Error(
-      error.message ||
-        "Não foi encontrado anúncios correspondentes à sua pesquisa"
+      error.message || "Não foi encontrado anúncios correspondentes à sua pesquisa"
     );
   }
 };
+
+
 
 const adsService = {
   publishAds,

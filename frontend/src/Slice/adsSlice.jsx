@@ -81,15 +81,16 @@ export const deleteAdd = createAsyncThunk(
 
 export const getAdsFilters = createAsyncThunk(
   "ads/getAds",
-  async (params, thunkAPI) => {
+  async (filters, thunkAPI) => {
     try {
-      const data = await adsService.searchAds(params);
+      const data = await adsService.searchAds(filters);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+
 
 export const adsSlice = createSlice({
   name: "ads",

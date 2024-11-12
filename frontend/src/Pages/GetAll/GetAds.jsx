@@ -34,28 +34,30 @@ const GetAds = () => {
   });
 
   useEffect(() => {
-    dispatch(getAdsFilters({ filters, page, limit: 5 }));
-  }, [dispatch, filters, page]);
+    console.log("Enviando filtros:", filters); // Debug para verificar o conteúdo de `filters`
+    dispatch(getAdsFilters(filters));
+  }, [dispatch, filters]);
+  
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
     dispatch(resetAds());
   };
 
-  const handleScroll = useCallback(() => {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
-      hasMore &&
-      !loading
-    ) {
-      dispatch(setPage(page + 1));
-    }
-  }, [dispatch, page, hasMore, loading]);
+  // const handleScroll = useCallback(() => {
+  //   if (
+  //     window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+  //     hasMore &&
+  //     !loading
+  //   ) {
+  //     dispatch(setPage(page + 1));
+  //   }
+  // }, [dispatch, page, hasMore, loading]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, [handleScroll]);
 
   return (
     <div className="getAds">
