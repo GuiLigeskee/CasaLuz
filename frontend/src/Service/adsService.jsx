@@ -138,24 +138,30 @@ const searchAds = async (filters) => {
   try {
     // Filtre para incluir apenas chaves com valores não vazios
     const queryString = new URLSearchParams(
-      Object.entries(filters).filter(([_, value]) => value)
+      Object.entries(filters).filter(
+        ([_, value]) => value !== "" && value !== null && value !== undefined
+      )
     ).toString();
 
     const response = await fetch(`${api}/ads/filter/search?${queryString}`);
+
     if (!response.ok) {
-      throw new Error("Não foi encontrado anúncios correspondentes à sua pesquisa");
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error ||
+          "Não foi encontrado anúncios correspondentes à sua pesquisa"
+      );
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
     throw new Error(
-      error.message || "Não foi encontrado anúncios correspondentes à sua pesquisa"
+      error.message ||
+        "Não foi encontrado anúncios correspondentes à sua pesquisa"
     );
   }
 };
-
-
 
 const adsService = {
   publishAds,

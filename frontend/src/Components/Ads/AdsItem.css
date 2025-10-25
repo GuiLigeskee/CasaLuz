@@ -1,68 +1,197 @@
 .ads-item {
   position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #ffffff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ads-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.ads-item > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ads-item a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
 }
 
 .ads-item img {
   display: block;
-  max-height: 300px;
+  height: 280px;
   width: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.ads-item:hover img {
+  transform: scale(1.08);
 }
 
 .ads-item .price {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 15px;
+  left: 15px;
   width: auto;
-  padding: 0.5em;
-  background-color: #ffffff85;
+  padding: 0.6em 1em;
+  background: linear-gradient(135deg, #fdb303 0%, #e5a103 100%);
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(253, 179, 3, 0.4);
+  z-index: 10;
+  border: 2px solid rgba(253, 179, 3, 0.5);
+  font-family: "Poppins", sans-serif;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .ads-item .title {
   position: absolute;
-  font-size: 1.2em;
+  font-size: 1.1em;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 0.5em;
+  padding: 1.2em 1em;
   color: #fff;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.5) 60%,
+    transparent 100%
+  );
+  font-weight: 600;
+  line-height: 1.4;
+  font-family: "Poppins", sans-serif;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .admin-options {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  display: flex;
+  gap: 0.5em;
 }
 
 .admin-options button {
-  margin-left: 5px;
-  padding: 0.5em 1em;
+  padding: 0.6em 1.2em;
   border: none;
-  background-color: #08273c;
+  background: linear-gradient(135deg, #08273c 0%, #0a3552 100%);
   color: #fff;
   cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(8, 39, 60, 0.3);
+  font-family: "Poppins", sans-serif;
 }
 
 #admin-option-delete {
   color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+  border: 2px solid #f5c6cb;
 }
 
 #admin-option-delete:hover {
-  background-color: #ffc4c9;
+  background: linear-gradient(135deg, #f5c6cb 0%, #f1b0b7 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
 }
 
 .admin-options button:hover {
-  background-color: #0f486e;
+  background: linear-gradient(135deg, #0a3552 0%, #0f486e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(8, 39, 60, 0.5);
 }
 
-@media screen and (max-width: 767px) {
-  .price {
-    font-size: 1em;
+/* Responsividade */
+@media screen and (max-width: 1024px) {
+  .ads-item img {
+    height: 260px;
   }
 
-  .ads-item p {
-    font-size: 1.2em;
+  .ads-item .price {
+    font-size: 1.05em;
+    padding: 0.5em 0.9em;
+  }
+
+  .ads-item .title {
+    font-size: 1.05em;
+    padding: 1em 0.9em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .ads-item img {
+    height: 240px;
+  }
+
+  .ads-item .price {
+    font-size: 1em;
+    padding: 0.5em 0.8em;
+    top: 12px;
+    left: 12px;
+  }
+
+  .ads-item .title {
+    font-size: 1em;
+    padding: 1em 0.8em;
+  }
+
+  .admin-options {
+    top: 12px;
+    right: 12px;
+    gap: 0.4em;
+  }
+
+  .admin-options button {
+    padding: 0.5em 1em;
+    font-size: 0.85em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .ads-item img {
+    height: 220px;
+  }
+
+  .ads-item .price {
+    font-size: 0.95em;
+    padding: 0.4em 0.7em;
+    top: 10px;
+    left: 10px;
+  }
+
+  .ads-item .title {
+    font-size: 0.95em;
+    padding: 0.9em 0.7em;
+  }
+
+  .admin-options {
+    flex-direction: column;
+    gap: 0.3em;
+    top: 10px;
+    right: 10px;
+  }
+
+  .admin-options button {
+    padding: 0.4em 0.8em;
+    font-size: 0.8em;
   }
 }

@@ -8,6 +8,16 @@ const initialState = {
   success: false,
   loading: false,
   message: null,
+  pagination: {
+    currentPage: 1,
+    totalPages: 0,
+    totalItems: 0,
+    itemsPerPage: 10,
+    hasNext: false,
+    hasPrev: false,
+    nextPage: null,
+    prevPage: null,
+  },
 };
 
 // Publish an user's ads
@@ -90,7 +100,6 @@ export const getAdsFilters = createAsyncThunk(
     }
   }
 );
-
 
 export const adsSlice = createSlice({
   name: "ads",
@@ -224,11 +233,13 @@ export const adsSlice = createSlice({
       })
       .addCase(getAdsFilters.fulfilled, (state, action) => {
         state.loading = false;
-        state.ads = action.payload;
+        state.ads = action.payload.data || action.payload;
+        state.pagination = action.payload.pagination || initialState.pagination;
       })
       .addCase(getAdsFilters.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.ads = [];
       });
   },
 });

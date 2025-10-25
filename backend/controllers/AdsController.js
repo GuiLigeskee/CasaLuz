@@ -347,11 +347,24 @@ const searchAds = async (req, res) => {
     bedrooms,
     bathrooms,
     carVacancies,
-    page = 1,
-    limit = 5,
+    page,
+    limit,
   } = req.query;
 
   try {
+    // Validação e conversão dos parâmetros de paginação
+    const pageNumber = parseInt(page) || 1;
+    const limitNumber = parseInt(limit) || 10;
+    const offset = (pageNumber - 1) * limitNumber;
+
+    // Validação dos parâmetros de paginação
+    if (pageNumber < 1 || limitNumber < 1 || limitNumber > 100) {
+      return res.status(400).json({
+        error:
+          "Parâmetros de paginação inválidos. Page deve ser >= 1, limit entre 1 e 100.",
+      });
+    }
+
     let filter = {};
 
     if (referenceAds) {
@@ -394,7 +407,6 @@ const searchAds = async (req, res) => {
       }
       filter.price = priceFilter;
     }
-    
 
     if (minSpace || maxSpace) {
       let spaceFilter = {};
@@ -419,30 +431,49 @@ const searchAds = async (req, res) => {
       filter.carVacancies = carVacancies;
     }
 
-    const results = await Ads.find(filter)
-      .skip((page - 1) * limit)
-      .limit(parseInt(limit))
-      .select({
-        referenceAds: 1,
-        title: 1,
-        typeOfRealty: 1,
-        methodOfSale: 1,
-        city: 1,
-        district: 1,
-        price: 1,
-        landMeasurement: 1,
-        bedrooms: 1,
-        bathrooms: 1,
-        carVacancies: 1,
-        images: { $slice: 1 },
-      });
+    // Buscar os resultados e o total de documentos
+    const [results, total] = await Promise.all([
+      Ads.find(filter)
+        .skip(offset)
+        .limit(limitNumber)
+        .select({
+          referenceAds: 1,
+          title: 1,
+          typeOfRealty: 1,
+          methodOfSale: 1,
+          city: 1,
+          district: 1,
+          price: 1,
+          landMeasurement: 1,
+          bedrooms: 1,
+          bathrooms: 1,
+          carVacancies: 1,
+          images: { $slice: 1 },
+        }),
+      Ads.countDocuments(filter),
+    ]);
 
-    if (results.length === 0) {
-      return res.status(404).json({ error: "Anúncio não encontrado." });
-    }
+    // Calcular informações de paginação
+    const totalPages = Math.ceil(total / limitNumber);
+    const hasNext = pageNumber < totalPages;
+    const hasPrev = pageNumber > 1;
 
-    res.json(results);
+    // Retornar resposta com dados e paginação
+    res.json({
+      data: results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        totalItems: total,
+        itemsPerPage: limitNumber,
+        hasNext,
+        hasPrev,
+        nextPage: hasNext ? pageNumber + 1 : null,
+        prevPage: hasPrev ? pageNumber - 1 : null,
+      },
+    });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Erro ao buscar anúncios." });
   }
 };

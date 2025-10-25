@@ -50,10 +50,10 @@ const imagesStorage = multer.diskStorage({
 const imagesUpload = multer({
   storage: imagesStorage,
   fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpg|jpeg|heif|hevc)$/i)) {
+    if (!file.originalname.match(/\.(png|jpg|jpeg|heif|hevc|webp)$/i)) {
       return cb(
         new Error(
-          "Por favor, envie apenas imagens PNG, JPG, HEIF, HEVC ou JPEG"
+          "Por favor, envie apenas imagens WEBP, PNG, JPG, HEIF, HEVC ou JPEG"
         )
       );
     }
