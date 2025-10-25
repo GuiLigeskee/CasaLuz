@@ -109,45 +109,23 @@ const deleteAds = async (req, res) => {
 // Obter os anúncios da homepage
 const getHomeAds = async (req, res) => {
   try {
-    const saleAds = await Ads.aggregate([
-      { $match: { methodOfSale: "Venda" } },
-      { $sample: { size: 10 } },
-      {
-        $project: {
-          _id: 1,
-          referenceAds: 1,
-          images: { $arrayElemAt: ["$images", 0] },
-          typeOfRealty: 1,
-          price: 1,
-          district: 1,
-          city: 1,
-          methodOfSale: 1,
-        },
-      },
-    ]);
+    const ads = await Ads.find()
+      .select({
+        referenceAds: 1,
+        title: 1,
+        typeOfRealty: 1,
+        methodOfSale: 1,
+        city: 1,
+        district: 1,
+        price: 1,
+        images: { $slice: 1 },
+      })
+      .sort({ createdAt: -1 });
 
-    const rentAds = await Ads.aggregate([
-      { $match: { methodOfSale: "Aluguel" } },
-      { $sample: { size: 10 } },
-      {
-        $project: {
-          _id: 1,
-          referenceAds: 1,
-          images: { $arrayElemAt: ["$images", 0] },
-          typeOfRealty: 1,
-          price: 1,
-          district: 1,
-          city: 1,
-          methodOfSale: 1,
-        },
-      },
-    ]);
-
-    const combinedAds = [...saleAds, ...rentAds];
-
-    return res.status(200).json(combinedAds);
+    return res.status(200).json(ads);
   } catch (error) {
-    return res.status(500).json({ message: "Error fetching ads", error });
+    console.error(error);
+    return res.status(500).json({ error: "Erro ao buscar anúncios." });
   }
 };
 

@@ -1,58 +1,253 @@
-#carroussel-title {
-  text-align: center;
-  margin: 2em 0;
-  color: #08273c;
-  font-size: 2em;
-  font-weight: 700;
-  font-family: "Poppins", sans-serif;
-}
-
-#carroussel-title span {
-  color: #fdb303;
-}
-
-.carroussel-ads,
-.carousel-depoiments {
-  margin: 4em auto;
-  max-width: 95%;
-  padding: 2em 0;
-}
-
+/* Seção Intro */
 .intro-home {
   background-image: url("../../assets/background-intro.jpg");
   background-size: cover;
   background-position: center center;
+  background-attachment: fixed;
   color: #08273c;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 3em 0;
+  padding: 3em 1.5em;
+  min-height: 95vh;
+  position: relative;
+  font-family: "Poppins", sans-serif;
 }
 
-.intro-home {
-  min-height: 95vh;
+.intro-home::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(8, 39, 60, 0.7) 0%,
+    rgba(8, 39, 60, 0.5) 100%
+  );
+  z-index: 1;
 }
 
 .intro-content {
-  background-color: rgba(0, 0, 0, 0.055);
-  padding: 3em 2em;
-  border-radius: 15px;
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  padding: 3.5em 3em;
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 1200px;
+  width: 100%;
+  animation: fadeInScale 0.8s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 #intro-title {
   text-align: center;
-  font-size: 3em;
-  color: #ffffff;
+  font-size: 3.2em;
+  font-weight: 800;
+  color: #08273c;
+  margin: 0 0 0.3em 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
 }
 
 h2 {
   text-align: center;
-  color: #ffffff;
+  color: #6c757d;
+  font-size: 1.5em;
+  font-weight: 500;
+  margin: 0 0 0.5em 0;
 }
 
 .creci {
-  color: #ffffff;
+  color: #08273c;
   text-align: center;
-  margin: 1em 0 0.5em 0;
+  margin: 0 0 1.5em 0;
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 0.5em 1.5em;
+  background: linear-gradient(135deg, #fdb303 0%, #e5a103 100%);
+  display: inline-block;
+  border-radius: 25px;
+  box-shadow: 0 4px 15px rgba(253, 179, 3, 0.3);
+  color: white;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: fit-content;
+}
+
+/* Seção de Carrosséis */
+.carroussel-ads,
+.carousel-depoiments {
+  margin: 5em auto;
+  max-width: 95%;
+  padding: 3em 1.5em;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.carousel-depoiments {
+  background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+}
+
+#carroussel-title {
+  text-align: center;
+  margin: 0 0 2em 0;
+  color: #08273c;
+  font-size: 2.5em;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.3;
+  position: relative;
+  padding-bottom: 0.5em;
+}
+
+#carroussel-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  /* background: linear-gradient(90deg, #08273c 0%, #fdb303 100%); */
+  border-radius: 2px;
+}
+
+#carroussel-title span {
+  background: linear-gradient(135deg, #fdb303 0%, #e5a103 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+/* Responsividade */
+@media screen and (max-width: 1024px) {
+  .intro-content {
+    padding: 3em 2.5em;
+    border-radius: 25px;
+  }
+
+  #intro-title {
+    font-size: 2.8em;
+  }
+
+  h2 {
+    font-size: 1.4em;
+  }
+
+  #carroussel-title {
+    font-size: 2.2em;
+  }
+
+  .carroussel-ads,
+  .carousel-depoiments {
+    margin: 4em auto;
+    padding: 2.5em 1.2em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .intro-home {
+    padding: 2em 1em;
+    min-height: 90vh;
+    background-attachment: scroll;
+  }
+
+  .intro-content {
+    padding: 2.5em 2em;
+    border-radius: 20px;
+  }
+
+  #intro-title {
+    font-size: 2.2em;
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
+
+  .creci {
+    font-size: 1em;
+    padding: 0.4em 1.2em;
+    margin-bottom: 1em;
+  }
+
+  #carroussel-title {
+    font-size: 1.8em;
+    margin-bottom: 1.5em;
+  }
+
+  #carroussel-title::after {
+    width: 80px;
+    height: 3px;
+  }
+
+  .carroussel-ads,
+  .carousel-depoiments {
+    margin: 3em auto;
+    padding: 2em 1em;
+    border-radius: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .intro-home {
+    padding: 1.5em 0.8em;
+    min-height: 85vh;
+  }
+
+  .intro-content {
+    padding: 2em 1.5em;
+    border-radius: 15px;
+  }
+
+  #intro-title {
+    font-size: 1.8em;
+    letter-spacing: -0.3px;
+  }
+
+  h2 {
+    font-size: 1.1em;
+  }
+
+  .creci {
+    font-size: 0.95em;
+    padding: 0.4em 1em;
+  }
+
+  #carroussel-title {
+    font-size: 1.5em;
+    margin-bottom: 1.2em;
+    padding-bottom: 0.4em;
+  }
+
+  #carroussel-title::after {
+    width: 60px;
+    height: 2.5px;
+  }
+
+  .carroussel-ads,
+  .carousel-depoiments {
+    margin: 2.5em auto;
+    padding: 1.5em 0.8em;
+    border-radius: 15px;
+  }
 }

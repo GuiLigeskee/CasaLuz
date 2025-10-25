@@ -1,7 +1,264 @@
 .contact-container {
-  margin-top: 4em;
+  max-width: 1200px;
+  margin: 4em auto;
+  padding: 3em 2em;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  font-family: "Poppins", sans-serif;
+}
+
+.logo {
+  margin-bottom: 2em;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.logo img {
+  max-width: 250px;
+  height: auto;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
+}
+
+#title {
+  font-size: 2.5em;
+  font-weight: 700;
+  color: #08273c;
+  text-align: center;
+  margin: 0 0 0.5em 0;
+  line-height: 1.3;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+#title span {
+  background: linear-gradient(135deg, #fdb303 0%, #e5a103 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+#subtitle {
+  font-size: 1.4em;
+  font-weight: 500;
+  color: #6c757d;
+  text-align: center;
+  margin: 0 0 3em 0;
+  animation: fadeInUp 1s ease-out;
+}
+
+.contact-buttons {
+  display: flex;
+  gap: 2em;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeInUp 1.2s ease-out;
+}
+
+#contact-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  padding: 2.5em 3em;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+#contact-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#contact-button:hover::before {
+  opacity: 1;
+}
+
+#contact-button:first-child {
+  background: linear-gradient(135deg, #25d366 0%, #1ebe57 100%);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+}
+
+#contact-button:first-child:hover {
+  background: linear-gradient(135deg, #1ebe57 0%, #17a347 100%);
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
+}
+
+#contact-button:last-child {
+  background: linear-gradient(135deg, #fdb303 0%, #e5a103 100%);
+  box-shadow: 0 8px 25px rgba(253, 179, 3, 0.3);
+}
+
+#contact-button:last-child:hover {
+  background: linear-gradient(135deg, #e5a103 0%, #cc8f02 100%);
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(253, 179, 3, 0.4);
+}
+
+#contact-button:active {
+  transform: translateY(-4px) scale(1.02);
+}
+
+#contact-button img {
+  width: 60px;
+  height: 60px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+#contact-button:hover img {
+  transform: scale(1.15) rotate(5deg);
+}
+
+#contact-button p {
+  margin: 0;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+/* Animações */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .contact-container {
+    margin: 3em auto;
+    padding: 2.5em 1.5em;
+  }
+
+  #title {
+    font-size: 2.2em;
+  }
+
+  #subtitle {
+    font-size: 1.2em;
+  }
+
+  .logo img {
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    margin: 2em 1em;
+    padding: 2em 1.5em;
+    border-radius: 20px;
+  }
+
+  .logo img {
+    max-width: 180px;
+  }
+
+  #title {
+    font-size: 1.8em;
+  }
+
+  #subtitle {
+    font-size: 1.1em;
+    margin-bottom: 2em;
+  }
+
+  .contact-buttons {
+    gap: 1.5em;
+    width: 100%;
+  }
+
+  #contact-button {
+    width: 100%;
+    padding: 2em 2.5em;
+  }
+
+  #contact-button img {
+    width: 50px;
+    height: 50px;
+  }
+
+  #contact-button p {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    margin: 1.5em 0.8em;
+    padding: 1.8em 1.2em;
+  }
+
+  .logo {
+    margin-bottom: 1.5em;
+  }
+
+  .logo img {
+    max-width: 150px;
+  }
+
+  #title {
+    font-size: 1.5em;
+  }
+
+  #subtitle {
+    font-size: 1em;
+    margin-bottom: 1.8em;
+  }
+
+  .contact-buttons {
+    gap: 1.2em;
+  }
+
+  #contact-button {
+    padding: 1.8em 2em;
+    min-width: auto;
+  }
+
+  #contact-button img {
+    width: 45px;
+    height: 45px;
+  }
+
+  #contact-button p {
+    font-size: 1.1em;
+  }
 }

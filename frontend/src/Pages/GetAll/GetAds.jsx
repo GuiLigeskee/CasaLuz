@@ -30,7 +30,7 @@ const GetAds = () => {
     bathrooms: "",
     carVacancies: "",
     page: 1,
-    limit: 5,
+    limit: 10,
   });
 
   useEffect(() => {
