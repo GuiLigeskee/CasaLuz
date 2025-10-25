@@ -4,11 +4,7 @@ import "./Home.css";
 import AdsItem from "../../Components/Ads/AdsItem";
 import SearchBar from "../../Components/SearchBar/SearchBar";
 import DepoimentItem from "../../Components/Depoiment/DepoimentItem";
-
-// Import Swiper React components
-import "swiper/css/bundle";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import Carousel from "../../Components/Carousel/Carousel";
 
 // Hooks
 import { useState, useEffect } from "react";
@@ -25,9 +21,6 @@ const Home = () => {
 
   const { depoiments } = useSelector((state) => state.depoiments);
 
-  const [slidePerView, setSlidePerView] = useState(4);
-  const [slidePerViewDepoiments, setSlidePerViewDepoiments] = useState(4);
-
   // Arrays to store filtered ads
   const [adsForSale, setAdsForSale] = useState([]);
   const [adsForRent, setAdsForRent] = useState([]);
@@ -36,32 +29,6 @@ const Home = () => {
     dispatch(getAds());
     dispatch(getDepoiments());
   }, [dispatch]);
-
-  useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 720) {
-        setSlidePerView(1);
-        setSlidePerViewDepoiments(1);
-      } else if (window.innerWidth < 1050) {
-        setSlidePerView(2);
-        setSlidePerViewDepoiments(3);
-      } else if (window.innerWidth < 1350) {
-        setSlidePerView(3);
-        setSlidePerViewDepoiments(4);
-      } else {
-        setSlidePerView(4);
-        setSlidePerViewDepoiments(5);
-      }
-    }
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     if (Array.isArray(ads)) {
@@ -98,24 +65,11 @@ const Home = () => {
           <h2 id="carroussel-title">
             Conheça nossos imóveis à <span>venda</span>
           </h2>
-          <div className="carousel">
-            <Swiper
-              slidesPerView={slidePerView}
-              loop={true}
-              pagination={{ clickable: true }}
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
-              navigation={true}
-              modules={[Pagination, Navigation, Autoplay]}
-            >
-              {adsForSale.map((add) => (
-                <SwiperSlide key={add._id}>
-                  <div key={add._id}>
-                    <AdsItem add={add} />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+          <Carousel itemsPerView={4} autoplay={true} autoplayDelay={5000}>
+            {adsForSale.map((add) => (
+              <AdsItem key={add._id} add={add} />
+            ))}
+          </Carousel>
         </div>
       )}
 
@@ -124,24 +78,11 @@ const Home = () => {
           <h2 id="carroussel-title">
             Conheça nossos imóveis para <span>alugar</span>
           </h2>
-          <div className="carousel">
-            <Swiper
-              slidesPerView={slidePerView}
-              loop={true}
-              pagination={{ clickable: true }}
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
-              navigation={true}
-              modules={[Pagination, Navigation, Autoplay]}
-            >
-              {adsForRent.map((add) => (
-                <SwiperSlide key={add._id}>
-                  <div key={add._id}>
-                    <AdsItem add={add} />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+          <Carousel itemsPerView={4} autoplay={true} autoplayDelay={5000}>
+            {adsForRent.map((add) => (
+              <AdsItem key={add._id} add={add} />
+            ))}
+          </Carousel>
         </div>
       )}
 
@@ -150,30 +91,11 @@ const Home = () => {
           <h2 id="carroussel-title">
             Veja os <span>depoimentos</span> de nossos clientes
           </h2>
-          <div className="carousel-depoiments">
-            <Swiper
-              slidesPerView={slidePerViewDepoiments}
-              loop={true}
-              pagination={{
-                clickable: true,
-              }}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
-              spaceBetween={30}
-              modules={[Pagination, Navigation, Autoplay]}
-            >
-              {Array.isArray(depoiments) &&
-                depoiments.map((depoiment) => (
-                  <SwiperSlide key={depoiment._id}>
-                    <div key={depoiment._id}>
-                      <DepoimentItem depoiment={depoiment} />
-                    </div>
-                  </SwiperSlide>
-                ))}
-            </Swiper>
-          </div>
+          <Carousel itemsPerView={5} autoplay={true} autoplayDelay={5000}>
+            {depoiments.map((depoiment) => (
+              <DepoimentItem key={depoiment._id} depoiment={depoiment} />
+            ))}
+          </Carousel>
         </div>
       )}
     </div>
