@@ -1,5 +1,5 @@
 import "./Carousel.css";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Carousel = ({
@@ -10,7 +10,12 @@ const Carousel = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsToShow, setItemsToShow] = useState(itemsPerView);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState(0);
+  const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [prevTranslate, setPrevTranslate] = useState(0);
+  const trackRef = useRef(null);
+  const autoplayRef = useRef(null);
 
   const totalItems = children.length;
   const maxIndex = Math.max(0, totalItems - itemsToShow);
@@ -21,9 +26,9 @@ const Carousel = ({
       if (window.innerWidth < 720) {
         setItemsToShow(1);
       } else if (window.innerWidth < 1050) {
-        setItemsToShow(2);
+        setItemsToShow(Math.min(2, itemsPerView));
       } else if (window.innerWidth < 1350) {
-        setItemsToShow(3);
+        setItemsToShow(Math.min(3, itemsPerView));
       } else {
         setItemsToShow(itemsPerView);
       }
@@ -34,47 +39,117 @@ const Carousel = ({
     return () => window.removeEventListener("resize", handleResize);
   }, [itemsPerView]);
 
+  // Recalcular quando mudar itemsToShow
+  useEffect(() => {
+    const newMaxIndex = Math.max(0, totalItems - itemsToShow);
+    if (currentIndex > newMaxIndex) {
+      setCurrentIndex(newMaxIndex);
+    }
+  }, [itemsToShow, totalItems, currentIndex]);
+
   // Navegação
   const goToNext = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
     setCurrentIndex((prevIndex) => {
-      const nextIndex = prevIndex + 1;
-      return nextIndex > maxIndex ? 0 : nextIndex;
+      const newMaxIndex = Math.max(0, totalItems - itemsToShow);
+      if (prevIndex >= newMaxIndex) {
+        return 0; // Volta para o início
+      }
+      return prevIndex + 1;
     });
-    setTimeout(() => setIsTransitioning(false), 500);
-  }, [maxIndex, isTransitioning]);
+  }, [totalItems, itemsToShow]);
 
   const goToPrev = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
     setCurrentIndex((prevIndex) => {
-      const prevIndexCalc = prevIndex - 1;
-      return prevIndexCalc < 0 ? maxIndex : prevIndexCalc;
+      const newMaxIndex = Math.max(0, totalItems - itemsToShow);
+      if (prevIndex <= 0) {
+        return newMaxIndex; // Vai para o final
+      }
+      return prevIndex - 1;
     });
-    setTimeout(() => setIsTransitioning(false), 500);
-  }, [maxIndex, isTransitioning]);
-
-  const goToSlide = (index) => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex(index);
-    setTimeout(() => setIsTransitioning(false), 500);
-  };
+  }, [totalItems, itemsToShow]);
 
   // Autoplay
   useEffect(() => {
     if (!autoplay || totalItems <= itemsToShow) return;
 
-    const interval = setInterval(goToNext, autoplayDelay);
-    return () => clearInterval(interval);
+    autoplayRef.current = setInterval(goToNext, autoplayDelay);
+    return () => {
+      if (autoplayRef.current) {
+        clearInterval(autoplayRef.current);
+      }
+    };
   }, [autoplay, autoplayDelay, goToNext, totalItems, itemsToShow]);
 
-  // Não mostrar controles se não houver itens suficientes
-  const showControls = totalItems > itemsToShow;
+  // Pausar autoplay durante drag
+  const pauseAutoplay = () => {
+    if (autoplayRef.current) {
+      clearInterval(autoplayRef.current);
+    }
+  };
 
-  // Calcular dots
-  const dotsCount = maxIndex + 1;
+  const resumeAutoplay = () => {
+    if (autoplay && totalItems > itemsToShow) {
+      autoplayRef.current = setInterval(goToNext, autoplayDelay);
+    }
+  };
+
+  // Funções de arraste
+  const getPositionX = (event) => {
+    return event.type.includes("mouse")
+      ? event.pageX
+      : event.touches[0].clientX;
+  };
+
+  const handleDragStart = (event) => {
+    pauseAutoplay();
+    setIsDragging(true);
+    setStartPos(getPositionX(event));
+    if (trackRef.current) {
+      trackRef.current.style.cursor = "grabbing";
+    }
+  };
+
+  const handleDragMove = (event) => {
+    if (!isDragging) return;
+    const currentPosition = getPositionX(event);
+    const diff = currentPosition - startPos;
+    setCurrentTranslate(prevTranslate + diff);
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    const movedBy = currentTranslate - prevTranslate;
+    const threshold = 50; // Pixels necessários para trocar slide
+
+    if (movedBy < -threshold && currentIndex < maxIndex) {
+      goToNext();
+    } else if (movedBy > threshold && currentIndex > 0) {
+      goToPrev();
+    }
+
+    setCurrentTranslate(prevTranslate);
+
+    if (trackRef.current) {
+      trackRef.current.style.cursor = "grab";
+    }
+
+    resumeAutoplay();
+  };
+
+  // Atualizar prevTranslate quando currentIndex mudar
+  useEffect(() => {
+    const itemWidth = trackRef.current
+      ? trackRef.current.offsetWidth / itemsToShow
+      : 0;
+    const newTranslate = -currentIndex * itemWidth;
+    setPrevTranslate(newTranslate);
+    setCurrentTranslate(newTranslate);
+  }, [currentIndex, itemsToShow]);
+
+  const showControls = totalItems > itemsToShow;
+  const itemWidth = 100 / itemsToShow;
 
   return (
     <div className="custom-carousel">
@@ -83,7 +158,6 @@ const Carousel = ({
           <button
             className="carousel-button carousel-button-prev"
             onClick={goToPrev}
-            disabled={isTransitioning}
             aria-label="Anterior"
           >
             <FaChevronLeft />
@@ -92,16 +166,26 @@ const Carousel = ({
 
         <div className="carousel-viewport">
           <div
+            ref={trackRef}
             className="carousel-track"
             style={{
-              transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)`,
-              gridTemplateColumns: `repeat(${totalItems}, ${
-                100 / itemsToShow
-              }%)`,
+              transform: `translateX(${-currentIndex * itemWidth}%)`,
+              cursor: isDragging ? "grabbing" : "grab",
             }}
+            onMouseDown={handleDragStart}
+            onMouseMove={handleDragMove}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={handleDragStart}
+            onTouchMove={handleDragMove}
+            onTouchEnd={handleDragEnd}
           >
             {children.map((child, index) => (
-              <div key={index} className="carousel-item">
+              <div
+                key={index}
+                className="carousel-item"
+                style={{ width: `${itemWidth}%` }}
+              >
                 {child}
               </div>
             ))}
@@ -112,7 +196,6 @@ const Carousel = ({
           <button
             className="carousel-button carousel-button-next"
             onClick={goToNext}
-            disabled={isTransitioning}
             aria-label="Próximo"
           >
             <FaChevronRight />
@@ -120,15 +203,15 @@ const Carousel = ({
         )}
       </div>
 
-      {/* {showControls && dotsCount > 1 && (
+      {/* {showControls && (
         <div className="carousel-dots">
-          {[...Array(dotsCount)].map((_, index) => (
+          {[...Array(maxIndex + 1)].map((_, index) => (
             <button
               key={index}
               className={`carousel-dot ${
                 index === currentIndex ? "active" : ""
               }`}
-              onClick={() => goToSlide(index)}
+              onClick={() => setCurrentIndex(index)}
               aria-label={`Ir para slide ${index + 1}`}
             />
           ))}
