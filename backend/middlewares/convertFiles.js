@@ -21,11 +21,16 @@ const convertFiles = async (req, res, next) => {
       const inputPath = file.path;
       const outputPath = inputPath.replace(/\.[^.]+$/, "") + ".webp";
 
-      await sharp(inputPath).webp().toFile(outputPath);
-
-      // await fse.remove(inputPath); // Caso dê erro, comente essa linha
-
-      file.filename = path.basename(outputPath);
+      try {
+        await sharp(inputPath).webp().toFile(outputPath);
+        // Remover o arquivo original quando a conversão for bem sucedida
+        await fse.remove(inputPath).catch(() => {});
+        file.filename = path.basename(outputPath);
+      } catch (err) {
+        console.error(`Erro ao converter arquivo ${inputPath}:`, err);
+        // fallback: mantém o arquivo original para não bloquear a requisição
+        file.filename = path.basename(inputPath);
+      }
     });
 
     await Promise.all(filesPromises);
@@ -33,7 +38,8 @@ const convertFiles = async (req, res, next) => {
     next();
   } catch (error) {
     console.error("Erro ao processar os arquivos:", error);
-    res.status(500).send("Erro ao processar os arquivos.");
+    // Não interrompe toda a requisição apenas por falha na conversão
+    next();
   }
 };
 

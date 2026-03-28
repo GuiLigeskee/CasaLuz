@@ -15,6 +15,7 @@ import { getAdsDetailsByReference } from "../../Slice/adsSlice";
 import anuncioSemImagem from "../../assets/add-sem-imagem.png";
 import Whatsapp from "../../assets/whatsapp.svg";
 import Tell from "../../assets/phone.svg";
+import ImageGallery from "../../Components/ImageGallery/ImageGallery";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -160,84 +161,14 @@ const AdsPage = () => {
 
       <div className="ads-main-content">
         <div className="carousel-section">
-          {add.images && add.images.length > 0 ? (
-            <div className="gallery-container">
-              <div className="gallery-main-image">
-                {validImages[currentImageIndex] !== false ? (
-                  <img
-                    src={`${uploads}/ads/${add.images[currentImageIndex]}`}
-                    alt={`${add.title} - Foto ${currentImageIndex + 1}`}
-                    className="main-image"
-                    onError={() => handleImageError(currentImageIndex)}
-                    onLoad={() => handleImageLoad(currentImageIndex)}
-                  />
-                ) : (
-                  <img
-                    src={anuncioSemImagem}
-                    alt="Anúncio sem imagem"
-                    className="main-image"
-                  />
-                )}
-
-                {add.images.length > 1 && (
-                  <>
-                    <button
-                      className="gallery-nav-button gallery-prev"
-                      onClick={prevImage}
-                      aria-label="Imagem anterior"
-                    >
-                      <FontAwesomeIcon icon={faChevronLeft} />
-                    </button>
-                    <button
-                      className="gallery-nav-button gallery-next"
-                      onClick={nextImage}
-                      aria-label="Próxima imagem"
-                    >
-                      <FontAwesomeIcon icon={faChevronRight} />
-                    </button>
-
-                    <div className="gallery-counter">
-                      {currentImageIndex + 1} / {add.images.length}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {add.images.length > 1 && (
-                <div className="gallery-thumbnails">
-                  <div className="thumbnails-track">
-                    {add.images.map((image, index) => (
-                      <div
-                        key={index}
-                        className={`thumbnail ${
-                          index === currentImageIndex ? "active" : ""
-                        }`}
-                        onClick={() => goToImage(index)}
-                      >
-                        <img
-                          src={`${uploads}/ads/${image}`}
-                          alt={`Miniatura ${index + 1}`}
-                          onError={(e) => {
-                            e.target.src = anuncioSemImagem;
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="gallery-container">
-              <div className="gallery-main-image">
-                <img
-                  src={anuncioSemImagem}
-                  alt="Anúncio sem imagem"
-                  className="main-image"
-                />
-              </div>
-            </div>
-          )}
+          {/* Replaced with ImageGallery component for better UX */}
+          <ImageGallery
+            images={add.images || []}
+            title={add.title}
+            adId={add._id}
+            reference={referenceAds}
+            onRefresh={() => dispatch(getAdsDetailsByReference(referenceAds))}
+          />
 
           <div className="ads-features">
             {add.bedrooms !== null && add.bedrooms > 0 && (

@@ -52,12 +52,21 @@ const registerValidation = (registerData) => {
   return errors;
 };
 
-const adsFormValidation = (adsData, images) => {
+const adsFormValidation = (adsData, images, options = {}) => {
   const errors = {};
+  const { isEdit = false, serverImagesCount = 0 } = options || {};
 
   // Imagem
-  if (images.length === 0) {
-    errors.images = "Pelo menos uma foto é obrigatória.";
+  const imagesCount = Array.isArray(images) ? images.length : 0;
+  if (isEdit) {
+    // Em edição, considerar imagens já existentes no servidor (serverImagesCount)
+    if (imagesCount + (serverImagesCount || 0) === 0) {
+      errors.images = "Pelo menos uma foto é obrigatória.";
+    }
+  } else {
+    if (imagesCount === 0) {
+      errors.images = "Pelo menos uma foto é obrigatória.";
+    }
   }
 
   // Título

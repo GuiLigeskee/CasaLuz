@@ -121,6 +121,30 @@ select option {
   height: auto; /* Mantém a proporção da imagem */
 }
 
+/* Novas classes para a seção de imagens (passo a passo) */
+.image-step {
+  margin: 1rem 0;
+  text-align: left;
+}
+.image-step h4 {
+  margin: 0 0 0.25rem 0;
+  color: #08273c;
+}
+.image-hint {
+  margin: 0 0 0.75rem 0;
+  color: #325a6d;
+  font-size: 0.95rem;
+}
+.image-counter {
+  display: inline-block;
+  background: #f1f1f1;
+  color: #08273c;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  margin-left: 0.5rem;
+  font-weight: 600;
+}
+
 @media screen and (max-width: 767px) {
   .createAds,
   .updateAds {

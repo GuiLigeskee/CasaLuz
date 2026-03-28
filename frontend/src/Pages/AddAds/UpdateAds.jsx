@@ -6,6 +6,7 @@ import CepModal from "../../Components/CepModal/CepModal";
 import ErrorModal from "../../Components/ErrorModal/ErrorModal";
 import SuccessModal from "../../Components/SuccessModal/SuccessModal";
 import ImageUploader from "../../Components/ImageUploader/ImageUploader.jsx";
+import { uploads } from "../../utils/config";
 import { adsFormValidation } from "../../utils/formValidation";
 
 // Hooks
@@ -77,7 +78,8 @@ const UpdateAds = () => {
   const [carVacancies, setCarVacancies] = useState("");
   const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
-  const [existingImages, setExistingImages] = useState([]);
+  const [orderedList, setOrderedList] = useState([]);
+  
 
   useEffect(() => {
     if (error) {
@@ -129,6 +131,9 @@ const UpdateAds = () => {
       setBedrooms(add.bedrooms || "");
       setCarVacancies(add.carVacancies || "");
       setImages(add.images || []);
+      // initialize ordered list for the uploader (preview + order) with stable uid
+      const genUid = (name, idx) => `srv_${String(name)}_${idx}_${Date.now().toString(36).slice(-4)}`;
+      setOrderedList((add.images || []).map((name, idx) => ({ data_url: `${uploads}/ads/${name}`, file: null, name, uid: genUid(name, idx) })));
       if (add.typeOfRealty === "Terreno") {
         handleSetGround();
       }
@@ -160,9 +165,14 @@ const UpdateAds = () => {
       ...(ground === false && { bedrooms, bathrooms, carVacancies }),
     };
 
-    const adsImages = [...existingImages, ...newImages];
+      const adsImages = [...(images || []), ...(newImages || [])];
 
-    const validationErrors = adsFormValidation(adsDataUpdate, adsImages);
+    // Durante edição, informar ao validador quantas imagens do servidor ainda existem
+    const serverImagesCount = images.length;
+    const validationErrors = adsFormValidation(adsDataUpdate, adsImages, {
+      isEdit: true,
+      serverImagesCount,
+    });
     setErrors(Object.values(validationErrors));
 
     if (Object.keys(validationErrors).length > 0) {
@@ -174,33 +184,36 @@ const UpdateAds = () => {
         formData.append(key, adsDataUpdate[key]);
       }
 
-      if (existingImages.length > 0) {
-        existingImages.forEach((image) => {
-          formData.append("existingImages", image);
-        });
+      // Build ordered list based on current uploader order (existing + new mixed)
+      const sourceList = orderedList && orderedList.length > 0 ? orderedList : (images || []).map((name) => ({ name }));
+
+      const imagesOrder = [];
+      let newCounter = 0;
+
+      for (let i = 0; i < sourceList.length; i++) {
+        const item = sourceList[i];
+        if (item && item.file) {
+          formData.append("images", item.file);
+          imagesOrder.push(`__new_${newCounter}__`);
+          newCounter++;
+        } else if (item && item.name) {
+          imagesOrder.push(item.name);
+        }
       }
 
-      if (newImages.length > 0) {
-        newImages.forEach((image) => {
-          formData.append("images", image);
-        });
-      }
+      formData.append("imagesOrder", JSON.stringify(imagesOrder));
 
       dispatch(updateAds(formData));
     }
   };
 
   const handleImageChange = (imageList) => {
-    const updatedExistingImages = imageList
-      .filter((image) => !image.file)
-      .map((image) => image.name);
-
-    const updatedNewImages = imageList
-      .filter((image) => image.file)
-      .map((image) => image.file);
-
-    setExistingImages(updatedExistingImages);
-    setNewImages(updatedNewImages);
+    // imageList contains both existing (file === null, name present) and new images (file present)
+    setOrderedList(imageList || []);
+    const files = imageList ? imageList.map((img) => img.file).filter(Boolean) : [];
+    setNewImages(files);
+    const remainingServer = imageList ? imageList.filter((img) => !img.file).map((img) => img.name) : [];
+    setImages(remainingServer);
   };
 
   // Faz a chamada para API CEP
@@ -311,11 +324,12 @@ const UpdateAds = () => {
       </h1>
       <h3>Altere os campos abaixo para atualizar o anúncio</h3>
 
-      <ImageUploader
-        initialImages={images}
-        onChange={handleImageChange}
-        typePage={"UPDATE"}
-      />
+      <div className="image-step">
+        <h4>Imagens</h4>
+        <p className="image-hint">Segure e arraste uma foto para alterar sua posição. Todas as imagens aparecem aqui em grade.</p>
+      </div>
+
+      <ImageUploader initialImages={orderedList} onChange={handleImageChange} typePage={"UPDATE"} />
 
       <form onSubmit={handleSubmit}>
         <label>

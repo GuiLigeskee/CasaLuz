@@ -5,10 +5,33 @@ const publishAds = async (data, token) => {
   const config = requestConfig("POST", data, token, true);
 
   try {
+    // Debug: enumerate FormData entries to confirm files are attached
+    try {
+      if (config && config.body && typeof config.body.entries === "function") {
+        const entries = [];
+        for (const pair of config.body.entries()) {
+          if (pair[0] === "images") {
+            entries.push({ name: pair[0], fileName: (pair[1] && pair[1].name) || null });
+          } else {
+            entries.push({ name: pair[0], value: pair[1] });
+          }
+        }
+        console.log("[adsService] publishAds entries:", entries);
+      } else {
+        console.log("[adsService] publishAds config:", config);
+      }
+    } catch (dbgErr) {
+      console.warn("[adsService] publishAds debug failed:", dbgErr);
+    }
+
     const res = await fetch(api + "/ads", config)
       .then((res) => res.json())
-      .catch((err) => err);
+      .catch((err) => {
+        console.error("[adsService] fetch error:", err);
+        return err;
+      });
 
+    console.log("[adsService] publishAds response:", res);
     return res;
   } catch (error) {
     console.log(error);

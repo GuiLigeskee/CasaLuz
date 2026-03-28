@@ -28,10 +28,15 @@ const insertAds = async (req, res) => {
       carVacancies,
     } = req.body;
 
-    const images = req.files.map((file) => file.filename);
+    const images = Array.isArray(req.files)
+      ? req.files.map((file) => file.filename)
+      : [];
 
-    const reference =
-      typeOfRealty.substring(0, 2).toUpperCase() + uuidv4().substring(0, 10);
+    const typeCode = typeOfRealty
+      ? String(typeOfRealty).substring(0, 2).toUpperCase()
+      : "AD";
+
+    const reference = typeCode + uuidv4().substring(0, 10);
 
     const newAds = await Ads.create({
       referenceAds: reference,
@@ -173,141 +178,187 @@ const getAdsByReference = async (req, res) => {
 
 // Atualizar um anúncio
 const updateAds = async (req, res) => {
-  const { id } = req.params;
-  const {
-    title,
-    typeOfRealty,
-    description,
-    price,
-    zipCode,
-    address,
-    addressNumber,
-    complement,
-    district,
-    city,
-    stateAddress,
-    methodOfSale,
-    landMeasurement,
-    tell,
-    whatsapp,
-    bedrooms,
-    bathrooms,
-    carVacancies,
-    existingImages,
-  } = req.body;
+  try {
+    const { id } = req.params;
+    const rawBody = req.body || {};
+    const {
+      title,
+      typeOfRealty,
+      description,
+      price,
+      zipCode,
+      address,
+      addressNumber,
+      complement,
+      district,
+      city,
+      stateAddress,
+      methodOfSale,
+      landMeasurement,
+      tell,
+      whatsapp,
+      bedrooms,
+      bathrooms,
+      carVacancies,
+    } = rawBody;
 
-  const add = await Ads.findById(id);
+    // existingImages may come as JSON string, array or comma-separated string
+    const existingImagesRaw = rawBody.existingImages;
+    const existingImagesProvided = Object.prototype.hasOwnProperty.call(
+      rawBody,
+      "existingImages"
+    );
 
-  let newImages;
+    const add = await Ads.findById(id);
 
-  if (req.files) {
-    newImages = req.files.map((file) => file.filename);
-  }
+    if (!add) {
+      return res.status(404).json({ errors: ["Anúncio não encontrado!"] });
+    }
 
-  if (!add) {
-    res.status(404).json({ errors: ["Anúncio não encontrado!"] });
-    return;
-  }
+    const newImages = Array.isArray(req.files)
+      ? req.files.map((file) => file.filename)
+      : [];
 
-  if (title) {
-    add.title = title;
-  }
+    // Atualiza campos simples quando fornecidos
+    const updatable = {
+      title,
+      typeOfRealty,
+      description,
+      price,
+      zipCode,
+      address,
+      addressNumber,
+      complement,
+      district,
+      city,
+      stateAddress,
+      methodOfSale,
+      landMeasurement,
+      tell,
+      whatsapp,
+      bedrooms,
+      bathrooms,
+      carVacancies,
+    };
 
-  if (typeOfRealty) {
-    add.typeOfRealty = typeOfRealty;
-  }
-
-  if (description) {
-    add.description = description;
-  }
-
-  if (price) {
-    add.price = price;
-  }
-
-  if (zipCode) {
-    add.zipCode = zipCode;
-  }
-
-  if (address) {
-    add.address = address;
-  }
-
-  if (addressNumber) {
-    add.addressNumber = addressNumber;
-  }
-
-  if (complement) {
-    add.complement = complement;
-  }
-
-  if (district) {
-    add.district = district;
-  }
-
-  if (city) {
-    add.city = city;
-  }
-
-  if (stateAddress) {
-    add.stateAddress = stateAddress;
-  }
-
-  if (methodOfSale) {
-    add.methodOfSale = methodOfSale;
-  }
-
-  if (landMeasurement) {
-    add.landMeasurement = landMeasurement;
-  }
-
-  if (tell) {
-    add.tell = tell;
-  }
-
-  if (whatsapp) {
-    add.whatsapp = whatsapp;
-  }
-
-  if (bedrooms) {
-    add.bedrooms = bedrooms;
-  }
-
-  if (bathrooms) {
-    add.bathrooms = bathrooms;
-  }
-
-  if (carVacancies) {
-    add.carVacancies = carVacancies;
-  }
-
-  let deletedImages = [];
-  let currentImages = [];
-
-  if (existingImages && existingImages.length > 0) {
-    add.images.forEach((imgName) => {
-      if (!existingImages.includes(imgName)) {
-        deletedImages.push(imgName);
-      } else {
-        currentImages.push(imgName);
+    Object.keys(updatable).forEach((k) => {
+      if (typeof updatable[k] !== "undefined" && updatable[k] !== null) {
+        add[k] = updatable[k];
       }
     });
+
+    // Garante que add.images é um array
+    add.images = Array.isArray(add.images) ? add.images : [];
+
+    // Parse de existingImages quando fornecido
+    let existingImagesArr = [];
+    if (existingImagesProvided) {
+      if (Array.isArray(existingImagesRaw)) {
+        existingImagesArr = existingImagesRaw;
+      } else if (typeof existingImagesRaw === "string") {
+        try {
+          const parsed = JSON.parse(existingImagesRaw);
+          if (Array.isArray(parsed)) {
+            existingImagesArr = parsed;
+          } else if (parsed) {
+            existingImagesArr = [String(parsed)];
+          }
+        } catch (err) {
+          // fallback: split por vírgula
+          existingImagesArr = existingImagesRaw
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean);
+        }
+      }
+    }
+
+    // Se o front-end enviou uma ordem completa das imagens (`imagesOrder`), respeitamos essa ordem
+    const imagesOrderRaw = rawBody.imagesOrder;
+    const imagesOrderProvided = Object.prototype.hasOwnProperty.call(rawBody, "imagesOrder");
+
+    if (imagesOrderProvided) {
+      let imagesOrderArr = [];
+      if (Array.isArray(imagesOrderRaw)) {
+        imagesOrderArr = imagesOrderRaw;
+      } else if (typeof imagesOrderRaw === "string") {
+        try {
+          const parsed = JSON.parse(imagesOrderRaw);
+          if (Array.isArray(parsed)) {
+            imagesOrderArr = parsed;
+          } else if (parsed) {
+            imagesOrderArr = [String(parsed)];
+          }
+        } catch (err) {
+          imagesOrderArr = imagesOrderRaw
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean);
+        }
+      }
+
+      const prevImages = Array.isArray(add.images) ? add.images.slice() : [];
+      const newFileNames = Array.isArray(newImages) ? newImages : [];
+
+      const finalImages = [];
+      let sequentialNewIndex = 0;
+
+      imagesOrderArr.forEach((token) => {
+        if (typeof token === "string" && token.startsWith("__new_")) {
+          const m = token.match(/__new_(\d+)__/);
+          let idx = null;
+          if (m && m[1]) idx = parseInt(m[1], 10);
+          let filename = null;
+          if (idx !== null && !Number.isNaN(idx) && newFileNames[idx]) filename = newFileNames[idx];
+          else if (newFileNames[sequentialNewIndex]) filename = newFileNames[sequentialNewIndex];
+          if (filename) {
+            finalImages.push(filename);
+            sequentialNewIndex++;
+          }
+        } else if (token) {
+          finalImages.push(token);
+        }
+      });
+
+      // Excluir imagens antigas que não estão mais na lista final
+      const toDelete = prevImages.filter((img) => !finalImages.includes(img));
+      toDelete.forEach((img) => deleteImages("ads", img));
+
+      add.images = finalImages;
+    } else {
+      // Fallback: comportamento antigo baseado em existingImages
+      let deletedImages = [];
+      let currentImages = [];
+
+      if (existingImagesArr && existingImagesArr.length > 0) {
+        add.images.forEach((imgName) => {
+          if (!existingImagesArr.includes(imgName)) {
+            deletedImages.push(imgName);
+          } else {
+            currentImages.push(imgName);
+          }
+        });
+      }
+
+      if (deletedImages.length > 0) {
+        add.images = currentImages;
+        deletedImages.forEach((imgName) => {
+          deleteImages("ads", imgName);
+        });
+      }
+
+      if (newImages.length > 0) {
+        add.images = [...add.images, ...newImages];
+      }
+    }
+
+    await add.save();
+
+    return res.status(200).json({ add, message: "Anúncio atualizado com sucesso!" });
+  } catch (error) {
+    console.error("Erro ao atualizar anúncio:", error);
+    return res.status(500).json({ error: "Erro ao atualizar anúncio." });
   }
-
-  if (deletedImages.length > 0) {
-    add.images = currentImages;
-    deletedImages.forEach((imgName) => {
-      deleteImages("ads", imgName);
-    });
-  }
-
-  if (newImages.length > 0) {
-    add.images = [...add.images, ...newImages];
-  }
-
-  await add.save();
-
-  res.status(200).json({ add, message: "Anúncio atualizado com sucesso!" });
 };
 
 const searchAds = async (req, res) => {
@@ -332,7 +383,7 @@ const searchAds = async (req, res) => {
   try {
     // Validação e conversão dos parâmetros de paginação
     const pageNumber = parseInt(page) || 1;
-    const limitNumber = parseInt(limit) || 10;
+    const limitNumber = Math.min(Math.max(parseInt(limit) || 10, 1), 100);
     const offset = (pageNumber - 1) * limitNumber;
 
     // Validação dos parâmetros de paginação
@@ -343,71 +394,74 @@ const searchAds = async (req, res) => {
       });
     }
 
+    const escapeRegExp = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
     let filter = {};
 
     if (referenceAds) {
-      const regex = new RegExp(referenceAds, "i");
+      const regex = new RegExp(escapeRegExp(referenceAds), "i");
       filter.referenceAds = { $regex: regex };
     }
 
     if (keyword) {
-      const regex = new RegExp(keyword, "i");
-      filter.title = { $regex: regex };
+      const regex = new RegExp(escapeRegExp(keyword), "i");
+      filter.$or = [
+        { title: { $regex: regex } },
+        { description: { $regex: regex } },
+      ];
     }
 
-    if (typeOfRealty) {
-      const regex = new RegExp(typeOfRealty, "i");
-      filter.typeOfRealty = { $regex: regex };
-    }
+    const addRegex = (field, value) => {
+      if (!value) return;
+      const regex = new RegExp(escapeRegExp(value), "i");
+      filter[field] = { $regex: regex };
+    };
 
-    if (methodOfSale) {
-      const regex = new RegExp(methodOfSale, "i");
-      filter.methodOfSale = { $regex: regex };
-    }
-
-    if (city) {
-      const regex = new RegExp(city, "i");
-      filter.city = { $regex: regex };
-    }
-
-    if (district) {
-      const regex = new RegExp(district, "i");
-      filter.district = { $regex: regex };
-    }
+    addRegex("typeOfRealty", typeOfRealty);
+    addRegex("methodOfSale", methodOfSale);
+    addRegex("city", city);
+    addRegex("district", district);
 
     if (minPrice || maxPrice) {
       let priceFilter = {};
       if (minPrice) {
-        priceFilter.$gte = parseFloat(minPrice.replace(/[^\d.-]/g, ""));
+        const val = parseFloat(String(minPrice).replace(/[^\d.-]/g, ""));
+        if (!Number.isNaN(val)) priceFilter.$gte = val;
       }
       if (maxPrice) {
-        priceFilter.$lte = parseFloat(maxPrice.replace(/[^\d.-]/g, ""));
+        const val = parseFloat(String(maxPrice).replace(/[^\d.-]/g, ""));
+        if (!Number.isNaN(val)) priceFilter.$lte = val;
       }
-      filter.price = priceFilter;
+      if (Object.keys(priceFilter).length) filter.price = priceFilter;
     }
 
     if (minSpace || maxSpace) {
       let spaceFilter = {};
       if (minSpace) {
-        spaceFilter.$gte = parseFloat(minSpace);
+        const val = parseFloat(minSpace);
+        if (!Number.isNaN(val)) spaceFilter.$gte = val;
       }
       if (maxSpace) {
-        spaceFilter.$lte = parseFloat(maxSpace);
+        const val = parseFloat(maxSpace);
+        if (!Number.isNaN(val)) spaceFilter.$lte = val;
       }
-      filter.landMeasurement = spaceFilter;
+      if (Object.keys(spaceFilter).length) filter.landMeasurement = spaceFilter;
     }
 
-    if (bedrooms) {
-      filter.bedrooms = bedrooms;
-    }
+    const parseIntIf = (v) => {
+      if (typeof v === "undefined" || v === null || v === "") return null;
+      const n = parseInt(v);
+      return Number.isNaN(n) ? null : n;
+    };
 
-    if (bathrooms) {
-      filter.bathrooms = bathrooms;
-    }
+    const b = parseIntIf(bedrooms);
+    if (b !== null) filter.bedrooms = b;
 
-    if (carVacancies) {
-      filter.carVacancies = carVacancies;
-    }
+    const bath = parseIntIf(bathrooms);
+    if (bath !== null) filter.bathrooms = bath;
+
+    const cars = parseIntIf(carVacancies);
+    if (cars !== null) filter.carVacancies = cars;
 
     // Buscar os resultados e o total de documentos
     const [results, total] = await Promise.all([

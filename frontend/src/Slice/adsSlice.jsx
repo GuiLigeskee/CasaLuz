@@ -138,7 +138,11 @@ export const adsSlice = createSlice({
         state.success = true;
         state.error = null;
         state.add = action.payload;
-        state.ads.unshift(state.ads);
+        // Prepend the newly created ad to the ads list.
+        // Previously `state.ads.unshift(state.ads)` created a circular reference
+        // (inserting the array into itself) which caused "too much recursion".
+        if (!Array.isArray(state.ads)) state.ads = [];
+        state.ads.unshift(action.payload);
         state.message = "Anúncio publicado com sucesso!";
       })
       .addCase(publishAds.rejected, (state, action) => {

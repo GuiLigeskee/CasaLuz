@@ -289,6 +289,13 @@ const AddAds = () => {
       </h1>
       <h3>Preencha os campos abaixo para criar um anúncio</h3>
 
+      <div className="image-step">
+        <h4>
+          Passo 1 — Imagens <span className="image-counter">{adsImages.length}</span>
+        </h4>
+        <p className="image-hint">Arraste as miniaturas para reordenar. A primeira imagem será usada como capa.</p>
+      </div>
+
       <ImageUploader
         initialImages={imageUrls.current}
         onChange={handleImageChange}
