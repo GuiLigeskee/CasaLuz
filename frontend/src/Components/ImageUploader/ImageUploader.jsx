@@ -27,11 +27,11 @@ const ImageUploader = forwardRef(({ initialImages = [], onChange, typePage }, re
     return `img_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
   };
 
-  const [isImageValid, setIsImageValid] = useState(true);
+  const [failedUids, setFailedUids] = useState(new Set());
 
-  const handleImageError = (e) => {
+  const handleImageError = (e, uid) => {
     e.target.style.opacity = 0.6;
-    setIsImageValid(false);
+    setFailedUids((prev) => new Set([...prev, uid]));
   };
 
   useEffect(() => {
@@ -163,6 +163,7 @@ const ImageUploader = forwardRef(({ initialImages = [], onChange, typePage }, re
   useImperativeHandle(ref, () => ({
     removeAllImages: () => {
       setImages([]);
+      setFailedUids(new Set());
       if (onChange) onChange([]);
     },
   }));
@@ -228,9 +229,12 @@ const ImageUploader = forwardRef(({ initialImages = [], onChange, typePage }, re
     if (onChange) onChange(interim);
 
     const processed = await Promise.all(files.map((f, i) => processFile(f, startIndex + i)));
-    const newList = [...images, ...processed];
-    setImages(newList);
-    if (onChange) onChange(newList);
+    let resolvedList;
+    setImages((prev) => {
+      resolvedList = [...prev.slice(0, startIndex), ...processed];
+      return resolvedList;
+    });
+    if (onChange) onChange(resolvedList);
     e.target.value = null;
   };
 
@@ -261,6 +265,7 @@ const ImageUploader = forwardRef(({ initialImages = [], onChange, typePage }, re
 
   const handleRemoveAll = () => {
     setImages([]);
+    setFailedUids(new Set());
     if (onChange) onChange([]);
   };
 
@@ -337,8 +342,8 @@ const ImageUploader = forwardRef(({ initialImages = [], onChange, typePage }, re
                                             <div className="spinner" />
                                           </div>
                                         </div>
-                                      ) : isImageValid && image && image.data_url ? (
-                                        <img src={image.data_url} alt={`Imagem ${globalIndex + 1}`} onError={handleImageError} />
+                                      ) : !failedUids.has(id) && image && image.data_url ? (
+                                        <img src={image.data_url} alt={`Imagem ${globalIndex + 1}`} onError={(e) => handleImageError(e, id)} />
                                       ) : (
                                         <div className="image-placeholder">
                                           <div className="placeholder-box empty" aria-hidden="true" />
